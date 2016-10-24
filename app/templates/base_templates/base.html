@@ -1,0 +1,20 @@
+{% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/fixes.html' as fixes %}
+
+{% block head %}
+{{super()}}
+{{fixes.ie8()}}
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+{% endblock %}
+
+{% block title %}{% endblock %}
+
+<!-- Navigation -->
+{% include 'base_templates/nav.html' %}
+
+{% block content %}{% endblock %}
+
+{% block scripts %}{% endblock %}
