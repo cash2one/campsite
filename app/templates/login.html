@@ -1,5 +1,15 @@
 {% extends "base_templates/base.html" %}
 {% block content %}
-        <h1>Hello, you look fantastic today</h1>
-        <p>This is the home page, welcome</p>
+        <h1> Parents Sign In </h1>
+        <form action="" method= "post" name="login">
+            {{form.hidden_tag()}}
+            <p>
+                Please enter your username and password <br>
+                Your username is the email you used to create <br>
+                your account!
+            </p>
+            <p>{{form.username(size=80)}}</p>
+            <p>{{form.password(size=80)}}</p>
+            <input type="submit" value="Sign In">
+        </form>
 {% endblock %}
