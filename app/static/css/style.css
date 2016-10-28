@@ -14,7 +14,7 @@ h2 { margin: 0 0 5px; font-size: 17px; }
 h3 { margin: 0 0 8px; padding: 0; font-size: 13px; font-weight: 400; }
 p { margin: 0; padding: 0 0 12px; }
 ul { margin: 0; padding: 0; list-style: none; }
-li { padding: 0 0 8px 14px; background: url(../img/bullet.gif) 0 5px no-repeat; }
+/*li { padding: 0 0 8px 14px; background: url(../img/bullet.gif) 0 5px no-repeat; }*/
 #page { min-height: 100%; text-align: left; }
 .ie6 #page { height: 100%; }
 #wrapper { padding: 0 0 45px; }

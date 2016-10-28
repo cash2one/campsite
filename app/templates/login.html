@@ -1,15 +1,28 @@
 {% extends "base_templates/base.html" %}
 {% block content %}
-        <h1> Parents Sign In </h1>
-        <form action="" method= "post" name="login">
-            {{form.hidden_tag()}}
-            <p>
-                Please enter your username and password <br>
-                Your username is the email you used to create <br>
-                your account!
-            </p>
-            <p>{{form.username(size=80)}}</p>
-            <p>{{form.password(size=80)}}</p>
-            <input type="submit" value="Sign In">
-        </form>
+    <div class= "container">
+        <div class="row">
+            <div class= "col-md-offset-4 col-md-4">
+                <h1> Parents Sign In </h1>
+                <form action="" method= "post" name="login">
+                    {{form.hidden_tag()}}
+                    <p>
+                        Please enter your username and password <br>
+                        Your username is the email you used to create <br>
+                        your account!
+                    </p>
+                    <p>{{form.username(size=50)}}</p>
+                    {% for error in form.username.errors %}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                    <p>{{form.password(size=50)}}</p>
+                    {% for error in form.password.errors %}
+                        <span>{{error}}</span>
+                    {% endfor %}
+                    <br>
+                    <input type="submit" value="Sign In">
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

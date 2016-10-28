@@ -1,5 +1,6 @@
-from flask import render_template
+from flask import render_template, flash, redirect
 from app import app
+from forms import LoginForm
 
 # Sample HTTP error handling
 @app.errorhandler(404)
@@ -9,4 +10,15 @@ def not_found(error):
 @app.route('/')
 @app.route('/index')
 def home():
-    return render_template('home.html') 
+    return render_template('home.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Logging In: {0} with password: {1}'.format(form.username.data, form.password.data))
+        # Change this to users logged in screen
+        return redirect('/')
+    return render_template('login.html', username= "trial", password="secret", form=form)
+
+

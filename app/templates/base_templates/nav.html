@@ -1,14 +1,20 @@
-<nav class="navbar navbar-light bg-faded">
-  <a class="navbar-brand" href="#">HHSC</a>
+<nav class="navbar navbar-dark">
+  <a class="navbar-brand" href="{{ url_for('home') }}"><img style="width: 50px;" src="static/images/hhsclogo.png"></a>
   <ul class="nav navbar-nav">
-    <li class="nav-item active">
-      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-    </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Camper Registration</a>
+      <a class="nav-link" href="{{ url_for('login') }}">Apply For Camp</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="#">Counselor Application</a>
+    </li>
+    <li>
+      <a>Photo Gallery</a>
+    </li>
+    <li>
+      <a>Contact Us</a>
+    </li>
+    <li> 
+      <a>About</a>
     </li>
 <!--     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="http://example.com" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>

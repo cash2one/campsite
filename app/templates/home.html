@@ -1,13 +1,382 @@
 {% extends "base_templates/base.html" %}
 {% block content %}
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-            {% for message in messages %}
-                <li> {{ message }} </li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-        <h1>Hello, you look fantastic today</h1>
-        <p>This is the home page, welcome</p>
+    {% include 'flash_messages.html' %}
+    <table class="table">
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+            <td valign="top">
+                <table class="table">
+                    <tr>
+                    <!--
+                        <td valign="top" align="center">
+                             <h3> 2016 Session 1 and 2 are full and there will be a waitlist<br /></h3>
+-->
+                            <h3>
+                                Our Mission</h3>
+                            Hindu children are the inheritors of one of the greatest cultural, religious, and
+                            spiritual traditions of the world. However, Hindu children growing up in Western
+                            societies are often not aware of this great inheritance. The purpose of Hindu Heritage
+                            Summer Camp, Inc., is to provide an opportunity for Hindu youth, ages 8 to 16, to
+                            explore and understand the diverse traditions and philosophies of Hinduism in an
+                            intellectual, nurturing, and fun-filled environment. HHSC is dedicated to helping
+                            Hindu youth discover and reconcile what it means to be Hindu American.
+                            <br />
+                            <br />
+                            <img alt="Devi Picture" src="static/images/devismall.jpg" height="200" width="200" />
+                            <hr />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h3>
+                                HHSC Counselors</h3>
+                            The counselors (age 16-21) are the backbone of the camp. The camp helps the counselors
+                            to develop leadership skills and sense of responsibility. The campers look up to
+                            the counselors.
+                            <br />
+                            <br />
+                            <b><a href="CounselorRegistration.aspx">Click here for more information on Counselor
+                                Registration.</a></b>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                &nbsp;</td>
+            <td width=".5" style="background-color: #ffb631">
+            </td>
+            <td>
+                &nbsp;</td>
+            <!-- Added by Dilip -->
+            <td valign="top">
+                <table class="table">
+                
+                <!--
+                
+                       <tr>
+                        <td>
+                            <h3>
+                                A Special Appeal </h3>
+                               As you may know the backbone of the camp is the volunteers that run the camp.  We typically have numerous out-of-town volunteers who reside at the camp facility, working hard all day to make camp fun for our campers. <br><br>
+We are undertaking a project of upgrading the volunteer sleeping and bathroom facilities.  This involves gutting and redoing the bathroom and upgrading the sleeping facilities to provide better and more comfortable accommodations.  The whole project is roughly $40,000. <br><br>
+We would appreciate your tax-deductible donation to help us make this project a reality before the start of Camp 2011.  Please make checks payable to HHSC and mail to: <br><br>
+Janani Parthasarathi<br>
+78 County Clare Cres<br>
+Fairport, NY 14450-9179<br>
+email: jananip@gmail.com<br><br>
+
+                          </td>                            
+                      <tr>
+
+          -->
+    
+
+                    <tr>
+                        <td>
+                            <h3>
+                                For children flying in to camp</h3>
+                            
+                            <h2>
+                            Please make sure the return plane reservation is made after 11 am on Saturday morning. Ideal time is from 11 am to 4 pm.
+                                           <br />
+                                          <h3>  Registration starts on Jan 1, 2016</h3>
+                            </h2>
+                            <h2> <b>2016 changes: </b>The Medical Form needs to be filled by the Parents/Guardians. It is not necessary for the physician to fill the form. </b>
+                            
+                          </td>  
+                          </tr>
+                          
+                            
+                        <!--    
+
+                    <tr>
+                        <td>
+                            <h3>
+                                Registration Status</h3>
+                            <br />
+                            <h2>
+                Registration for Counselors and Campers begins on January 1st 2011
+                            </h2>
+                      
+                       -->
+                       
+                       
+                            
+                   <tr>
+                    <td>
+                    
+                    <!--
+                    <h3> <blink> We will be streaming Live Video from the Hindu Summer Camp </blink>
+                        <a href="http://www.ustream.tv/channel/hhsc" target="_blank"> Click this link for Live Video  : </a> </h3> 
+
+                        Live Video Streaming  Schedule <br />
+
+Wednesday   07/27/2011     06:30 - 7:30 PM    <br />
+Thursday       07/28/2011     07:00 - 8:30 PM     Talent Show <br />
+Friday            07/29/2011     06:30 - 7:30 PM   <br />
+-->
+
+                          <!--
+                        <a href="Docs/Forms/SecondSessionSchedule2010.pdf" target="_blank">2010 Second Session Schedule </a><br /> 
+                        
+                        <a href="" target="_blank"> 2010 First Session Schedule</a><br />
+                        <a href="" target="_blank">2010 Second Session Schedule </a><br /> 
+                      -->
+
+                    </td>
+                    </tr>
+
+
+
+                          
+
+
+
+                            
+                   <tr>
+                    <td>
+                    <h3> Session Schedule</h3> 
+                     
+                         <a href="Docs/Forms/Typical Schedule.pdf" target="_blank"> Typical daily Schedule </a><br />
+                          <!--
+                        <a href="Docs/Forms/SecondSessionSchedule2010.pdf" target="_blank">2010 Second Session Schedule </a><br /> 
+                        
+                        <a href="" target="_blank"> 2010 First Session Schedule</a><br />
+                        <a href="" target="_blank">2010 Second Session Schedule </a><br /> 
+                      -->
+
+                    </td>
+                    </tr>
+
+                            <!--
+                            <marquee style="color: black; font-family: Arial, Sans-Serif, Verdana;" scrolldelay="100"
+                                width="100%">
+                            <strong>"Parents - Early Bird Ends April 1st,  All
+checks need to be postmarked by April 1st to receive discount"
+                            </strong>
+                        </marquee>
+                        
+                
+
+
+                        -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <asp:Label ID="Label2" runat="server" Font-Bold="True" ForeColor="Green" Text="Session 1:"></asp:Label></td>
+                                    <td>
+                                        <b>Sun July 3rd – Sat, July 16th 2016</b><!--<asp:Label ID="lbl_session1" runat="server" Font-Bold="True" ForeColor="Green" BackColor="#ff9900">--></asp:Label></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <asp:Label ID="Label1" runat="server" Font-Bold="True" ForeColor="Green" Text="Session 2:"></asp:Label></td>
+                                    <td>
+                                        <b>Sun, July 17th – Sat, July 30th 2016</b><!--<asp:Label ID="lbl_session2" runat="server" Font-Bold="True" ForeColor="Green" BackColor="#ff9900"></asp:Label>--></td>
+                                </tr>
+                                <!--
+                              
+                                <tr>
+                                    <td>
+                                        <asp:Label ID="Label3" runat="server" Font-Bold="True" ForeColor="Green" Text="Session 3 :"></asp:Label></td>
+                                    <td>
+                                        <b>Session 3 has been cancelled!</b>
+                                        
+                                        <!--<asp:Label ID="lbl_session3" runat="server" Font-Bold="True" ForeColor="Green" BackColor="#ff9900"></asp:Label></td>
+                                </tr>
+                                -->
+                                
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:GridView ID="_registrationGV" runat="server" AutoGenerateColumns="False" HeaderStyle-Wrap="false"
+                                AlternatingRowStyle-BorderStyle="Solid" BorderStyle="Solid" EditRowStyle-BorderStyle="Groove"
+                                EmptyDataRowStyle-BorderStyle="None" GridLines="Both" HeaderStyle-BorderStyle="None"
+                                ShowHeader="true" AlternatingRowStyle-BackColor="#eeeeee" AlternatingRowStyle-BorderColor="ActiveBorder">
+                                <Columns>
+                                    <asp:BoundField DataField="sessionNos" ItemStyle-Wrap="false" ItemStyle-HorizontalAlign="Center"
+                                        ItemStyle-VerticalAlign="Middle" />
+                                    <asp:BoundField DataField="BFilled" AccessibleHeaderText="Boys" ReadOnly="false"
+                                        HeaderText="Boys" ItemStyle-HorizontalAlign="Right" />
+                                    <asp:BoundField DataField="BRemaining" HeaderText="Remaining" ItemStyle-HorizontalAlign="Right" />
+                                    <asp:BoundField DataField="GFilled" HeaderText="Girls" ItemStyle-HorizontalAlign="Right" />
+                                    <asp:BoundField DataField="GRemaining" HeaderText="Remaining" ItemStyle-HorizontalAlign="Right" />
+                                </Columns>
+                                <EmptyDataRowStyle BorderStyle="None" />
+                                <EditRowStyle BorderStyle="None" />
+                                <HeaderStyle BorderStyle="None" Wrap="False" />
+                                <AlternatingRowStyle BackColor="#EEEEEE" BorderColor="ActiveBorder" BorderStyle="Solid" />
+                            </asp:GridView>
+                            <!-- Link to login page -->
+                            <br />
+                            <!--
+                            <b><i> <h3> ** Girls Additional registrations will be placed on the waiting list and will be accepted on first come first served basis.</h3> </i></b><br />         
+                            -->
+                            <b><a href="Login.aspx">Click here to Register/Login</a></b><br/>
+                    <a href="docs/forms/What to Bring.pdf" target="_new"><b>What to Bring List</b></a>
+    
+                            <hr />
+                        </td>
+                    </tr>
+                    <!-- Announcements -->
+                    <tr>
+                        <td>
+                            <h3>
+                                Announcements
+                                <br /> Pick up and Drop off of Campers:
+                                </h3> 
+                                   Camper registration starts at 10 am. Tours of the facility will be available and lunch will be provided for parents/guardians. There will be a parent orientation following lunch. 
+                                <br /> 
+                                    On the last day of camp, there will be a program for the parents starting at around 11:00 am followed by lunch.  Parents are encouraged to attend and join us for lunch. 
+                                 <br />
+                                The address of the camp site is 2171 Monroe Wayne County Line Road, Macedon, NY 14502
+                                
+                        </td>
+                    </tr>
+                        
+                        
+                       <tr>
+                        <td>
+                            <h3>
+                                
+                                <br /> For children flying in to camp
+                                </h3> 
+                               
+Please book the reservations so the campers arrive between 9 am to 4 pm into Rochester (ROC) airport.  The earlier the better.  Return trips should be booked between 11 am and 4 pm.  Please do not book return flights for early in the morning.
+
+                               
+                                
+                        </td>
+                    </tr>
+                    
+                       
+
+
+                           
+
+
+                    <tr>
+                    <td>
+                    
+                
+                    
+                    <b><i> <h3> Vedanta Retreat 2016 <br>
+                                Dates: August 3 to 7'th, 2016                   </h3> </i></b> 
+                    
+                    The Vedanta Retreat 2016 will be held from Wednesday, August 3 to Sunday, August 7. Swami Yogatmanandaji of Vedanta Society of Providence, RI and Swami Kripamayanandaji of Vedanta Society of Toronto, Canada will conduct the Retreat. The theme for the Retreat will be “Mandukya Upanishad – Omkar Upasana”. Please see the flyer and the Registration Form.
+ 
+                                           
+                      You may download the <a href="docs/forms/Vedanta Retreat Flyer 2016.doc" target="_new"><b>flyer </b></a>  and the <a href="docs/forms/Vedanta Retreat 2016 Registration Form.doc" target="_new"><b>registration </b></a> Form here
+                    
+                   
+                    <!--
+
+                    The Retreat will be held from July 31 to August 4 at the India Community Center of Rochester. Swami Yogatmanandaji of the Vedanta Society of Providence, RI and Swami Kripamayanandaji of the Vedanta Society of Toronto, Canada will conduct the retreat. 
+                     You may download the <a href="docs/forms/Vedanta Retreat Flyer 2013.doc" target="_new"><b>flyer </b></a>   and the <a href="docs/forms/Vedanta Retreat 2013 Registration Form.doc" target="_new"><b>registration </b></a> Form here.
+                    
+
+                    The next Vedanta Retreat will be held at the India Community Center of Rochester from August 1 to August 5, 2012. Swami Yogatmanandaji of the Vedanta Society of Providence, RI and Swami Kripamayanandaji of Vedanta Society of Toronto, Canada will conduct the retreat. The subject for this year’s Retreat will be: “Selected Topics from Chhandogya Upanishad”. Preregistration is requested. 
+                    You may download the <a href="docs/forms/Vedanta Retreat Flyer 2012.doc" target="_new"><b>flyer </b></a>   and the <a href="docs/forms/Vedanta Retreat 2012 Registration Form.doc" target="_new"><b>registration </b></a> Form here.
+                    
+                    
+                            Please stay tuned for further announcements.
+             
+                    The next Vedanta Retreat will be held at the India Community Center of Rochester from August 3rd  to August 7th, 2011. Swami Yogatmanandaji of the Vedanta Society of Providence, RI and Swami Kripamayanandaji of Vedanta Society of Toronto, Canada will conduct the retreat. The theme for this year will be Pathanjali Yogasuthra – Chapters 2-4.  For more information and registration, go to the <a href="docs/forms/Vedanta Retreat Flyer.doc" target="_new"><b>flyer </b></a>   and the <a href="docs/forms/Vedanta Retreat Registration Form.doc" target="_new"><b>registration </b></a>  form. 
+                    
+                    
+                                       
+                      - The next Vedanta Retreat will be held at the India Community Center of Rochester from August 4 to August 8, 2010. Swami Yogatmanandaji of the Vedanta Society of Providence, RI and Swami Kripamayanandaji of Vedanta Society of Toronto, Canada will conduct the retreat.
+                       For more information and registration, go to the  <a href="docs/forms/Vedanta Retreat Flyer 2010.doc" target="_new"><b>flyer </b></a>   and the <a href="docs/forms/Vedanta Retreat 2010 Registration Form.doc" target="_new"><b>registration </b></a>  form.
+                       -->
+                 
+                                            
+                    
+                       <!--
+                    
+                    - We are creating a new Medical Assistant Position in 2010. Great opportunity for counselors considering a medical profession. See Counselor Information Page. <br />  <br />
+
+                    - <a href="http://www.mriduchandra.com/?p=389" target="_blank">View trailer for HHSC documentary on PBS</a><br />
+                    
+                    
+                
+                   <h3> NEW </h3> 
+                        Vedanta Retreat for families  <br />
+                        Aug 5-9, 2009  <br /></b><b>  
+                        <a href="Docs/Forms/Vedanta Retreat Flyer.pdf" target="_blank">Retreat info</a><br />
+                        <a href="Docs/Forms/Vedanta Retreat 2009 Registration Form.pdf" target="_blank">Registration form for retreat</a>
+
+                    -->
+
+                    </td>
+                    </tr>
+                    
+                    -->
+                    <tr>
+                        <td valign="top">
+                            <asp:GridView ID="_announcementsDG" runat="server" AutoGenerateColumns="False" HeaderStyle-Wrap="false"
+                                AlternatingRowStyle-BorderStyle="Solid" GridLines="None" HeaderStyle-BorderStyle="None"
+                                ShowHeader="False" AlternatingRowStyle-BackColor="#ffff9c" AlternatingRowStyle-BorderColor="ActiveBorder"
+                                OnRowDataBound="_announcementsDG_RowDataBound" CellPadding="4" ForeColor="#333333">
+                                <Columns>
+                                    <asp:BoundField DataField="detail" />
+                                </Columns>
+                                <FooterStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
+                                <SelectedRowStyle BackColor="#ffff9c" ForeColor="Navy" Font-Bold="True" />
+                                <PagerStyle BackColor="#ffff9c" ForeColor="#333333" HorizontalAlign="Center" />
+                                <HeaderStyle BackColor="#990000" BorderStyle="None" Font-Bold="True" Wrap="False" ForeColor="White" />
+                                <AlternatingRowStyle BackColor="White" BorderColor="ActiveBorder" BorderStyle="Solid" />
+                                <RowStyle BackColor="#FFFf96" ForeColor="#333333" />
+                            </asp:GridView>
+                            <hr />
+                        </td>
+                    </tr>
+                    
+                    <!--
+                    <tr>
+                        <td>
+                            <h3>
+                                What's New</h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:GridView ID="_whatsNewDG" runat="server" AutoGenerateColumns="False" HeaderStyle-Wrap="false"
+                                AlternatingRowStyle-BorderStyle="Solid" BorderStyle="None" GridLines="None" HeaderStyle-BorderStyle="None"
+                                ShowHeader="False" AlternatingRowStyle-BackColor="#ffff9c" AlternatingRowStyle-BorderColor="ActiveBorder"
+                                OnRowDataBound="_whatsNewDG_RowDataBound">
+                                <Columns>
+                                    <asp:BoundField DataField="description" />
+                                </Columns>
+                                <HeaderStyle BorderStyle="None" Wrap="False" />
+                                <AlternatingRowStyle BackColor="#ffff9c" BorderColor="ActiveBorder" BorderStyle="Solid" />
+                            </asp:GridView>
+                            <hr />
+                        </td>
+                    </tr>
+                    -->
+                    <tr>
+                        <td>
+                            <h3>
+                                Karma Yoga Scholars</h3>
+                            KYS Program gives the older returning campers an opportunity to experience the joy of selfless
+                            service. Only a select number of 14 and 15 year old campers will be selected for
+                            this program.
+                            <br />
+                            <br />
+                            <b><a href="KYS.aspx">Click here for more information on KYS</a></b>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <!-- up to here -->
+        </tr>
+    </table>
+
 {% endblock %}

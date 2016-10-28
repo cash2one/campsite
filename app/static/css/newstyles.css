@@ -1,0 +1,8 @@
+.navbar {
+    background-color: #ffb631;
+    box-shadow: 0px 0px 5px 1px #bbb;
+}
+
+.navbar-brand {
+    padding: 0px 15px;
+}
