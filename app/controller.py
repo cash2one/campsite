@@ -22,3 +22,10 @@ def login():
     return render_template('login.html', username= "trial", password="secret", form=form)
 
 
+@app.route('/create_account', methods=['POST'])
+def create_account():
+    form = CreateAccountForm()
+    if form.validate_on_submit():
+        flash('Account Created for {0} and {1}'.format(form.fatherfn, form.motherfn))
+        return redirect('/')
+    return render_template('create_account.html', form=form)
