@@ -26,6 +26,7 @@ def login():
 def create_account():
     form = CreateAccountForm()
     if form.validate_on_submit():
-        flash('Account Created for {0} and {1}'.format(form.fatherfn, form.motherfn))
+        user = Parent
+        flash('Account Created for {0}'.format(form.email.data)
         return redirect('/')
     return render_template('create_account.html', form=form)
