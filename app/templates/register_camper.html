@@ -1,0 +1,21 @@
+{% extends "base_templates/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% include 'flash_messages.html' %}
+{% block content %}
+    {% include 'flash_messages.html' %}
+    <div class= "container">
+        <div class="row">
+            <div class="col-md-3">
+                <h2>Camper Profile</h2>
+                <ul>
+                    <li>{{camper.fn}} {{camper.ln}}</li>
+                    <li>{{camper.dob}}</li>
+                </ul>
+            </div>
+            <div class= "col-md-offset-3 col-md-6">
+                <h1> Register Camper </h1>
+                {{ wtf.quick_form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

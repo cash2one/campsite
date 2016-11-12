@@ -3,7 +3,7 @@ DEBUG = True
 # Set app directory
 import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'app.db')
 # Production DB
 # SQLALCHEMY_DATABASE_URI = 'mysql://hhscusername:freepassword@hhscdb.ci7xsupmx76b.us-east-1.rds.amazonaws.com/hhscdb'
 SQLALCHEMY_MIGRATE_REPO = os.path.join(BASE_DIR, 'db_repository')

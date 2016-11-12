@@ -1,0 +1,16 @@
+{% extends "base_templates/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+    {% include 'flash_messages.html' %}
+    <div class= "container">
+        <div class="row">
+            <div class= "col-md-offset-4 col-md-4">
+                <h1> Parents Sign In </h1>
+                {{ wtf.quick_form(form) }}
+                <br>
+                <a href="">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

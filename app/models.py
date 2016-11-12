@@ -18,22 +18,27 @@ class Camp_Session(db.Model):
 class Camper(db.Model):
     __tablename__ = 'camper'
     id = db.Column(db.Integer, primary_key = True)
-    firstname = db.Column(db.String(64), index=True)
-    lastname = db.Column(db.String(64), index=True)
-    birthdate = db.Column(db.Date, index = True)
-    camp_session_id = db.Column(db.Integer, db.ForeignKey('camp_session.id'))
-    parent_id = db.Column(db.Integer, db.ForeignKey('parents.id'))
+    fn = db.Column(db.String(64), index=True)
+    ln = db.Column(db.String(64), index=True)
+    dob = db.Column(db.Date, index = True)
+    gender = db.Column(db.String(5))
+    street = db.Column(db.String(200))
+    state = db.Column(db.String(2))
+    country = db.Column(db.String(64))
+    zipcode = db.Column(db.String(8))
+    campercell = db.Column(db.String(64))
+    camperemail = db.Column(db.String(64))
+    parents_id = db.Column(db.Integer, db.ForeignKey('parents.id'))
 
     def __repr__(self):
         return '<Camper {0} {1}>'.format(self.firstname, self.lastname)
 
 class User(UserMixin, db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
-    username = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    parents_id = db.Column(db.Integer, db.ForeignKey('parents.id'))
+    parents = db.relationship('Parents', backref='parents', uselist=False)
 
     @property
     def password(self):
@@ -120,17 +125,26 @@ def load_user(user_id):
 class Parents(db.Model):
     __tablename__ = 'parents'
     id = db.Column(db.Integer, primary_key = True)
-    fatherfn = db.Column(db.String(64), index = True)
-    fatherln = db.Column(db.String(64), index = True)
-    motherfn = db.Column(db.String(64), index = True)
-    motherln = db.Column(db.String(64), index = True)
-    street = db.Column(db.String(200))
-    city = db.Column(db.String(200))
-    state = db.Column(db.String(200))
-    zipcode = db.Column(db.String(200))
-    country = db.Column(db.String(200))
-    altstreet = db.Column(db.String(200))
-    email = db.Column(db.String, unique = True)
+    g1fn = db.Column(db.String(64), index = True)
+    g1ln = db.Column(db.String(64), index = True)
+    g2fn = db.Column(db.String(64), index = True)
+    g2ln = db.Column(db.String(64), index = True)
+    g1street = db.Column(db.String(64))
+    g1city = db.Column(db.String(64))
+    g1state = db.Column(db.String(64))
+    g1zipcode = db.Column(db.String(64))
+    g1country = db.Column(db.String(64))
+    g2street = db.Column(db.String(64))
+    g2city = db.Column(db.String(64))
+    g2state = db.Column(db.String(64))
+    g2zipcode = db.Column(db.String(64))
+    g2country = db.Column(db.String(64))
+    g1phone = db.Column(db.String(64))
+    g2phone = db.Column(db.String(64))
+    g1email = db.Column(db.String(64))
+    g2email = db.Column(db.String(64))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
     campers = db.relationship('Camper', backref='parents', lazy='dynamic')
 
     def __repr__(self):

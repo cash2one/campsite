@@ -2,7 +2,7 @@
   <a class="navbar-brand" href="{{ url_for('home') }}"><img style="width: 50px;" src="static/images/hhsclogo.png"></a>
   <ul class="nav navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('login') }}">Apply For Camp</a>
+      <a class="nav-link" href="{{ url_for('auth.create_account') }}">Apply For Camp</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="#">Counselor Application</a>
@@ -16,6 +16,16 @@
     <li> 
       <a>About</a>
     </li>
+
+    {% if current_user.is_authenticated %}
+    <li class="nav-item pull-right">
+      <a href="{{url_for('auth.logout')}}">Logout</a>
+    </li>
+    <li class= "nav-item pull-right">
+      <a href="{{url_for('dashboard')}}">{{ current_user.email }}</a>
+    </li>
+
+    {% endif %}
 <!--     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="http://example.com" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
       <div class="dropdown-menu" aria-labelledby="supportedContentDropdown">
