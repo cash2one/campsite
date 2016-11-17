@@ -1,8 +1,9 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
-from .forms import UpdateParentProfileForm, UpdateCamperProfileForm, CamperRegistrationForm
+from .forms import UpdateParentProfileForm, UpdateCamperProfileForm, CamperRegistrationForm, MedicalForm
 from flask_login import login_required, current_user
 from .models import *
+from datetime import datetime
 
 # Sample HTTP error handling
 @app.errorhandler(404)
@@ -36,7 +37,6 @@ def update_parent_profile():
             g2country = form.g2country.data,
             g1phone = form.g1phone.data,
             g2phone = form.g2phone.data,
-            g1email = form.g1email.data,
             g2email = form.g2email.data,
             user_id = current_user.id
             )
@@ -53,7 +53,15 @@ def dashboard():
     if parents is None:
         return redirect(url_for('update_parent_profile'))
     campers = Camper.query.filter_by(parents_id=current_user.parents.id).all()
-    return render_template('dashboard.html', campers=campers)
+    regs = {c:c.find_active_registration() for c in campers}
+    sess = {}
+    for c in campers:
+        if regs[c] == "None":
+            sess[c] = "None"
+        else:
+            sess[c] = Camp_Session.query.get(regs[c].camp_session_id)
+
+    return render_template('dashboard.html', campers=campers, regs=regs, sess=sess)
 
 @app.route('/camper_profile', methods=['GET','POST'])
 @login_required
@@ -86,7 +94,22 @@ def register_camper(camper_id):
     form = CamperRegistrationForm()
     errors = None
     if form.validate_on_submit():
-        camper_registration = 1
+        camper_registration = Camper_Registration(
+            submission_timestamp = datetime.now(),
+            camper_id = camper_id,
+            camp_session_id = form.session.data,
+            gradeinfall = form.gradeinfall.data,
+            prevcamper = form.previouscamper.data,
+            cabin_pal_name = form.cabinpalname.data,
+            shirtsize = form.tshirtsize.data,
+            emgname = form.emgname.data,
+            emgrelation = form.emgname.data,
+            emgemail = form.emgemail.data,
+            accept = form.acceptterms.data,
+            ppsrelease = form.ppsreleaseagreement.data
+            )
+        db.session.add(camper_registration)
+        db.session.commit()
         flash('Camper Registered')
         return redirect(url_for('dashboard'))
     camper = Camper.query.filter_by(id=camper_id).first()
@@ -95,5 +118,7 @@ def register_camper(camper_id):
 @app.route('/medical_form/<int:camper_id>', methods=['GET', 'POST'])
 @login_required
 def medical_form(camper_id):
+    form = MedicalForm()
+    
     flash("Reached Medical Form")
     return redirect(url_for('dashboard'))

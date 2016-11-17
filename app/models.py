@@ -2,6 +2,8 @@ from app import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask import request, url_for
+from sqlalchemy import desc
+from datetime import datetime
 
 
 class Camp_Session(db.Model):
@@ -11,6 +13,13 @@ class Camp_Session(db.Model):
     year = db.Column(db.String(4))
     camper_registrations = db.relationship('Camper_Registration', backref='camp_session',lazy='dynamic')
     counselor_registrations = db.relationship('Counselor_Registration', backref='camp_session', lazy='dynamic')
+
+    @classmethod
+    def active_sessions(self):
+        sessions = Camp_Session.query.filter_by(year='2016').all()
+        if sessions != None:
+            sessions = [(str(s.id), "Session {0} {1}".format(str(s.session), s.year)) for s in sessions]
+        return sessions
 
     def __repr__(self):
         return '<{0} Session {1}>'.format(self.year, self.session)
@@ -30,8 +39,19 @@ class Camper(db.Model):
     camperemail = db.Column(db.String(64))
     parents_id = db.Column(db.Integer, db.ForeignKey('parents.id'))
 
+    def find_active_registration(self):
+        regs = Camper_Registration.query.filter_by(camper_id=self.id).order_by(desc(Camper_Registration.submission_timestamp)).first()
+        if regs is None:
+            regs = "None"
+        return regs
+
+    @property
+    def age(self):
+        return ((datetime.now().date() - self.dob).days) / 365
+    
+
     def __repr__(self):
-        return '<Camper {0} {1}>'.format(self.firstname, self.lastname)
+        return '<Camper {0} {1}>'.format(self.fn, self.ln)
 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
@@ -141,7 +161,6 @@ class Parents(db.Model):
     g2country = db.Column(db.String(64))
     g1phone = db.Column(db.String(64))
     g2phone = db.Column(db.String(64))
-    g1email = db.Column(db.String(64))
     g2email = db.Column(db.String(64))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -154,21 +173,36 @@ class Parents(db.Model):
 class Camper_Registration(db.Model):
     __tablename__ = 'camper_registration'
     id = db.Column(db.Integer, primary_key = True)
-    camper_id = db.Column(db.Integer, db.ForeignKey('camper.id'))
-    camp_session_id = db.Column(db.Integer, db.ForeignKey('camp_session.id'))
-    medical_form_id = db.Column(db.Integer, db.ForeignKey('medical_form.id'))
-    submission_timestamp = db.Column(db.DateTime)
-    payment_received = db.Column(db.DateTime)
+    submission_timestamp = db.Column(db.TIMESTAMP)
+    payment_received = db.Column(db.TIMESTAMP)
     registration_complete = db.Column(db.Boolean)
     accepted = db.Column(db.Boolean)
+    camper_id = db.Column(db.Integer, db.ForeignKey('camper.id'))
+    camp_session_id = db.Column(db.Integer, db.ForeignKey('camp_session.id'))
+    gradeinfall = db.Column(db.String(2))
+    prevcamper = db.Column(db.Boolean)
+    cabin_pal_name = db.Column(db.String(64))
+    shirtsize = db.Column(db.String(4))
+    emgname = db.Column(db.String(255))
+    emgrelation = db.Column(db.String(64))
+    emgemail = db.Column(db.String(64))
+    accept = db.Column(db.Boolean)
+    ppsrelease = db.Column(db.Boolean)
 
     def __repr__(self):
-        return '<Registration record {0}>'.format(self.camper_id)
+        camper = Camper.query.get(self.camper_id)
+        return '<Registration for {0} - id:{1}>'.format(camper.fn, self.id)
+
+    def get_session(self):
+        return Camp_Session.query.get(self.camp_session_id)
 
 class Medical_Form(db.Model):
     __tablename__ = 'medical_form'
     id = db.Column(db.Integer, primary_key = True)
     vaccine = db.Column(db.String(500))
+
+    def __repr__(self):
+        return '<Medical Form '
 
 class Counselor_Registration(db.Model):
     __tablename__ = 'counselor_registration'

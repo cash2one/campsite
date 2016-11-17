@@ -6,52 +6,71 @@
     {% include 'flash_messages.html' %}
     <div class= "container">
         <div class="row">
-            <div class= "col-md-10">
-                <h1> Welcome to your Dashboard</h1>
-                <ul>
-                    <li>
-                        {{ current_user.parents.g1fn }}
-                        {{ current_user.parents.g1ln }}
-                    </li>
-                </ul>
-                <a class='btn' href="{{url_for('add_camper')}}">Add Camper</a>
-                <h2>Register Campers</h2>
-                {% if campers==None %}
-                    <p>Please Add a Camper to register them</p>
-                {% else %}
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Age</th>
-                                    <th>Session</th>
-                                    <th>Application</th>
-                                    <th>Medical Form</th>
-                                    <th>Fee Received</th>
-                                    <th>Decision</th>
-                                    <th>Register Camper</th>
-                                    <th>Complete Medical Form</th>
-                                </tr>
-                            </thead>
-                            {% for camper in campers %}
-                            <tr>
-                                <td>{{camper.fn}} {{camper.ln}}</td>
-                                <td>{{camper.dob}}</td>
-                                <td>None</td>
-                                <td>Incomplete</td>
-                                <td>Incomplete</td>
-                                <td>Incomplete</td>
-                                <td>None</td>
-                                <td><a class="btn" href="{{ url_for('register_camper', camper_id=camper.id) }}">Register</a></td>
-                                <td><a class="btn" href="{{ url_for('medical_form', camper_id=camper.id) }}">Fill Out</a></td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                {% endif %}
-
+            <h1> Welcome to your Dashboard</h1>
+            <div class= "col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>Name</dt>
+                    <dd>{{ current_user.parents.g1fn }} {{ current_user.parents.g1ln }}</dd>
+                    <dt>Email</dt>
+                    <dd>{{ current_user.email}}</dd>
+                    <dt>Phone</dt>
+                    <dd>{{ current_user.parents.g1phone }}</dd>
+                </dl>
             </div>
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>Name</dt>
+                    <dd>{{ current_user.parents.g2fn }} {{ current_user.parents.g2ln }}</dd>
+                    <dt>Email</dt>
+                    <dd>{{ current_user.parents.g2email}}</dd>
+                    <dt>Phone</dt>
+                    <dd>{{ current_user.parents.g2phone }}</dd>
+                </dl>
+            </div>
+            
+            <div class="clearfix"></div>
+            <div class="col-md-6"><a class='center-block btn' href="{{url_for('add_camper')}}">Add Camper</a></div>
+        </div>
+        <div class="row">
+            <h2>Register Campers</h2>
+            {% if campers|length == 0 %}
+                <p>Please Add a Camper to register them</p>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Session</th>
+                                <th>Application</th>
+                                <th>Medical Form</th>
+                                <th>Fee Received</th>
+                                <th>Decision</th>
+                                <th>Register Camper</th>
+                                <th>Complete Medical Form</th>
+                            </tr>
+                        </thead>
+                        {% for camper in campers %}
+                        <tr>
+                            <td>{{camper.fn}} {{camper.ln}}</td>
+                            <td>{{camper.age}}</td>
+                            <td>{{sess[camper]}}</td>
+                            {% if regs[camper] == 'None' %}
+                            <td>Incomplete</td>
+                            {% else %}
+                            <td>{{regs[camper].submission_timestamp}}</td>
+                            {% endif %}
+                            <td>Incomplete</td>
+                            <td>Incomplete</td>
+                            <td>None</td>
+                            <td><a class="btn" href="{{ url_for('register_camper', camper_id=camper.id) }}">Register</a></td>
+                            <td><a class="btn" href="{{ url_for('medical_form', camper_id=camper.id) }}">Fill Out</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

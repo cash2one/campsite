@@ -6,3 +6,7 @@
 .navbar-brand {
     padding: 0px 15px;
 }
+
+dl {
+    font-size: 16px;
+}
