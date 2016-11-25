@@ -5,6 +5,7 @@ from flask import request, url_for
 from sqlalchemy import desc
 from datetime import datetime
 
+allergies = [(1,'No Allergies'), (2, 'Food'), (3, 'Medicine'),(4,'Enviornment'),(5,'Insect Bites'),(6,'Other')]
 
 class Camp_Session(db.Model):
     __tablename__ = 'camp_session'
@@ -197,12 +198,63 @@ class Camper_Registration(db.Model):
         return Camp_Session.query.get(self.camp_session_id)
 
 class Medical_Form(db.Model):
+
     __tablename__ = 'medical_form'
     id = db.Column(db.Integer, primary_key = True)
     vaccine = db.Column(db.String(500))
+    dtap = db.Column(db.Date)
+    mump = db.Column(db.Date)
+    polio = db.Column(db.Date)
+    ckpox = db.Column(db.Date)
+    meningitis = db.Column(db.Date)
+    hib = db.Column(db.Date)
+    pcv = db.Column(db.Date)
+    tb = db.Column(db.Date)
+    tbtest =db.Column(db.Boolean)
+    prescriptions = db.relationship('Prescription', backref='prescriptions', lazy='dynamic')
+    hosp = db.Column(db.Boolean)
+    surg = db.Column(db.Boolean)
+    chro = db.Column(db.Boolean)
+    bedw = db.Column(db.Boolean)
+    recinj = db.Column(db.Boolean)
+    asth = db.Column(db.Boolean)
+    diab = db.Column(db.Boolean)
+    seiz = db.Column(db.Boolean)
+    dizz = db.Column(db.Boolean)
+    chestpain = db.Column(db.Boolean)
+    add = db.Column(db.Boolean)
+    emodisorder = db.Column(db.Boolean)
+    seenprof = db.Column(db.Boolean)
+    other = db.Column(db.Boolean)
+    explain = db.Column(db.String(1024))
+    swim = db.Column(db.Boolean)
+    restrictions = db.Column(db.String(1024))
+    insu = db.Column(db.Boolean)
+    insucomp = db.Column(db.String(128))
+    insupoli = db.Column(db.String(128))
+    insusubs = db.Column(db.String(128))
+    insuphon = db.Column(db.String(128))
+    sign = db.Column(db.Boolean)
+    parents_id = db.Column(db.Integer, db.ForeignKey('parents.id'))
 
     def __repr__(self):
-        return '<Medical Form '
+        return '<Medical Form {0}>'.format(self.id)
+
+class Prescription(db.Model):
+
+    __tablename__ = 'prescription'
+    id = db.Column(db.Integer, primary_key = True)
+    medical_id = db.Column(db.Integer, db.ForeignKey('medical_form.id'))
+    name = db.Column(db.String(512))
+    reason = db.Column(db.String(2000))
+    dosage = db.Column(db.String(128))
+    schedule = db.Column(db.String(512))
+    admin = db.Column(db.String(512))
+    other = db.Column(db.String(512))
+
+    def __repr__(self):
+        return '<Prescription {0}'.format(self.id)
+
 
 class Counselor_Registration(db.Model):
     __tablename__ = 'counselor_registration'
