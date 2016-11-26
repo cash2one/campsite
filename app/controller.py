@@ -38,9 +38,27 @@ def edit_parent_profile(parents_id):
     form.g2phone.default = parents.g2phone
     form.g2email.default = parents.g2email
     if form.validate_on_submit():
-        
-
-    current_user.id
+        parents.g1fn = form.g1fn.data
+        parents.g1ln = form.g1ln.data
+        parents.g2fn = form.g2fn.data
+        parents.g2ln = form.g2ln.data
+        parents.g1street = form.g1street.data
+        parents.g1city = form.g1city.data
+        parents.g1state = form.g1state.data
+        parents.g1zipcode = form.g1zipcode.data
+        parents.g1country = form.g1country.data
+        parents.g2street = form.g2street.data
+        parents.g2city = form.g2city.data
+        parents.g2state = form.g2state.data
+        parents.g2zipcode = form.g2zipcode.data
+        parents.g2country = form.g2country.data
+        parents.g1phone = form.g1phone.data
+        parents.g2phone = form.g2phone.data
+        parents.g2email = form.g2email.data
+        db.session.commit()
+        flash('Parent Profile Updated')
+        return redirect(url_for('dashboard'))
+    return render_template('parent_profile.html', form=form)
 
 @app.route('/parent_profile', methods=['GET', 'POST'])
 @login_required
