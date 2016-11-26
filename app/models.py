@@ -201,7 +201,7 @@ class Medical_Form(db.Model):
 
     __tablename__ = 'medical_form'
     id = db.Column(db.Integer, primary_key = True)
-    vaccine = db.Column(db.String(500))
+    allergies = 
     dtap = db.Column(db.Date)
     mump = db.Column(db.Date)
     polio = db.Column(db.Date)

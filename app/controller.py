@@ -15,6 +15,33 @@ def not_found(error):
 def home():
     return render_template('home.html')
 
+@app.route('/update_parent_profile/<int:parents_id>', methods=['GET', 'POST'])
+@login_required
+def edit_parent_profile(parents_id):
+    form = UpdateParentProfileForm()
+    parents = Parents.query.get(parents_id)
+    form.g1fn.default = parents.g1fn
+    form.g1ln.default = parents.g1ln
+    form.g2fn.default = parents.g2fn
+    form.g2ln.default = parents.g2ln
+    form.g1street.default = parents.g1street
+    form.g1city.default = parents.g1city
+    form.g1state.default = parents.g1state
+    form.g1zipcode.default = parents.g1zipcode
+    form.g1country.default = parents.g1country
+    form.g2street.default = parents.g2street
+    form.g2city.default = parents.g2city
+    form.g2state.default = parents.g2state
+    form.g2zipcode.default = parents.g2zipcode
+    form.g2country.default = parents.g2country
+    form.g1phone.default = parents.g1phone
+    form.g2phone.default = parents.g2phone
+    form.g2email.default = parents.g2email
+    if form.validate_on_submit():
+        
+
+    current_user.id
+
 @app.route('/parent_profile', methods=['GET', 'POST'])
 @login_required
 def update_parent_profile():
@@ -119,6 +146,5 @@ def register_camper(camper_id):
 @login_required
 def medical_form(camper_id):
     form = MedicalForm()
-    
     flash("Reached Medical Form")
     return redirect(url_for('dashboard'))

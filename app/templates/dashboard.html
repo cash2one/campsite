@@ -16,6 +16,7 @@
                     <dt>Phone</dt>
                     <dd>{{ current_user.parents.g1phone }}</dd>
                 </dl>
+                <a class='btn' href="{{ url_for('edit_parent_profile', parents_id=current_user.parents.id) }}"> Edit Parent Profile</a>
             </div>
             <div class="col-md-4">
                 <dl class="dl-horizontal">
