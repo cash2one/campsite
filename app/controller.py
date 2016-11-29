@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
-from .forms import UpdateParentProfileForm, UpdateCamperProfileForm, CamperRegistrationForm, MedicalForm
+from .forms import UpdateParentProfileForm, UpdateCamperProfileForm, CamperRegistrationForm, MedicalForm, MedicationForm
 from flask_login import login_required, current_user
 from .models import *
 from datetime import datetime
@@ -18,25 +18,8 @@ def home():
 @app.route('/update_parent_profile/<int:parents_id>', methods=['GET', 'POST'])
 @login_required
 def edit_parent_profile(parents_id):
-    form = UpdateParentProfileForm()
     parents = Parents.query.get(parents_id)
-    form.g1fn.default = parents.g1fn
-    form.g1ln.default = parents.g1ln
-    form.g2fn.default = parents.g2fn
-    form.g2ln.default = parents.g2ln
-    form.g1street.default = parents.g1street
-    form.g1city.default = parents.g1city
-    form.g1state.default = parents.g1state
-    form.g1zipcode.default = parents.g1zipcode
-    form.g1country.default = parents.g1country
-    form.g2street.default = parents.g2street
-    form.g2city.default = parents.g2city
-    form.g2state.default = parents.g2state
-    form.g2zipcode.default = parents.g2zipcode
-    form.g2country.default = parents.g2country
-    form.g1phone.default = parents.g1phone
-    form.g2phone.default = parents.g2phone
-    form.g2email.default = parents.g2email
+    form = UpdateParentProfileForm(obj=parents)
     if form.validate_on_submit():
         parents.g1fn = form.g1fn.data
         parents.g1ln = form.g1ln.data
@@ -60,9 +43,13 @@ def edit_parent_profile(parents_id):
         return redirect(url_for('dashboard'))
     return render_template('parent_profile.html', form=form)
 
-@app.route('/parent_profile', methods=['GET', 'POST'])
+@app.route('/add_parent_profile', methods=['GET', 'POST'])
 @login_required
-def update_parent_profile():
+def create_parent_profile():
+    parents = Parents.query.filter_by(user_id=current_user.id).first()
+    if parents is not None:
+        return redirect(url_for('edit_parent_profile',parents_id=parents.id))
+
     form = UpdateParentProfileForm()
     if form.validate_on_submit():
         parents = Parents(
@@ -96,7 +83,7 @@ def update_parent_profile():
 def dashboard():
     parents = Parents.query.filter_by(user_id=current_user.id).first()
     if parents is None:
-        return redirect(url_for('update_parent_profile'))
+        return redirect(url_for('create_parent_profile'))
     campers = Camper.query.filter_by(parents_id=current_user.parents.id).all()
     regs = {c:c.find_active_registration() for c in campers}
     sess = {}
@@ -108,7 +95,30 @@ def dashboard():
 
     return render_template('dashboard.html', campers=campers, regs=regs, sess=sess)
 
-@app.route('/camper_profile', methods=['GET','POST'])
+@app.route('/edit_camper_profile/<int:camper_id>', methods=['GET','POST'])
+@login_required
+def edit_camper(camper_id):
+    camper = Camper.query.get(camper_id)
+    form = UpdateCamperProfileForm(obj=camper)
+    errors = None
+    if form.validate_on_submit():
+        camper.fn = form.fn.data
+        camper.ln = form.ln.data
+        camper.dob = form.dob.data
+        camper.gender = form.gender.data
+        camper.street = form.street.data
+        camper.state = form.state.data
+        camper.country = form.country.data
+        camper.zipcode = form.zipcode.data
+        camper.campercell = form.campercell.data
+        camper.camperemail = form.camperemail.data
+        db.session.commit()
+        flash('Camper Profile Updated')
+        return redirect(url_for('dashboard'))
+    return render_template('camper_profile.html', form=form, errors=errors)
+
+
+@app.route('/add_camper', methods=['GET','POST'])
 @login_required
 def add_camper():
     form = UpdateCamperProfileForm()
@@ -160,9 +170,85 @@ def register_camper(camper_id):
     camper = Camper.query.filter_by(id=camper_id).first()
     return render_template('register_camper.html', form=form, errors=errors, camper=camper)
 
+@app.route('/edit_camper_registration/<int:camper_id>', methods=['GET','POST'])
+@login_required
+def edit_registration(camper_id):
+    reg = Camper.query.get(camper_id).find_active_registration()
+    form = CamperRegistrationForm(obj=reg)
+    errors = None
+    if form.validate_on_submit():
+        camper_registration = Camper_Registration(
+            reg.submission_timestamp = datetime.now()
+            reg.camp_session_id = form.session.data
+            reg.gradeinfall = form.gradeinfall.data
+            reg.prevcamper = form.previouscamper.data
+            reg.cabin_pal_name = form.cabinpalname.data
+            reg.shirtsize = form.tshirtsize.data
+            reg.emgname = form.emgname.data
+            reg.emgrelation = form.emgname.data
+            reg.emgemail = form.emgemail.data
+            reg.accept = form.acceptterms.data
+            reg.ppsrelease = form.ppsreleaseagreement.dat
+            )
+        db.session.commit()
+        flash('Camper Registeration Updated')
+        return redirect(url_for('dashboard'))
+    camper = Camper.query.filter_by(id=camper_id).first()
+    return render_template('register_camper.html', form=form, errors=errors, camper=camper)
+
 @app.route('/medical_form/<int:camper_id>', methods=['GET', 'POST'])
 @login_required
 def medical_form(camper_id):
-    form = MedicalForm()
-    flash("Reached Medical Form")
-    return redirect(url_for('dashboard'))
+    mform = MedicalForm()
+    pform = MedicationForm()
+    if mform.validate_on_submit() and mform.submit:
+        reg = Camper.query.get(camper_id).find_active_registration()
+        if reg != "None":
+            reg = reg.id
+        else:
+            reg = -1
+        med_form = Medical_Form(
+            allergies = mform.allergies.data,
+            dtap = mform.dtap.data,
+            mump = mform.mump.data,
+            polio = mform.polio.data,
+            ckpox = mform.ckpox.data,
+            meningitis = mform.meningitis.data,
+            hib = mform.hib.data,
+            pcv = mform.pcv.data,
+            tb = mform.tb.data,
+            tbtest =mform.tbtest.data,
+            hosp = mform.hosp.data,
+            surg = mform.surg.data,
+            chro = mform.chro.data,
+            bedw = mform.bedw.data,
+            recinj = mform.recinj.data,
+            asth = mform.asth.data,
+            envallg = mform.envallg.data,
+            diab = mform.diab.data,
+            seiz = mform.seiz.data,
+            dizz = mform.dizz.data,
+            chestpain = mform.chestpain.data,
+            add = mform.add.data,
+            emodisorder = mform.emodisorder.data,
+            seenprof = mform.seenprof.data,
+            other = mform.other.data,
+            explain = mform.explain.data,
+            swim = mform.swim.data,
+            restrictions = mform.restrictions.data,
+            insu = mform.insu.data,
+            insucomp = mform.insucomp.data,
+            insupoli = mform.insupoli.data,
+            insusubs = mform.insusubs.data,
+            insuphon = mform.insuphon.data,
+            sign = mform.sign.data,
+            parent = mform.parent.data,
+            submission_timestamp = datetime.now(),
+            camper_registration_id = reg
+        )
+        db.session.add(med_form)
+        db.session.commit()
+        flash("Medical Form Submitted")
+        return redirect(url_for('dashboard'))
+
+    return render_template('medical_form.html', mform = mform, pform=pform)

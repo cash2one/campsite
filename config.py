@@ -13,7 +13,7 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(BASE_DIR, 'db_repository')
 THREADS_PER_PAGE = 2
 
 # Protection against Cross-site Request Forgery (CSRF)
-WTF_CSRF_ENABLED = True
+CSRF_ENABLED = True
 
 # CSRF_SESSION_KEY = "secret"
 

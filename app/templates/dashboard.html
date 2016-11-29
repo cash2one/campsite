@@ -41,6 +41,7 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Name</th>
                                 <th>Age</th>
                                 <th>Session</th>
@@ -54,6 +55,7 @@
                         </thead>
                         {% for camper in campers %}
                         <tr>
+                            <td><a class="btn" href="{{ url_for('edit_camper', camper_id=camper.id) }}">Edit Camper</a></td>
                             <td>{{camper.fn}} {{camper.ln}}</td>
                             <td>{{camper.age}}</td>
                             <td>{{sess[camper]}}</td>

@@ -168,7 +168,7 @@ class Parents(db.Model):
     campers = db.relationship('Camper', backref='parents', lazy='dynamic')
 
     def __repr__(self):
-        return '<Parent {0} {1}>'.format(self.firstname, self.lastname)
+        return '<Parents {0}>'.format(self.g1ln)
 
 
 class Camper_Registration(db.Model):
@@ -201,7 +201,7 @@ class Medical_Form(db.Model):
 
     __tablename__ = 'medical_form'
     id = db.Column(db.Integer, primary_key = True)
-    allergies = 
+    allergies = db.Column(db.String(1024))
     dtap = db.Column(db.Date)
     mump = db.Column(db.Date)
     polio = db.Column(db.Date)
@@ -211,13 +211,13 @@ class Medical_Form(db.Model):
     pcv = db.Column(db.Date)
     tb = db.Column(db.Date)
     tbtest =db.Column(db.Boolean)
-    prescriptions = db.relationship('Prescription', backref='prescriptions', lazy='dynamic')
     hosp = db.Column(db.Boolean)
     surg = db.Column(db.Boolean)
     chro = db.Column(db.Boolean)
     bedw = db.Column(db.Boolean)
     recinj = db.Column(db.Boolean)
     asth = db.Column(db.Boolean)
+    envallg = db.Column(db.Boolean)
     diab = db.Column(db.Boolean)
     seiz = db.Column(db.Boolean)
     dizz = db.Column(db.Boolean)
@@ -235,14 +235,17 @@ class Medical_Form(db.Model):
     insusubs = db.Column(db.String(128))
     insuphon = db.Column(db.String(128))
     sign = db.Column(db.Boolean)
-    parents_id = db.Column(db.Integer, db.ForeignKey('parents.id'))
+    parent = db.Column(db.String(128))
+    submission_timestamp = db.Column(db.TIMESTAMP)
+    camper_registration_id = db.Column(db.Integer, db.ForeignKey('camper_registration.id'))
+    prescriptions = db.relationship('Medication', backref='medications', lazy='dynamic')
 
     def __repr__(self):
         return '<Medical Form {0}>'.format(self.id)
 
-class Prescription(db.Model):
+class Medication(db.Model):
 
-    __tablename__ = 'prescription'
+    __tablename__ = 'medication'
     id = db.Column(db.Integer, primary_key = True)
     medical_id = db.Column(db.Integer, db.ForeignKey('medical_form.id'))
     name = db.Column(db.String(512))
@@ -253,7 +256,7 @@ class Prescription(db.Model):
     other = db.Column(db.String(512))
 
     def __repr__(self):
-        return '<Prescription {0}'.format(self.id)
+        return '<Medication {0}'.format(self.id)
 
 
 class Counselor_Registration(db.Model):
