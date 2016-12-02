@@ -146,6 +146,10 @@ def add_camper():
 @app.route('/register_camper/<int:camper_id>', methods=['GET','POST'])
 @login_required
 def register_camper(camper_id):
+    reg = Camper.query.get(camper_id).find_active_registration()
+    if reg is not None:
+        return redirect(url_for('edit_registration', reg_id=reg.id))
+
     form = CamperRegistrationForm()
     errors = None
     if form.validate_on_submit():
@@ -170,30 +174,29 @@ def register_camper(camper_id):
     camper = Camper.query.filter_by(id=camper_id).first()
     return render_template('register_camper.html', form=form, errors=errors, camper=camper)
 
-@app.route('/edit_camper_registration/<int:camper_id>', methods=['GET','POST'])
+@app.route('/edit_camper_registration/<int:reg_id>', methods=['GET','POST'])
 @login_required
-def edit_registration(camper_id):
-    reg = Camper.query.get(camper_id).find_active_registration()
+def edit_registration(reg_id):
+    reg = Camper_Registration.query.get(reg_id)
     form = CamperRegistrationForm(obj=reg)
     errors = None
     if form.validate_on_submit():
-        camper_registration = Camper_Registration(
-            reg.submission_timestamp = datetime.now()
-            reg.camp_session_id = form.session.data
-            reg.gradeinfall = form.gradeinfall.data
-            reg.prevcamper = form.previouscamper.data
-            reg.cabin_pal_name = form.cabinpalname.data
-            reg.shirtsize = form.tshirtsize.data
-            reg.emgname = form.emgname.data
-            reg.emgrelation = form.emgname.data
-            reg.emgemail = form.emgemail.data
-            reg.accept = form.acceptterms.data
-            reg.ppsrelease = form.ppsreleaseagreement.dat
-            )
+        reg.submission_timestamp = datetime.now()
+        reg.camp_session_id = form.session.data
+        reg.gradeinfall = form.gradeinfall.data
+        reg.prevcamper = form.previouscamper.data
+        reg.cabin_pal_name = form.cabinpalname.data
+        reg.shirtsize = form.tshirtsize.data
+        reg.emgname = form.emgname.data
+        reg.emgrelation = form.emgname.data
+        reg.emgemail = form.emgemail.data
+        reg.emgphone = form.emgphone.data
+        reg.accept = form.acceptterms.data
+        reg.ppsrelease = form.ppsreleaseagreement.data
         db.session.commit()
         flash('Camper Registeration Updated')
         return redirect(url_for('dashboard'))
-    camper = Camper.query.filter_by(id=camper_id).first()
+    camper = Camper.query.get(reg.camper_id)
     return render_template('register_camper.html', form=form, errors=errors, camper=camper)
 
 @app.route('/medical_form/<int:camper_id>', methods=['GET', 'POST'])
