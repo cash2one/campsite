@@ -17,7 +17,8 @@ class Camp_Session(db.Model):
 
     @classmethod
     def active_sessions(self):
-        sessions = Camp_Session.query.filter_by(year='2016').all()
+        current_year = str(datetime.now().year)
+        sessions = Camp_Session.query.filter_by(year=current_year).all()
         if sessions != None:
             sessions = [(str(s.id), "Session {0} {1}".format(str(s.session), s.year)) for s in sessions]
         return sessions
@@ -41,9 +42,10 @@ class Camper(db.Model):
     parents_id = db.Column(db.Integer, db.ForeignKey('parents.id'))
 
     def find_active_registration(self):
-        regs = Camper_Registration.query.filter_by(camper_id=self.id).order_by(desc(Camper_Registration.submission_timestamp)).first()
-        if regs is None:
-            regs = "None"
+        current_year = str(datetime.now().year)
+        regs = Camper_Registration.query.filter_by(camper_id=self.id).join(Camp_Session, Camper_Registration.camp_session_id==Camp_Session.id).filter_by(year=current_year).first()
+        # regs = Camper_Registration.query.filter_by(camper_id=self.id).join(Camp_Session.active_sessions, Camper_Registration.camp_session_id==Camp_Session.id).first()
+        # print regs
         return regs
 
     @property
@@ -72,6 +74,21 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def is_active(self):
+        """True, as all users are active."""
+        return True
+
+    def get_id(self):
+        """Return the email address to satisfy Flask-Login's requirements."""
+        return self.email
+
+    def is_anonymous(self):
+        """False, as anonymous users aren't supported."""
+        return False
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter_by(email=user_id).first()
     # def generate_confirmation_token(self, expiration=3600):
     #     s = Serializer(current_app.config['SECRET_KEY'], expiration)
     #     return s.dumps({'confirm': self.id})
@@ -139,10 +156,6 @@ class User(UserMixin, db.Model):
     #                expires_in=expiration)
     # return s.dumps({'id': self.id}).decode('ascii')
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
 class Parents(db.Model):
     __tablename__ = 'parents'
     id = db.Column(db.Integer, primary_key = True)
@@ -195,7 +208,12 @@ class Camper_Registration(db.Model):
         return '<Registration for {0} - id:{1}>'.format(camper.fn, self.id)
 
     def get_session(self):
-        return Camp_Session.query.get(self.camp_session_id)
+        session = Camp_Session.query.get(self.camp_session_id)
+        return "Session {0}".format(session.session)
+
+    @property
+    def sub_time(self):
+        return self.submission_timestamp.strftime("%I:%M:%S%p %m/%d/%y")
 
 class Medical_Form(db.Model):
 

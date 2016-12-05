@@ -59,12 +59,17 @@
                             <td>{{camper.fn}} {{camper.ln}}</td>
                             <td>{{camper.age}}</td>
                             <td>{{sess[camper]}}</td>
-                            {% if regs[camper] == 'None' %}
-                            <td>Incomplete</td>
+                            {% if regs[camper] == None %}
+                                <td>Incomplete</td>
                             {% else %}
-                            <td>{{regs[camper].submission_timestamp}}</td>
+                                <td>{{regs[camper].sub_time}}</td>
                             {% endif %}
-                            <td>Incomplete</td>
+                            
+                            {% if med[camper] == None %}
+                                <td>Incomplete</td>
+                            {% else %}
+                                <td>{{med[camper].sub_time}}</td>
+                            {% endif %}
                             <td>Incomplete</td>
                             <td>None</td>
                             <td><a class="btn" href="{{ url_for('register_camper', camper_id=camper.id) }}">Register</a></td>

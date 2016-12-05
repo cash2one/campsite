@@ -86,14 +86,17 @@ def dashboard():
         return redirect(url_for('create_parent_profile'))
     campers = Camper.query.filter_by(parents_id=current_user.parents.id).all()
     regs = {c:c.find_active_registration() for c in campers}
+    med = {}
     sess = {}
     for c in campers:
-        if regs[c] == "None":
+        if regs[c] is None:
+            med[c] = None
             sess[c] = "None"
         else:
-            sess[c] = Camp_Session.query.get(regs[c].camp_session_id)
+            sess[c] = regs[c].get_session()
+            med[c] = Medical_Form.query.filter_by(camper_registration_id=regs[c].id)
 
-    return render_template('dashboard.html', campers=campers, regs=regs, sess=sess)
+    return render_template('dashboard.html', campers=campers, regs=regs, sess=sess, med=med)
 
 @app.route('/edit_camper_profile/<int:camper_id>', methods=['GET','POST'])
 @login_required
@@ -147,7 +150,9 @@ def add_camper():
 @login_required
 def register_camper(camper_id):
     reg = Camper.query.get(camper_id).find_active_registration()
+    print reg
     if reg is not None:
+        print "Reg inside", reg
         return redirect(url_for('edit_registration', reg_id=reg.id))
 
     form = CamperRegistrationForm()
