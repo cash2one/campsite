@@ -10,10 +10,20 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(BASE_DIR, 'db_repository')
 
 # print __file__
 
-THREADS_PER_PAGE = 2
+THREADS_PER_PAGE = 5
+
+# email server
+MAIL_SERVER = 'smtp.googlemail.com'
+MAIL_PORT = 587
+MAIL_USE_TLS = True
+MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+
+# administrator list
+ADMINS = ['ankurtoshniwal4@gmail.com']
 
 # Protection against Cross-site Request Forgery (CSRF)
-CSRF_ENABLED = True
+WTF_CSRF_ENABLED = True
 
 # CSRF_SESSION_KEY = "secret"
 
