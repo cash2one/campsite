@@ -5,13 +5,97 @@
     {% include 'flash_messages.html' %}
     <div class= "container">
         <div class="row">
-            <div class= "col-md-offset-3 col-md-6">
+            <div class= "col-md-offset-2 col-md-8">
                 <h1> Medical Form </h1>
-                    {{ wtf.form_field(mform.allergies) }}
-                    <span>{{ mform.tbtest.label }}</span> {{ wtf.form_field(mform.tbtest) }}
-                    <hr>
-                    {{ wtf.quick_form(mform) }}
-                    
+                {{ wtf.form_field(mform.allergies) }}
+                <h2>Immunization History</h2>
+                <div class='table-responsive'>
+                    <table class='table table-striped'>
+                        <thead>
+                            <tr>
+                                <th>Test</th>
+                                <th>Date Received</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> {{ mform.dtap.label}}</td>
+                                <td> {{ mform.dtap}}</td>
+                            </tr>
+                            <tr>
+                                <td> {{ mform.mump.label}}</td>
+                                <td> {{ mform.mump}} </td>
+                            </tr>
+                            <tr>
+                                <td> {{ mform.polio.label}}</td>
+                                <td> {{ mform.polio }} </td>
+                            </tr>
+                            <tr>
+                                <td> {{ mform.ckpox.label }} </td>
+                                <td> {{ mform.ckpox }} </td>
+                            </tr>
+                            <tr>
+                                <td> {{ mform.meningitis.label }} </td>
+                                <td> {{ mform.meningitis }} </td>
+                            </tr>
+                            <tr>
+                                <td> {{ mform.hib.label }} </td>
+                                <td> {{ mform.hib }} </td>
+                            </tr>
+                            <tr>
+                                <td> {{ mform.pcv.label }} </td>
+                                <td> {{ mform.pcv }} </td>
+                            </tr>
+                            <tr>
+                                <td> {{ mform.tb.label }} </td>
+                                <td> {{ mform.tb }} </td>
+                                <td> {{ mform.tbtest }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h2>Health History</h2>
+                {{ wtf.form_field(mform.hosp) }}
+                {{ wtf.form_field(mform.surg) }}
+                {{ wtf.form_field(mform.chro) }}
+                {{ wtf.form_field(mform.bedw) }}
+                {{ wtf.form_field(mform.recinj) }}
+                {{ wtf.form_field(mform.asth) }}
+                {{ wtf.form_field(mform.diab) }}
+                {{ wtf.form_field(mform.envallg) }}
+                {{ wtf.form_field(mform.seiz) }}
+                {{ wtf.form_field(mform.dizz) }}
+                {{ wtf.form_field(mform.chestpain) }}
+                {{ wtf.form_field(mform.add) }}
+                {{ wtf.form_field(mform.emodisorder) }}
+                {{ wtf.form_field(mform.seenprof) }}
+                {{ wtf.form_field(mform.other) }}
+                {{ wtf.form_field(mform.explain) }}
+                {{ wtf.form_field(mform.swim) }}
+                <div class='table-responsive'>
+                    <table class='table table-striped'>
+                        <tbody>
+                            <tr>
+                                <td>{{ mform.insucomp.label }}</td>
+                                <td>{{ mform.insucomp }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ mform.insupoli.label }}</td>
+                                <td>{{ mform.insupoli }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ mform.insusubs.label }}</td>
+                                <td>{{ mform.insusubs }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                {{ wtf.form_field(mform.sign) }}
+                {{ wtf.form_field(mform.parent) }}
+                {{ wtf.form_field(mform.submit) }}
+
+                <hr>
+                
                 <h1> Medications </h1>
                     {{ wtf.quick_form(pform) }}
             </div>

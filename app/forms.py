@@ -67,7 +67,7 @@ class MedicalForm(FlaskForm):
     hib = DateField('Haemophilus influenza B (HIB)', validators=[Required()])
     pcv = DateField('Pneumococcal (PCV)', validators=[Required()])
     tb = DateField('Tubercolosis test (TB) (PPD)', validators=[Required()])
-    tbtest = RadioField('TB Test Result', choices=[(False, 'neg'),(True, 'positive')])
+    tbtest = RadioField('Result', choices=[(False, 'neg'),(True, 'positive')])
     hosp = BooleanField('Ever been hospitalized?', validators=[Required()])
     surg = BooleanField('Ever had surgery?', validators=[Required()])
     chro = BooleanField('Have a recurrent/chronic illness?', validators=[Required()])
