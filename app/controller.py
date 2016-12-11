@@ -5,6 +5,14 @@ from flask_login import login_required, current_user
 from .models import *
 from datetime import datetime
 
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ))
+
 # Sample HTTP error handling
 @app.errorhandler(404)
 def not_found(error):
@@ -150,14 +158,18 @@ def add_camper():
 @login_required
 def register_camper(camper_id):
     reg = Camper.query.get(camper_id).find_active_registration()
-    print reg
     if reg is not None:
-        print "Reg inside", reg
         return redirect(url_for('edit_registration', reg_id=reg.id))
+
+    if not Camp_Session.registration_active():
+        flash('No active sessions. Please wait till the New Year to Register')
+        return redirect(url_for('dashboard'))
 
     form = CamperRegistrationForm()
     errors = None
+    print 'reached validation'
     if form.validate_on_submit():
+        print 'inside validate'
         camper_registration = Camper_Registration(
             submission_timestamp = datetime.now(),
             camper_id = camper_id,
@@ -167,7 +179,7 @@ def register_camper(camper_id):
             cabin_pal_name = form.cabinpalname.data,
             shirtsize = form.tshirtsize.data,
             emgname = form.emgname.data,
-            emgrelation = form.emgname.data,
+            emgrelation = form.emgrelation.data,
             emgemail = form.emgemail.data,
             accept = form.acceptterms.data,
             ppsrelease = form.ppsreleaseagreement.data
@@ -185,6 +197,7 @@ def edit_registration(reg_id):
     reg = Camper_Registration.query.get(reg_id)
     form = CamperRegistrationForm(obj=reg)
     errors = None
+    print 'HELLOOO'
     if form.validate_on_submit():
         reg.submission_timestamp = datetime.now()
         reg.camp_session_id = form.session.data
@@ -193,28 +206,32 @@ def edit_registration(reg_id):
         reg.cabin_pal_name = form.cabinpalname.data
         reg.shirtsize = form.tshirtsize.data
         reg.emgname = form.emgname.data
-        reg.emgrelation = form.emgname.data
+        reg.emgrelation = form.emgrelation.data
         reg.emgemail = form.emgemail.data
         reg.emgphone = form.emgphone.data
         reg.accept = form.acceptterms.data
         reg.ppsrelease = form.ppsreleaseagreement.data
         db.session.commit()
         flash('Camper Registeration Updated')
+        print 'HELLOOOO'
         return redirect(url_for('dashboard'))
+    print 'Invalid form'
+    flash_errors(form)
     camper = Camper.query.get(reg.camper_id)
     return render_template('register_camper.html', form=form, errors=errors, camper=camper)
 
 @app.route('/medical_form/<int:camper_id>', methods=['GET', 'POST'])
 @login_required
 def medical_form(camper_id):
+    reg = Camper.query.get(camper_id).find_active_registration()
+    if reg is None:
+        flash('Register Camper before filling out Medical Form')
+        return redirect(url_for('register_camper', camper_id=camper_id))
+
+    print "about to call MedicationForm"
     mform = MedicalForm()
     pform = MedicationForm()
     if mform.validate_on_submit() and mform.submit:
-        reg = Camper.query.get(camper_id).find_active_registration()
-        if reg != "None":
-            reg = reg.id
-        else:
-            reg = -1
         med_form = Medical_Form(
             allergies = mform.allergies.data,
             dtap = mform.dtap.data,
@@ -252,11 +269,11 @@ def medical_form(camper_id):
             sign = mform.sign.data,
             parent = mform.parent.data,
             submission_timestamp = datetime.now(),
-            camper_registration_id = reg
+            camper_registration_id = reg.id
         )
         db.session.add(med_form)
         db.session.commit()
         flash("Medical Form Submitted")
         return redirect(url_for('dashboard'))
-
-    return render_template('medical_form.html', mform = mform, pform=pform)
+    flash_errors(mform)
+    return render_template('medical_form.html', mform = mform, pform=pform, camper_id=camper_id)

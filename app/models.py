@@ -23,6 +23,15 @@ class Camp_Session(db.Model):
             sessions = [(str(s.id), "Session {0} {1}".format(str(s.session), s.year)) for s in sessions]
         return sessions
 
+    @classmethod
+    def registration_active(self):
+        current_year = str(datetime.now().year)
+        sessions = Camp_Session.query.filter_by(year=current_year).first()
+        if sessions is None:
+            return False
+        else:
+            return True
+
     def __repr__(self):
         return '<{0} Session {1}>'.format(self.year, self.session)
 
