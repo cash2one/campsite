@@ -5,7 +5,12 @@
     <div class= "container">
         <div class="row">
             <div class= "col-md-offset-2 col-md-8">
+                {% if edit == 'True' %}
+                <form method=post action="{{url_for('edit_medical_form', med_id=med_id)}}">
+                {% else %}
                 <form method=post action="{{url_for('medical_form', camper_id=camper_id)}}">
+                {% endif %}
+                    {{ mform.hidden_tag() }}
                     <h1> Medical Form </h1>
                     {{ wtf.form_field(mform.allergies) }}
                     <h2>Immunization History</h2>
@@ -55,23 +60,24 @@
                         </table>
                     </div>
                     <h2>Health History</h2>
-                    {{ wtf.form_field(mform.hosp) }}
-                    {{ wtf.form_field(mform.surg) }}
-                    {{ wtf.form_field(mform.chro) }}
-                    {{ wtf.form_field(mform.bedw) }}
-                    {{ wtf.form_field(mform.recinj) }}
-                    {{ wtf.form_field(mform.asth) }}
-                    {{ wtf.form_field(mform.diab) }}
-                    {{ wtf.form_field(mform.envallg) }}
-                    {{ wtf.form_field(mform.seiz) }}
-                    {{ wtf.form_field(mform.dizz) }}
-                    {{ wtf.form_field(mform.chestpain) }}
-                    {{ wtf.form_field(mform.add) }}
-                    {{ wtf.form_field(mform.emodisorder) }}
-                    {{ wtf.form_field(mform.seenprof) }}
-                    {{ wtf.form_field(mform.other) }}
+                    {{ mform.hosp.label }} {{ mform.hosp }}
+                    {{ mform.surg.label }} {{ mform.surg }}
+                    {{ mform.chro.label }} {{ mform.chro }}
+                    {{ mform.bedw.label }} {{ mform.bedw }}
+                    {{ mform.recinj.label }} {{ mform.recinj }}
+                    {{ mform.asth.label }} {{ mform.asth }}
+                    {{ mform.diab.label }} {{ mform.diab }}
+                    {{ mform.envallg.label }} {{ mform.envallg }}
+                    {{ mform.seiz.label }} {{ mform.seiz }}
+                    {{ mform.dizz.label }} {{ mform.dizz }}
+                    {{ mform.chestpain.label }} {{ mform.chestpain }}
+                    {{ mform.add.label }} {{ mform.add }}
+                    {{ mform.emodisorder.label }} {{ mform.emodisorder }}
+                    {{ mform.seenprof.label }} {{ mform.seenprof }}
+                    {{ mform.other.label }} {{ mform.other }}
                     {{ wtf.form_field(mform.explain) }}
-                    {{ wtf.form_field(mform.swim) }}
+                    {{ mform.swim.label }} {{ mform.swim }}
+                    <h2>Insurance Details</h2>
                     {{ mform.insu.label}}
                     {{ mform.insu }}
                     <div class='table-responsive'>
@@ -98,12 +104,7 @@
                 </form>
                 <hr>
             </div>
-            <div class="row">
-               <div class= "col-md-offset-2 col-md-8">
-                <h1> Medications </h1>
-                {{ wtf.quick_form(pform) }}
-                </div>
-            </div>
+
         </div>
     </div>
 {% endblock %}

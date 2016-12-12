@@ -4,6 +4,7 @@ from flask_login import UserMixin
 from flask import request, url_for
 from sqlalchemy import desc
 from datetime import datetime
+from sqlalchemy.orm import relationship, backref
 
 allergies = [(1,'No Allergies'), (2, 'Food'), (3, 'Medicine'),(4,'Enviornment'),(5,'Insect Bites'),(6,'Other')]
 
@@ -40,7 +41,7 @@ class Camper(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     fn = db.Column(db.String(64), index=True)
     ln = db.Column(db.String(64), index=True)
-    dob = db.Column(db.Date, index = True)
+    dob = db.Column(db.Date)
     gender = db.Column(db.String(5))
     street = db.Column(db.String(200))
     state = db.Column(db.String(2))
@@ -49,6 +50,8 @@ class Camper(db.Model):
     campercell = db.Column(db.String(64))
     camperemail = db.Column(db.String(64))
     parents_id = db.Column(db.Integer, db.ForeignKey('parents.id'))
+
+    regs = db.relationship('Camper_Registration', backref='camper', lazy='dynamic')
 
     def find_active_registration(self):
         current_year = str(datetime.now().year)
@@ -70,7 +73,8 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    parents = db.relationship('Parents', backref='parents', uselist=False)
+
+    parents = db.relationship('Parents', backref='user', uselist=False)
 
     @property
     def password(self):
@@ -209,8 +213,11 @@ class Camper_Registration(db.Model):
     emgname = db.Column(db.String(255))
     emgrelation = db.Column(db.String(64))
     emgemail = db.Column(db.String(64))
+    emgphone = db.Column(db.String(32))
     accept = db.Column(db.Boolean)
     ppsrelease = db.Column(db.Boolean)
+
+    med_form = db.relationship('Medical_Form', backref=backref("camper_registration", uselist=False))
 
     def __repr__(self):
         camper = Camper.query.get(self.camper_id)
@@ -265,10 +272,15 @@ class Medical_Form(db.Model):
     parent = db.Column(db.String(128))
     submission_timestamp = db.Column(db.TIMESTAMP)
     camper_registration_id = db.Column(db.Integer, db.ForeignKey('camper_registration.id'))
+
     prescriptions = db.relationship('Medication', backref='medications', lazy='dynamic')
 
     def __repr__(self):
         return '<Medical Form {0}>'.format(self.id)
+
+    @property
+    def sub_time(self):
+        return self.submission_timestamp.strftime("%I:%M:%S%p %m/%d/%y")
 
 class Medication(db.Model):
 

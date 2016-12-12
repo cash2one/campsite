@@ -5,14 +5,6 @@ from flask_login import login_required, current_user
 from .models import *
 from datetime import datetime
 
-def flash_errors(form):
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash(u"Error in the %s field - %s" % (
-                getattr(form, field).label.text,
-                error
-            ))
-
 # Sample HTTP error handling
 @app.errorhandler(404)
 def not_found(error):
@@ -102,7 +94,8 @@ def dashboard():
             sess[c] = "None"
         else:
             sess[c] = regs[c].get_session()
-            med[c] = Medical_Form.query.filter_by(camper_registration_id=regs[c].id)
+            med[c] = Medical_Form.query.filter_by(camper_registration_id=regs[c].id).first()
+            print med[c]
 
     return render_template('dashboard.html', campers=campers, regs=regs, sess=sess, med=med)
 
@@ -167,20 +160,19 @@ def register_camper(camper_id):
 
     form = CamperRegistrationForm()
     errors = None
-    print 'reached validation'
     if form.validate_on_submit():
-        print 'inside validate'
         camper_registration = Camper_Registration(
             submission_timestamp = datetime.now(),
             camper_id = camper_id,
             camp_session_id = form.session.data,
             gradeinfall = form.gradeinfall.data,
-            prevcamper = form.previouscamper.data,
+            prevcamper = to_bool(form.previouscamper.data),
             cabin_pal_name = form.cabinpalname.data,
             shirtsize = form.tshirtsize.data,
             emgname = form.emgname.data,
             emgrelation = form.emgrelation.data,
             emgemail = form.emgemail.data,
+            emgphone = form.emgphone.data,
             accept = form.acceptterms.data,
             ppsrelease = form.ppsreleaseagreement.data
             )
@@ -188,6 +180,7 @@ def register_camper(camper_id):
         db.session.commit()
         flash('Camper Registered')
         return redirect(url_for('dashboard'))
+    flash_errors(form)
     camper = Camper.query.filter_by(id=camper_id).first()
     return render_template('register_camper.html', form=form, errors=errors, camper=camper)
 
@@ -197,7 +190,6 @@ def edit_registration(reg_id):
     reg = Camper_Registration.query.get(reg_id)
     form = CamperRegistrationForm(obj=reg)
     errors = None
-    print 'HELLOOO'
     if form.validate_on_submit():
         reg.submission_timestamp = datetime.now()
         reg.camp_session_id = form.session.data
@@ -213,12 +205,60 @@ def edit_registration(reg_id):
         reg.ppsrelease = form.ppsreleaseagreement.data
         db.session.commit()
         flash('Camper Registeration Updated')
-        print 'HELLOOOO'
         return redirect(url_for('dashboard'))
-    print 'Invalid form'
     flash_errors(form)
     camper = Camper.query.get(reg.camper_id)
     return render_template('register_camper.html', form=form, errors=errors, camper=camper)
+
+@app.route('/edit_medical_form/<int:med_id>', methods=['GET','POST'])
+@login_required
+def edit_medical_form(med_id):
+    mf = Medical_Form.query.get(med_id)
+    form = MedicalForm(obj=mf)
+    if form.validate_on_submit():
+        mf.allergies = str(form.allergies.data)
+        mf.dtap = form.dtap.data
+        mf.mump = form.mump.data
+        mf.polio = form.polio.data
+        mf.ckpox = form.ckpox.data
+        mf.meningitis = form.meningitis.data
+        mf.hib = form.hib.data
+        mf.pcv = form.pcv.data
+        mf.tb = form.tb.data
+        mf.tbtest = to_bool(form.tbtest.data)
+        mf.hosp = to_bool(form.hosp.data)
+        mf.surg = to_bool(form.surg.data)
+        mf.chro = to_bool(form.chro.data)
+        mf.bedw = to_bool(form.bedw.data)
+        mf.recinj = to_bool(form.recinj.data)
+        mf.asth = to_bool(form.asth.data)
+        mf.envallg = to_bool(form.envallg.data)
+        mf.diab = to_bool(form.diab.data)
+        mf.seiz = to_bool(form.seiz.data)
+        mf.dizz = to_bool(form.dizz.data)
+        mf.chestpain = to_bool(form.chestpain.data)
+        mf.add = to_bool(form.add.data)
+        mf.emodisorder = to_bool(form.emodisorder.data)
+        mf.seenprof = to_bool(form.seenprof.data)
+        mf.other = to_bool(form.other.data)
+        mf.explain = form.explain.data
+        mf.swim = to_bool(form.swim.data)
+        mf.restrictions = form.restrictions.data
+        mf.insu = to_bool(form.insu.data)
+        mf.insucomp = form.insucomp.data
+        mf.insupoli = form.insupoli.data
+        mf.insusubs = form.insusubs.data
+        mf.insuphon = form.insuphone.data
+        mf.sign = form.sign.data
+        mf.parent = form.parent.data
+        mf.submission_timestamp = datetime.now()
+        db.session.commit()
+        flash('Medical Form Updated')
+        return redirect(url_for('dashboard'))
+    print "Invalid Submission"
+    flash_errors(form)
+    camper_id = mf.camper_registration.camper_id
+    return render_template('medical_form.html', mform=form, camper_id=camper_id, edit='True', med_id=med_id)
 
 @app.route('/medical_form/<int:camper_id>', methods=['GET', 'POST'])
 @login_required
@@ -228,12 +268,18 @@ def medical_form(camper_id):
         flash('Register Camper before filling out Medical Form')
         return redirect(url_for('register_camper', camper_id=camper_id))
 
-    print "about to call MedicationForm"
+    med = Medical_Form.query.filter_by(camper_registration_id=reg.id).first()
+    if med is not None:
+        return redirect(url_for('edit_medical_form', med_id=med.id))
+
     mform = MedicalForm()
-    pform = MedicationForm()
-    if mform.validate_on_submit() and mform.submit:
+    if mform.submit.data and mform.validate_on_submit():
+        print "registration id", reg.id
+        print mform.add.data
+        print str(mform.allergies.data)
+        print mform.sign.data
         med_form = Medical_Form(
-            allergies = mform.allergies.data,
+            allergies = str(mform.allergies.data),
             dtap = mform.dtap.data,
             mump = mform.mump.data,
             polio = mform.polio.data,
@@ -242,38 +288,55 @@ def medical_form(camper_id):
             hib = mform.hib.data,
             pcv = mform.pcv.data,
             tb = mform.tb.data,
-            tbtest =mform.tbtest.data,
-            hosp = mform.hosp.data,
-            surg = mform.surg.data,
-            chro = mform.chro.data,
-            bedw = mform.bedw.data,
-            recinj = mform.recinj.data,
-            asth = mform.asth.data,
-            envallg = mform.envallg.data,
-            diab = mform.diab.data,
-            seiz = mform.seiz.data,
-            dizz = mform.dizz.data,
-            chestpain = mform.chestpain.data,
-            add = mform.add.data,
-            emodisorder = mform.emodisorder.data,
-            seenprof = mform.seenprof.data,
-            other = mform.other.data,
+            tbtest = to_bool(mform.tbtest.data),
+            hosp = to_bool(mform.hosp.data),
+            surg = to_bool(mform.surg.data),
+            chro = to_bool(mform.chro.data),
+            bedw = to_bool(mform.bedw.data),
+            recinj = to_bool(mform.recinj.data),
+            asth = to_bool(mform.asth.data),
+            envallg = to_bool(mform.envallg.data),
+            diab = to_bool(mform.diab.data),
+            seiz = to_bool(mform.seiz.data),
+            dizz = to_bool(mform.dizz.data),
+            chestpain = to_bool(mform.chestpain.data),
+            add = to_bool(mform.add.data),
+            emodisorder = to_bool(mform.emodisorder.data),
+            seenprof = to_bool(mform.seenprof.data),
+            other = to_bool(mform.other.data),
             explain = mform.explain.data,
-            swim = mform.swim.data,
+            swim = to_bool(mform.swim.data),
             restrictions = mform.restrictions.data,
-            insu = mform.insu.data,
+            insu = to_bool(mform.insu.data),
             insucomp = mform.insucomp.data,
             insupoli = mform.insupoli.data,
             insusubs = mform.insusubs.data,
-            insuphon = mform.insuphon.data,
+            insuphon = mform.insuphone.data,
             sign = mform.sign.data,
             parent = mform.parent.data,
             submission_timestamp = datetime.now(),
             camper_registration_id = reg.id
         )
+        print "no form added yet"
+        db.session.commit()
         db.session.add(med_form)
+        print "form added to session"
         db.session.commit()
         flash("Medical Form Submitted")
         return redirect(url_for('dashboard'))
     flash_errors(mform)
-    return render_template('medical_form.html', mform = mform, pform=pform, camper_id=camper_id)
+    return render_template('medical_form.html', mform=mform, camper_id=camper_id, edit='False')
+
+def to_bool(n):
+    if n == 0:
+        return False
+    else:
+        return True
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ))

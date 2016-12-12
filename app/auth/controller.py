@@ -53,6 +53,9 @@ def logout():
 
 @auth.route('/register', methods=['GET','POST'])
 def create_account():
+    if current_user.is_authenticated():
+        return redirect(url_for('dashboard'))
+
     form = CreateAccountForm()
     if form.validate_on_submit():
         user = User(email=form.email.data,

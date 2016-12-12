@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SubmitField, DateField, SelectField, RadioField, ValidationError, TextField, SelectMultipleField
-from wtforms.validators import Required, Optional, Email
+from wtforms.validators import Required, Optional, Email, InputRequired
 from flask_login import current_user
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from .models import User, Camp_Session
@@ -9,8 +9,8 @@ STATES = [('AK','AK'),('AL','AL'),("AR","AR"),("AZ","AZ"),("CA","CA"),("CO","CO"
 
 GRADES = [(str(i), str(i)) for i in xrange(1,12)]
 TSIZES = [('S', 'Small'), ('M', 'Medium'), ('L', 'Large')]
-ALLERGIES = [('0', 'None'), ('1', 'Food'), ('2', 'Medicine'), ('3', 'Enviornment'), ('4', 'Insect Bites'), ('5', 'Other')]
-YESNO = [(True, 'Yes'),(False, 'No')]
+ALLERGIES = [('None', 'None'), ('Food', 'Food'), ('Medicine', 'Medicine'), ('Enviornment', 'Enviornment'), ('Insect Bites', 'Insect Bites'), ('Other', 'Other')]
+YESNO = [(1, 'Yes'),(0, 'No')]
 FDATE = '%m/%d/%Y'
 
 class UpdateParentProfileForm(FlaskForm):
@@ -37,7 +37,7 @@ class UpdateParentProfileForm(FlaskForm):
 class CamperRegistrationForm(FlaskForm):
     session = SelectField('Camp Session', choices=Camp_Session.active_sessions(), validators=[Required()])
     gradeinfall = SelectField('Grade in Fall', choices=GRADES, validators=[Required()])
-    previouscamper = RadioField('Previous Camper', choices=YESNO, validators=[Optional()])
+    previouscamper = RadioField('Previous Camper', choices=YESNO, coerce=int, validators=[Optional()])
     tshirtsize = SelectField('T-Shirt Size', choices=TSIZES, validators=[Required()])
     cabinpalname = StringField('Cabin Pal Name', validators=[Optional()])
     emgname = StringField('Emergency Contact Name', validators=[Required()])
@@ -59,35 +59,35 @@ class MedicationForm(FlaskForm):
     submit = SubmitField('Add Medication')
 
 class MedicalForm(FlaskForm):
-    allergies = SelectMultipleField('Allergies', choices=ALLERGIES, validators=[Required()])
-    dtap = DateField('Diptheria, tetanus, pertussis: DTaP or TDaP', format=FDATE, validators=[Required()])
-    mump = DateField('Mump, measels, rubella (MMR)', format=FDATE, validators=[Required()])
-    polio = DateField('Polio (IPV)', format=FDATE, validators=[Required()])
-    ckpox = DateField('Varicella (chickenpox)', format=FDATE, validators=[Required()])
-    meningitis = DateField('Meningococcal meningitis', format=FDATE ,validators=[Required()])
-    hib = DateField('Haemophilus influenza B (HIB)', format=FDATE, validators=[Required()])
-    pcv = DateField('Pneumococcal (PCV)', format=FDATE, validators=[Required()])
-    tb = DateField('Tubercolosis test (TB) (PPD)', format=FDATE, validators=[Required()])
-    tbtest = RadioField('Result', choices=[(False, 'neg'),(True, 'positive')], validators=[Required()])
-    hosp = RadioField('Ever been hospitalized?', choices=YESNO, validators=[Required()])
-    surg = RadioField('Ever had surgery?', choices=YESNO, validators=[Required()])
-    chro = RadioField('Have a recurrent/chronic illness?', choices=YESNO, validators=[Required()])
-    bedw = RadioField('Had a history of bedwetting?', choices=YESNO, validators=[Required()])
-    recinj = RadioField('Had a recent injury?', choices=YESNO, validators=[Required()])
-    asth = RadioField('Had asthma/ wheezing/ shortness of bread, required an inhaler?', choices=YESNO, validators=[Required()])
-    diab = RadioField('Have diabetes?', choices=YESNO, validators=[Required()])
-    envallg = RadioField('Had seasonal/ enviornmental allergies?', choices=YESNO, validators=[Required()])
-    seiz = RadioField('Had a seizure?', choices=YESNO, validators=[Required()])
-    dizz = RadioField('Had fainting or dizziness?', choices=YESNO, validators=[Required()])
-    chestpain = RadioField('Passed out/ had chest pain with exercise?', choices=YESNO, validators=[Required()])
-    add = RadioField('Ever been treated for attention deficit disorder (ADD)?', choices=YESNO, validators=[Required()])
-    emodisorder = RadioField('Ever been treated for emotional and/or behavioral disorder or eating disorder?', choices=YESNO, validators=[Required()])
-    seenprof = RadioField('Over the past 12 months, seen a professional for any of the above?', choices=YESNO, validators=[Required()])
-    other = RadioField('Had any other issues you would like us to know?', choices=YESNO, validators=[Required()])
-    explain = TextField('Please explain "yes" answers:)', choices=YESNO, validators=[Optional()])
-    swim = RadioField('Allowed to swim', choices=YESNO, validators=[Required()])
+    allergies = SelectMultipleField('Allergies', choices=ALLERGIES, validators=[InputRequired()])
+    dtap = DateField('Diptheria, tetanus, pertussis: DTaP or TDaP', format=FDATE, validators=[InputRequired()])
+    mump = DateField('Mump, measels, rubella (MMR)', format=FDATE, validators=[InputRequired()])
+    polio = DateField('Polio (IPV)', format=FDATE, validators=[InputRequired()])
+    ckpox = DateField('Varicella (chickenpox)', format=FDATE, validators=[InputRequired()])
+    meningitis = DateField('Meningococcal meningitis', format=FDATE ,validators=[InputRequired()])
+    hib = DateField('Haemophilus influenza B (HIB)', format=FDATE, validators=[InputRequired()])
+    pcv = DateField('Pneumococcal (PCV)', format=FDATE, validators=[InputRequired()])
+    tb = DateField('Tubercolosis test (TB) (PPD)', format=FDATE, validators=[InputRequired()])
+    tbtest = RadioField('Result', coerce=int, choices=[(0, 'neg'),(1, 'positive')], validators=[InputRequired()])
+    hosp = RadioField('Ever been hospitalized?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    surg = RadioField('Ever had surgery?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    chro = RadioField('Have a recurrent/chronic illness?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    bedw = RadioField('Had a history of bedwetting?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    recinj = RadioField('Had a recent injury?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    asth = RadioField('Had asthma/ wheezing/ shortness of bread, Inputrequired an inhaler?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    diab = RadioField('Have diabetes?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    envallg = RadioField('Had seasonal/ enviornmental allergies?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    seiz = RadioField('Had a seizure?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    dizz = RadioField('Had fainting or dizziness?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    chestpain = RadioField('Passed out/ had chest pain with exercise?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    add = RadioField('Ever been treated for attention deficit disorder (ADD)?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    emodisorder = RadioField('Ever been treated for emotional and/or behavioral disorder or eating disorder?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    seenprof = RadioField('Over the past 12 months, seen a professional for any of the above?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    other = RadioField('Had any other issues you would like us to know?', coerce=int, choices=YESNO, validators=[InputRequired()])
+    explain = TextField('Please explain "yes" answers:', validators=[Optional()])
+    swim = RadioField('Allowed to swim', coerce=int, choices=YESNO, validators=[InputRequired()])
     restrictions = TextField('He/ She may participate in all camp activities, with the following restrictions (which parents will be responsible for discussign with camp staff/ counselor upon arrival to camp, to assure tehse restrictions are able to be met', validators=[Optional()])
-    insu = RadioField('This camper is covered by family medical/hospital insurance', choices=YESNO, validators=[Required()])
+    insu = RadioField('This camper is covered by family medical/hospital insurance', coerce=int, choices=YESNO, validators=[InputRequired()])
     insucomp = StringField('Insurance Company')
     insupoli = StringField('Policy Number')
     insusubs = StringField('Subscriber')
