@@ -8,21 +8,29 @@ from flask_admin import Admin
 from flask import Blueprint
 # from flask_pagedown import PageDown
 
-# Define the WSGI application object
 app = Flask(__name__)
+app.config.from_object('config')
+
+
+# Define the WSGI application object
+
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 login_manager = LoginManager(app)
-mail = Mail(app)
 admin = Admin(app, name='campsite', template_mode='bootstrap3')
+mail = Mail(app)
+
+from app import controller, models
 
 # pagedown = PageDown(app)
-app.config.from_object('config')
 
 from .auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
 
-from app import controller, models
+
+
+# email server
+
 
 from flask_admin.contrib.sqla import ModelView
 admin.add_view(ModelView(models.User, db.session))

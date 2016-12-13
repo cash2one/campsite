@@ -1,9 +1,10 @@
 from flask import render_template, flash, redirect, url_for
-from app import app
+from app import app, mail
 from .forms import UpdateParentProfileForm, UpdateCamperProfileForm, CamperRegistrationForm, MedicalForm, MedicationForm
 from flask_login import login_required, current_user
 from .models import *
 from datetime import datetime
+from emails import send_email
 
 # Sample HTTP error handling
 @app.errorhandler(404)
@@ -176,6 +177,8 @@ def register_camper(camper_id):
             accept = form.acceptterms.data,
             ppsrelease = form.ppsreleaseagreement.data
             )
+        send_email("Child Registered", recipients=[current_user.email], text_body="This is the testing email body. Your child has been registered!")
+
         db.session.add(camper_registration)
         db.session.commit()
         flash('Camper Registered')
