@@ -15,14 +15,14 @@ THREADS_PER_PAGE = 5
 # email server
 # MAIL_SERVER = 'smtp.googlemail.com'
 # MAIL_PORT = 587
-MAIL_USERNAME = 'hhsc.register@gmail.com'
-MAIL_PASSWORD = 'weeks2+2'
+MAIL_USERNAME = 'ankurtoshniwal4@gmail.com'
+MAIL_PASSWORD = 'R#6wny9gat'
 MAIL_SERVER = 'smtp.gmail.com'
 MAIL_PORT = 587
 MAIL_USE_TLS = True
 MAIL_USE_SSL = False
 MAIL_DEBUG = True
-MAIL_DEFAULT_SENDER = 'hhsc.register@gmail.com'
+MAIL_DEFAULT_SENDER = 'ankurtoshniwal4@gmail.com'
 MAIL_MAX_EMAILS = None
 MAIL_SUPPRESS_SEND = True
 MAIL_ASCII_ATTACHMENTS = False
