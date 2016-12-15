@@ -11,7 +11,6 @@ from flask import Blueprint
 app = Flask(__name__)
 app.config.from_object('config')
 
-
 # Define the WSGI application object
 
 db = SQLAlchemy(app)
@@ -26,7 +25,6 @@ from app import controller, models
 
 from .auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
-
 
 
 # email server

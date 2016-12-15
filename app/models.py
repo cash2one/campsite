@@ -56,8 +56,6 @@ class Camper(db.Model):
     def find_active_registration(self):
         current_year = str(datetime.now().year)
         regs = Camper_Registration.query.filter_by(camper_id=self.id).join(Camp_Session, Camper_Registration.camp_session_id==Camp_Session.id).filter_by(year=current_year).first()
-        # regs = Camper_Registration.query.filter_by(camper_id=self.id).join(Camp_Session.active_sessions, Camper_Registration.camp_session_id==Camp_Session.id).first()
-        # print regs
         return regs
 
     @property
