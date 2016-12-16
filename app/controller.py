@@ -16,6 +16,10 @@ def not_found(error):
 def home():
     return render_template('home.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/update_parent_profile/<int:parents_id>', methods=['GET', 'POST'])
 @login_required
 def edit_parent_profile(parents_id):

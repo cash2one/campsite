@@ -13,16 +13,21 @@
 {% endblock %}
 
 {% block title %}HHSC{% endblock %}
-<body>
+
 <!-- Navigation -->
-{% include 'base_templates/nav.html' %}
-    <h1>HELLOOOO</h1>
+{% block body %}
+    {% include 'base_templates/nav.html' %}
     <div class="container">
         <div class="row">
-        {% block content %}{% endblock %}
+            <h1 class="text-center"><span class="hhsc">H</span>INDU <span class="hhsc">H</span>ERITAGE <span class="hhsc">S</span>UMMER <span class="hhsc">C</span>AMP</h1>
+            <h2 class="text-center">Indian Community Center, Rochester, NY</h3>
+        </div>
+        <div class="row">
+            {% block content %}{% endblock content %}
         </div>
     </div>
-</body>
-
-{% block scripts %}{% endblock %}
+    {% block scripts %} 
+        {{super()}}
+    {% endblock scripts %}
+{% endblock body %}
 </html>
