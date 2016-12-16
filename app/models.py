@@ -22,6 +22,7 @@ class Camp_Session(db.Model):
         sessions = Camp_Session.query.filter_by(year=current_year).all()
         if sessions != None:
             sessions = [(str(s.id), "Session {0} {1}".format(str(s.session), s.year)) for s in sessions]
+        print sessions
         return sessions
 
     @classmethod
@@ -212,7 +213,7 @@ class Camper_Registration(db.Model):
     emgrelation = db.Column(db.String(64))
     emgemail = db.Column(db.String(64))
     emgphone = db.Column(db.String(32))
-    accept = db.Column(db.Boolean)
+    accept = db.Column(db.Integer)
     ppsrelease = db.Column(db.Boolean)
 
     med_form = db.relationship('Medical_Form', backref=backref("camper_registration", uselist=False))

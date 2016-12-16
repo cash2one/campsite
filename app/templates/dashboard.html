@@ -70,8 +70,20 @@
                             {% else %}
                                 <td>{{med[camper].sub_time}}</td>
                             {% endif %}
-                            <td>Incomplete</td>
-                            <td>None</td>
+
+                            {% if camper.payment_received %}
+                            <td>Received</td>
+                            {% else %}
+                            <td>Not Received</td>
+                            {% endif %}
+
+                            {% if camper.accept == 1 %}
+                            <td>Accepted</td>
+                            {% elif camper.accept == -1 %}
+                            <td>Rejected</td>
+                            {% else %}
+                            <td>Decision Pending</td>
+                            {% endif %}
                             <td><a class="btn" href="{{ url_for('register_camper', camper_id=camper.id) }}">Register</a></td>
                             <td><a class="btn" href="{{ url_for('medical_form', camper_id=camper.id) }}">Fill Out</a></td>
                         </tr>
