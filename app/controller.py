@@ -16,6 +16,10 @@ def not_found(error):
 def home():
     return render_template('home.html')
 
+@app.route('/campinformation')
+def information():
+    return render_template('information.html')
+
 @app.route('/about')
 def about():
     return render_template('about.html')
@@ -93,6 +97,7 @@ def dashboard():
     regs = {c:c.find_active_registration() for c in campers}
     med = {}
     sess = {}
+    pay = {}
     for c in campers:
         if regs[c] is None:
             med[c] = None
@@ -100,9 +105,11 @@ def dashboard():
         else:
             sess[c] = regs[c].get_session()
             med[c] = Medical_Form.query.filter_by(camper_registration_id=regs[c].id).first()
-            print med[c]
+            pay[c] = str(regs[c].payment_received)
+            print regs[c].accept
+        # print str(regs[c].payment_received)
 
-    return render_template('dashboard.html', campers=campers, regs=regs, sess=sess, med=med)
+    return render_template('dashboard.html', campers=campers, regs=regs, sess=sess, med=med, pay=pay)
 
 @app.route('/edit_camper_profile/<int:camper_id>', methods=['GET','POST'])
 @login_required

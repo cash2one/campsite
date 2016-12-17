@@ -3,12 +3,12 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 {% block content %}
-    {% include 'flash_messages.html' %}
     <div class= "container">
         <div class="row">
             <h1> Welcome to your Dashboard</h1>
             <div class= "col-md-4">
                 <dl class="dl-horizontal">
+                    <h2 class='text-center'>Guardian 1</h2>
                     <dt>Name</dt>
                     <dd>{{ current_user.parents.g1fn }} {{ current_user.parents.g1ln }}</dd>
                     <dt>Email</dt>
@@ -20,6 +20,7 @@
             </div>
             <div class="col-md-4">
                 <dl class="dl-horizontal">
+                    <h2 class='text-center'>Guardian 2</h2>
                     <dt>Name</dt>
                     <dd>{{ current_user.parents.g2fn }} {{ current_user.parents.g2ln }}</dd>
                     <dt>Email</dt>
@@ -71,15 +72,17 @@
                                 <td>{{med[camper].sub_time}}</td>
                             {% endif %}
 
-                            {% if camper.payment_received %}
-                            <td>Received</td>
+                            {% if pay[camper] %}
+                            <td> {{ pay[camper] }}</td>
                             {% else %}
                             <td>Not Received</td>
                             {% endif %}
 
-                            {% if camper.accept == 1 %}
+                            {% if regs[camper] == None %}
+                            <td>No Decision</td>
+                            {% elif regs[camper].accept == 1 %}
                             <td>Accepted</td>
-                            {% elif camper.accept == -1 %}
+                            {% elif regs[camper].accept == -1 %}
                             <td>Rejected</td>
                             {% else %}
                             <td>Decision Pending</td>
