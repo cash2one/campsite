@@ -1,7 +1,7 @@
 <nav class="navbar navbar-dark bg-og">
   <ul class="nav navbar-nav">
 
-    <a class="navbar-brand" href="{{ url_for('home') }}"><img style="width: 50px;" src="static/images/hhsclogo.png"></a>
+    <a class="navbar-brand" href="{{ url_for('home') }}"><img style="width: 50px;" src="{{ url_for('static', filename='images/hhsclogo.png') }}"></a>
     <li class="nav-item">
       <a href="{{ url_for('home') }}" class="nav-link">Home</a>
     </li>
