@@ -10,7 +10,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class CreateAccountForm(FlaskForm):
-    email = StringField('email', validators=[Required(), Email()])
+    email = StringField('email', validators=[Required(), Email(), EqualTo('email2', message='Emails must match')])
+    email2 = StringField('confirm email', validators=[Required()])
     password = PasswordField('password', validators=[
         Required(), EqualTo('password2', message='Passwords must match.')])
     password2 = PasswordField('confirm password', validators=[Required()])

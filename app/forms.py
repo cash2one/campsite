@@ -11,6 +11,7 @@ GRADES = [(str(i), str(i)) for i in xrange(1,12)]
 TSIZES = [('S', 'Small'), ('M', 'Medium'), ('L', 'Large')]
 ALLERGIES = [('None', 'None'), ('Food', 'Food'), ('Medicine', 'Medicine'), ('Enviornment', 'Enviornment'), ('Insect Bites', 'Insect Bites'), ('Other', 'Other')]
 YESNO = [(1, 'Yes'),(0, 'No')]
+TRAVEL = [('Flight', 'Flight'), ('Bus', 'Bus'), ('Train', 'Train'), ('Own arrangement', 'Own arrangement')]
 FDATE = '%m/%d/%Y'
 
 class UpdateParentProfileForm(FlaskForm):
@@ -38,14 +39,14 @@ class CamperRegistrationForm(FlaskForm):
     session = SelectField('Camp Session', choices=Camp_Session.active_sessions(), validators=[Required()])
     gradeinfall = SelectField('Grade in Fall', choices=GRADES, validators=[Required()])
     previouscamper = RadioField('Previous Camper', choices=YESNO, coerce=int, validators=[Optional()])
-    tshirtsize = SelectField('T-Shirt Size', choices=TSIZES, validators=[Required()])
+    tshirtsize = SelectField('Adult T-Shirt Size', choices=TSIZES, validators=[Required()])
     cabinpalname = StringField('Cabin Pal Name', validators=[Optional()])
     emgname = StringField('Emergency Contact Name', validators=[Required()])
     emgrelation = StringField('Relation', validators=[Required()])
     emgphone = StringField('Phone', validators=[Required()])
     emgemail = StringField('Email', validators=[Required(), Email()])
+    travel = SelectField('Mode of Travel', choices=TRAVEL, validators=[Optional()])
     acceptterms = BooleanField('Accept Terms', validators=[Required()])
-    ppsreleaseagreement = BooleanField('Accept Pack Paddle Agreement', validators=[Required()])
     submit = SubmitField('Submit Application')
 
 class MedicationForm(FlaskForm):

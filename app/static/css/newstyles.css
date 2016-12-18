@@ -3,8 +3,15 @@ nav {
 }
 
 .navbar {
-    background-color: #ffb631;
     box-shadow: 0px 0px 5px 1px #bbb;
+}
+
+.bg-og {
+    background-color: #f90;
+}
+
+.bg-og-light {
+    background-color: #FFC164;
 }
 
 .hhsc {
@@ -38,4 +45,12 @@ dl {
 .row {
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.infolabel {
+    font-weight: bold;
+}
+
+.fc-light {
+    color: #f5f5f5;
 }

@@ -80,10 +80,10 @@
 
                             {% if regs[camper] == None %}
                             <td>No Decision</td>
-                            {% elif regs[camper].accept == 1 %}
+                            {% elif regs[camper].accepted == 1 %}
                             <td>Accepted</td>
-                            {% elif regs[camper].accept == -1 %}
-                            <td>Rejected</td>
+                            {% elif regs[camper].accepted == -1 %}
+                            <td>Waitlist</td>
                             {% else %}
                             <td>Decision Pending</td>
                             {% endif %}

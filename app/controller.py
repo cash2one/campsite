@@ -24,6 +24,14 @@ def information():
 def about():
     return render_template('about.html')
 
+@app.route('/directors')
+def directors():
+    return render_template('directors.html')
+
+@app.route('/faqs')
+def faqs():
+    return render_template('faqs.html')
+
 @app.route('/update_parent_profile/<int:parents_id>', methods=['GET', 'POST'])
 @login_required
 def edit_parent_profile(parents_id):
@@ -169,7 +177,7 @@ def register_camper(camper_id):
     if not Camp_Session.registration_active():
         flash('No active sessions. Please wait till the New Year to Register')
         return redirect(url_for('dashboard'))
-
+    print "Finished checks"
     form = CamperRegistrationForm()
     errors = None
     if form.validate_on_submit():
@@ -185,8 +193,8 @@ def register_camper(camper_id):
             emgrelation = form.emgrelation.data,
             emgemail = form.emgemail.data,
             emgphone = form.emgphone.data,
+            travel = form.travel.data,
             accept = form.acceptterms.data,
-            ppsrelease = form.ppsreleaseagreement.data
             )
         send_email("Child Registered", recipients=[current_user.email], text_body="This is the testing email body. Your child has been registered!")
 
@@ -216,7 +224,7 @@ def edit_registration(reg_id):
         reg.emgemail = form.emgemail.data
         reg.emgphone = form.emgphone.data
         reg.accept = form.acceptterms.data
-        reg.ppsrelease = form.ppsreleaseagreement.data
+        reg.travel = form.travel.data
         db.session.commit()
         flash('Camper Registeration Updated')
         return redirect(url_for('dashboard'))

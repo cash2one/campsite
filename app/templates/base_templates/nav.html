@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark">
+<nav class="navbar navbar-dark bg-og">
   <ul class="nav navbar-nav">
 
     <a class="navbar-brand" href="{{ url_for('home') }}"><img style="width: 50px;" src="static/images/hhsclogo.png"></a>
@@ -12,7 +12,7 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Camp <span class="caret"></span></a>
       <ul class="dropdown-menu">
         <li><a href="{{ url_for('information') }}">Information</a></li>
-        <li><a href="#">FAQs</a></li>
+        <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
         <li><a href="#">Fees</a></li>
         <li><a href="{{ url_for('auth.create_account') }}">Registration</a></li>
       </ul>

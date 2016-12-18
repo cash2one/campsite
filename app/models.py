@@ -202,7 +202,7 @@ class Camper_Registration(db.Model):
     submission_timestamp = db.Column(db.TIMESTAMP)
     payment_received = db.Column(db.TIMESTAMP)
     registration_complete = db.Column(db.Boolean)
-    accepted = db.Column(db.Boolean)
+    accepted = db.Column(db.Integer)
     camper_id = db.Column(db.Integer, db.ForeignKey('camper.id'))
     camp_session_id = db.Column(db.Integer, db.ForeignKey('camp_session.id'))
     gradeinfall = db.Column(db.String(2))
@@ -213,8 +213,8 @@ class Camper_Registration(db.Model):
     emgrelation = db.Column(db.String(64))
     emgemail = db.Column(db.String(64))
     emgphone = db.Column(db.String(32))
-    accept = db.Column(db.Integer)
-    ppsrelease = db.Column(db.Boolean)
+    accept = db.Column(db.Boolean)
+    travel = db.Column(db.String(32))
 
     med_form = db.relationship('Medical_Form', backref=backref("camper_registration", uselist=False))
 
