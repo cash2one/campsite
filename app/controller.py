@@ -44,6 +44,10 @@ def facilities():
 def kys():
     return render_template('kys.html')
 
+@app.route('/counselor')
+def counselor():
+    return render_template('counselor.html')
+
 @app.route('/update_parent_profile/<int:parents_id>', methods=['GET', 'POST'])
 @login_required
 def edit_parent_profile(parents_id):
