@@ -1,0 +1,27 @@
+{% extends "base_templates/base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <img src="{{ url_for('static', filename = 'images/CabinEdit.jpg') }}" width="100%">
+        <p><strong>Cabin:</strong> Campers stay in cabins with 15-20 other campers and 4-5 counselors. The cabins make for a true camp experience (bunks beds, no air conditioning, etc.). There are a total of 6 cabins (3 boy cabins and 3 girl cabins)
+        </p>
+    </div>
+    <div class="col-md-6">
+        <img src="{{ url_for('static', filename = 'images/ICCEdit.jpg') }}" width="100%">
+        <p><strong>India Community Center (ICC):</strong> The ICC is an air conditioned building where campers spend much of their day: morning puja, chanting class, philosophy, meals, clubs and some evening programs. It is equipped with 3 classrooms, an infirmary, a large auditorium and a kitchen, where all the meals are prepared by volunteers.
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <img src="{{ url_for('static', filename = 'images/CampGrounds.jpg') }}" width="100%">
+        <p><strong>Bathhouse:</strong> There is a separate boys and girls bathhouse. The bathhouses are equipped with 6 sinks with mirrors and 6 showers.
+        </p>
+    </div>
+    <div class="col-md-6">
+        <img src="{{ url_for('static', filename = 'images/BathhouseEdit.jpg') }}" width="100%">
+        <p><strong>Camp Grounds:</strong> The camp grounds include two pavilions and two open fields where campers hang out and participate in sports and games every day.
+        </p>
+    </div>
+</div>
+{% endblock %}

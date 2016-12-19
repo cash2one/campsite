@@ -12,15 +12,16 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Camp <span class="caret"></span></a>
       <ul class="dropdown-menu">
         <li><a href="{{ url_for('information') }}">Information</a></li>
+        <li><a href="{{ url_for('facilities') }}">Facilities</a></li>
         <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
-        <li><a href="#">Fees</a></li>
+        <li><a href="{{ url_for('fees') }}">Fees</a></li>
         <li><a href="{{ url_for('auth.create_account') }}">Registration</a></li>
       </ul>
     </li>
     <li class="dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Apply to be a...<span class="caret"></span></a>
       <ul class="dropdown-menu">
-        <li><a href="#">Karma Yoga Scholar (13-15)</a></li>
+        <li><a href="{{ url_for('kys') }}">Karma Yoga Scholar (13-15)</a></li>
         <li><a href="#">Counselor (16+)</a></li>
         <li><a href="#">Medical Assistant</a></li>
         <li><a href="#">Assistant Manager</a></li>

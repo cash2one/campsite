@@ -1,15 +1,15 @@
 {% extends "base_templates/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block content %}
-    <div class= "container">
-        <div class="row">
-            <div class= "col-md-offset-4 col-md-4">
-                <h1> Create Camper Registration Account</h1>
-                <h2>(Parents/Guardian Only)</h2>
-                {{ wtf.quick_form(form) }}
-                <br>
-                <a href="{{url_for('auth.login')}}">Already have an account?</a>
-            </div>
+    <div class="row">
+        <h1 class='text-center'>Create Camper Registration Account</h1>
+        <h2 class='text-center'>(Parents/Guardian Only)</h2>
+    </div>
+    <div class="row">
+        <div class= "col-md-offset-4 col-md-4">
+            {{ wtf.quick_form(form) }}
+            <br>
+            <a href="{{url_for('auth.login')}}">Already have an account?</a>
         </div>
     </div>
 {% endblock %}

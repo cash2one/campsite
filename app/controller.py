@@ -32,6 +32,18 @@ def directors():
 def faqs():
     return render_template('faqs.html')
 
+@app.route('/fees')
+def fees():
+    return render_template('fees.html')
+
+@app.route('/facilities')
+def facilities():
+    return render_template('facilities.html')
+
+@app.route('/kys')
+def kys():
+    return render_template('kys.html')
+
 @app.route('/update_parent_profile/<int:parents_id>', methods=['GET', 'POST'])
 @login_required
 def edit_parent_profile(parents_id):
