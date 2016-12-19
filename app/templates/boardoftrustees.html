@@ -1,0 +1,91 @@
+{% extends "base_templates/base.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-2 col-md-offset-2">
+        <img src="{{ url_for('static', filename='images/trustees/trustee1.jpg') }}" width='100%'>
+    </div>
+    <div class="col-md-5">
+        <h3>Dr. Padmanabh Kamath</h3>
+        <strong>President</strong><br><br>
+        <p>Dr. Kamath is a pathologist in Rochester. Padmanabh and his wife, Amrith have been closely associated with the camp for 15+ years. Padmanabh teaches philosophy classes at the camp. Amrith is in charge of purchasing for the camp.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 col-md-offset-2">
+        <img src="{{ url_for('static', filename='images/trustees/trustee2.jpg') }}" width='100%'>
+    </div>
+    <div class="col-md-5">
+        <h3>Aanand Parthasarathi</h3>
+        <strong>Vice President</strong><br><br>
+        <p>Aanand has been a volunteer at the camp since 1998</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 col-md-offset-2">
+        <img src="{{ url_for('static', filename='images/trustees/trustee3.jpg') }}" width='100%'>
+    </div>
+    <div class="col-md-5">
+        <h3>Roopa Duggal</h3>
+        <strong>Corporate Secretary</strong><br><br>
+
+        <p>Roopa is an Obstetrician/Gynecologist in Leesburg, VA. She first came to the camp in 1982 in Poconos, Pennsylvania. She was a camper, Karma Yoga Scholar (KYS), and counselor for about 12 years. She returned as a volunteer camp doctor in 2012.<br>
+        Throughout the years, Roopa has been a volunteer at a number of institutions both at home and abroad. Some of her work includes teaching high-risk middle-schoolers through the Higher Achievement Program in Washington D.C., volunteering with the Red Cross in Spain, and working with Mother Teresa’s Center for Sick Orphaned Children and Free Clinic in Calcutta, India.
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 col-md-offset-2">
+        <img src="{{ url_for('static', filename='images/trustees/trustee4.jpg') }}" width='100%'>
+    </div>
+    <div class="col-md-5">
+        <h3>Dimple Vakharia</h3>
+        <strong>Treasurer</strong><br><br>
+        <p>Dimple is a New York City Public School teacher. She was a camper, counselor, director, and volunteer prior to joining the board of directors. As a board member, she has been responsible for camper registration since 2009, creating lesson plans for philosophy with Devi since 2008, and training directors. She volunteers at camp every summer.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 col-md-offset-2">
+        <img src="{{ url_for('static', filename='images/trustees/trustee5.jpg') }}" width='100%'>
+    </div>
+    <div class="col-md-5">
+        <h3>Devi Parvati</h3>
+        <strong>Camp Spiritual Advisor</strong><br><br>
+
+        <p>Devi Parvati has been an integral part of HHSC for over 37 years. She is one of the founding members of HHSC when it was established during the 70s in the Poconos, Pennsylvania. Devi has remained very active with HHSC, serving on its Board of Directors and acting as HHSC's Spiritual Advisor. She helps train young camp veterans to assume leadership roles as directors and staff. She oversees the classes in philosophy and chanting, and will conduct special classes, pujas, and meditation sessions for the summer camp program. <br><br>
+
+        Devi has remained very active with HHSC, serving on its Board of Directors and acting as HHSC's Spiritual Advisor. Devi has now retired from MDA and will be at camp full time in 2010. She will be overseeing the classes in philosophy and chanting, and will conduct special classes, pujas, and meditation sessions for the Camp.
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 col-md-offset-2">
+        <img src="{{ url_for('static', filename='images/trustees/trustee6.jpg') }}" width='100%'>
+    </div>
+    <div class="col-md-5">
+        <h3>Dr. Piush Sharma</h3>
+        <strong>Medical Director</strong><br><br>
+        <p>Piush is a pediatrician in Rochester, NY. She is very involved with camp throughout the year. Her little dog, Gauri, is a favorite of the campers. She spends her evening with the campers.
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 col-md-offset-2">
+        <strong>Other Members</strong>
+    </div>
+    <div class="col-md-5">
+        <p>Nivedita Prabhu, Sumati Jain, Anjali Parthasarathi, Roopa Duggal, Deepa Shah, Hema Varahan, Jyothsna Ponnuri, Janani Parthasarathi, Ashish Heda, Aanand Parthasarathi
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 col-md-offset-2">
+        <strong>Camp Directors</strong>
+    </div>
+    <div class="col-md-5">
+        <p>Click to see details on <a href="{{ url_for('directors') }}">Camp Directors for this year.
+        </p>
+    </div>
+</div>
+
+{% endblock %}

@@ -13,8 +13,29 @@ def not_found(error):
 
 @app.route('/')
 @app.route('/index')
+@app.route('/home')
 def home():
     return render_template('home.html')
+
+@app.route('/medicalassistant')
+def medicalassistant():
+    return render_template('medicalassistant.html')
+
+@app.route('/boardoftrustees')
+def boardoftrustees():
+    return render_template('boardoftrustees.html')
+
+@app.route('/contactus')
+def contactus():
+    return render_template('contactus.html')
+
+@app.route('/volunteer')
+def volunteer():
+    return render_template('volunteer.html')
+
+@app.route('/assistantmanager')
+def assistantmanager():
+    return render_template('assistantmanager.html')
 
 @app.route('/campinformation')
 def information():

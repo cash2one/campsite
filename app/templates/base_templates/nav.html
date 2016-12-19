@@ -23,18 +23,18 @@
       <ul class="dropdown-menu">
         <li><a href="{{ url_for('kys') }}">Karma Yoga Scholar (13-15)</a></li>
         <li><a href="{{ url_for('counselor') }}">Counselor (16+)</a></li>
-        <li><a href="#">Medical Assistant</a></li>
-        <li><a href="#">Assistant Manager</a></li>
+        <li><a href="{{ url_for('medicalassistant') }}">Medical Assistant</a></li>
+        <li><a href="{{ url_for('assistantmanager') }}">Assistant Manager</a></li>
       </ul>
     </li>
     <li class="nav-item">
-      <a href="#">Volunteer</a>
+      <a href="{{ url_for('volunteer') }}">Volunteer</a>
     </li>
     <li class="nav-item">
-      <a href="#">Board of Trustees</a>
+      <a href="{{ url_for('boardoftrustees') }}">Board of Trustees</a>
     </li>
     <li>
-      <a href="#">Contact Us</a>
+      <a href="{{ url_for('contactus') }}">Contact Us</a>
     </li>
 
     {% if current_user.is_authenticated() %}
