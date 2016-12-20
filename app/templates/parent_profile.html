@@ -4,10 +4,11 @@
     <div class= "container">
         <div class="row">
             <div class= "col-md-offset-4 col-md-4">
-                <h1> Create your Profile (Parents)</h1>
+                <h1> Parent/Guardian Profile</h1>
                     {{form.hidden_tag() }}
-                    <label>Primary Email</label>
+                    <label>Primary Email (for Guardian 1):</label>
                     {{current_user.email}}
+                    <p><i>Note: All communications will be done with this email address</i></p>
                     {{ wtf.quick_form(form) }}
             </div>
         </div>

@@ -214,7 +214,7 @@ def register_camper(camper_id):
     if not Camp_Session.registration_active():
         flash('No active sessions. Please wait till the New Year to Register')
         return redirect(url_for('dashboard'))
-    print "Finished checks"
+
     form = CamperRegistrationForm()
     errors = None
     if form.validate_on_submit():
@@ -241,7 +241,7 @@ def register_camper(camper_id):
         return redirect(url_for('dashboard'))
     flash_errors(form)
     camper = Camper.query.filter_by(id=camper_id).first()
-    return render_template('register_camper.html', form=form, errors=errors, camper=camper)
+    return render_template('register_camper.html', edit='False', form=form, errors=errors, camper=camper)
 
 @app.route('/edit_camper_registration/<int:reg_id>', methods=['GET','POST'])
 @login_required
@@ -267,7 +267,7 @@ def edit_registration(reg_id):
         return redirect(url_for('dashboard'))
     flash_errors(form)
     camper = Camper.query.get(reg.camper_id)
-    return render_template('register_camper.html', form=form, errors=errors, camper=camper)
+    return render_template('register_camper.html', form=form, edit='True', errors=errors, camper=camper, reg_id=reg.id)
 
 @app.route('/edit_medical_form/<int:med_id>', methods=['GET','POST'])
 @login_required

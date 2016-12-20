@@ -1,6 +1,7 @@
 <html>
 {% extends 'bootstrap/base.html' %}
-<!-- {% import 'bootstrap/fixes.html' as fixes %} -->
+{% import 'bootstrap/fixes.html' as fixes %}
+{% from "_formhelpers.html" import render_field %}
 
 {% block head %}
     {{super()}}
@@ -23,12 +24,20 @@
             <h1 class="text-center"><span class="hhsc">H</span>INDU <span class="hhsc">H</span>ERITAGE <span class="hhsc">S</span>UMMER <span class="hhsc">C</span>AMP</h1>
             <h3 class="text-center">India Community Center, Rochester, NY</h3>
         </div>
-        <div class="row">
-            {% block content %}{% endblock content %}
+        {% block content %}{% endblock content %}
+    </div>
+    {% block footer %}
+    <div class="container-fluid bg-og">
+        <div style="padding-top: 15px;" class="row">        
+            <div class="col-md-12">
+                <h3 class="text-center"> 2003 - 2017 © Hindu Heritage Summer Camp, Inc. ®</h3>
+            </div>
         </div>
     </div>
+    {% endblock footer %}
     {% block scripts %} 
         {{super()}}
     {% endblock scripts %}
 {% endblock body %}
+
 </html>

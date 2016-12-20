@@ -54,3 +54,8 @@ dl {
 .fc-light {
     color: #f5f5f5;
 }
+
+.error-red {
+    color: #FF1800;
+}
+}
