@@ -13,6 +13,7 @@ ALLERGIES = [('None', 'None'), ('Food', 'Food'), ('Medicine', 'Medicine'), ('Env
 YESNO = [(1, 'Yes'),(0, 'No')]
 TRAVEL = [('Flight', 'Flight'), ('Bus', 'Bus'), ('Train', 'Train'), ('Own arrangement', 'Own arrangement')]
 FDATE = '%m/%d/%Y'
+DATEPH = 'mm/dd/yyyy'
 
 class UpdateParentProfileForm(FlaskForm):
     g1fn = StringField('First Name', validators=[Required()])
@@ -40,7 +41,7 @@ class CamperRegistrationForm(FlaskForm):
     gradeinfall = SelectField('Grade in Fall', choices=GRADES, validators=[Required()])
     previouscamper = RadioField('Previous Camper', choices=YESNO, coerce=int, validators=[Optional()])
     tshirtsize = SelectField('Adult T-Shirt Size', choices=TSIZES, validators=[Required()])
-    cabinpalname = StringField('Cabin Pal Name', validators=[Optional()])
+    cabinpalname = StringField('Cabin Pal Name', validators=[Optional()], render_kw={"placeholder": "Full Name"})
     emgname = StringField('Name', validators=[Required()])
     emgrelation = StringField('Relation', validators=[Required()])
     emgphone = StringField('Phone', validators=[Required()])
@@ -61,15 +62,15 @@ class MedicationForm(FlaskForm):
 
 class MedicalForm(FlaskForm):
     allergies = SelectMultipleField('Allergies', choices=ALLERGIES, validators=[InputRequired()])
-    dtap = DateField('Diptheria, tetanus, pertussis: DTaP or TDaP', format=FDATE, validators=[InputRequired()])
-    mump = DateField('Mump, measels, rubella (MMR)', format=FDATE, validators=[InputRequired()])
-    polio = DateField('Polio (IPV)', format=FDATE, validators=[InputRequired()])
-    ckpox = DateField('Varicella (chickenpox)', format=FDATE, validators=[InputRequired()])
-    meningitis = DateField('Meningococcal meningitis', format=FDATE ,validators=[InputRequired()])
-    hib = DateField('Haemophilus influenza B (HIB)', format=FDATE, validators=[InputRequired()])
-    pcv = DateField('Pneumococcal (PCV)', format=FDATE, validators=[InputRequired()])
-    tb = DateField('Tubercolosis test (TB) (PPD)', format=FDATE, validators=[InputRequired()])
-    tbtest = RadioField('Result', coerce=int, choices=[(0, 'neg'),(1, 'positive')], validators=[InputRequired()])
+    dtap = DateField('Diptheria, tetanus, pertussis: DTaP or TDaP', format=FDATE, validators=[InputRequired()], render_kw={"placeholder": DATEPH})
+    mump = DateField('Mump, measels, rubella (MMR)', format=FDATE, validators=[InputRequired()], render_kw={"placeholder": DATEPH} )
+    polio = DateField('Polio (IPV)', format=FDATE, validators=[InputRequired()], render_kw={"placeholder": DATEPH})
+    ckpox = DateField('Varicella (chickenpox)', format=FDATE, validators=[InputRequired()], render_kw={"placeholder": DATEPH})
+    meningitis = DateField('Meningococcal meningitis', format=FDATE ,validators=[Optional()], render_kw={"placeholder": DATEPH})
+    hib = DateField('Haemophilus influenza B (HIB)', format=FDATE, validators=[Required()], render_kw={"placeholder": DATEPH})
+    pcv = DateField('Pneumococcal (PCV)', format=FDATE, validators=[Required()], render_kw={"placeholder": DATEPH})
+    tb = DateField('Tubercolosis test (TB) (PPD)', format=FDATE, validators=[Optional()], render_kw={"placeholder": DATEPH})
+    tbtest = RadioField('Result', coerce=int, choices=[(0, 'neg'),(1, 'positive')], validators=[Optional()])
     hosp = RadioField('Ever been hospitalized?', coerce=int, choices=YESNO, validators=[InputRequired()])
     surg = RadioField('Ever had surgery?', coerce=int, choices=YESNO, validators=[InputRequired()])
     chro = RadioField('Have a recurrent/chronic illness?', coerce=int, choices=YESNO, validators=[InputRequired()])
@@ -85,7 +86,7 @@ class MedicalForm(FlaskForm):
     emodisorder = RadioField('Ever been treated for emotional and/or behavioral disorder or eating disorder?', coerce=int, choices=YESNO, validators=[InputRequired()])
     seenprof = RadioField('Over the past 12 months, seen a professional for any of the above?', coerce=int, choices=YESNO, validators=[InputRequired()])
     other = RadioField('Had any other issues you would like us to know?', coerce=int, choices=YESNO, validators=[InputRequired()])
-    explain = TextField('Please explain "yes" answers:', validators=[Optional()])
+    explain = TextField('Please explain "Yes" answers below:', validators=[Optional()])
     swim = RadioField('Allowed to swim', coerce=int, choices=YESNO, validators=[InputRequired()])
     restrictions = TextField('He/ She may participate in all camp activities, with the following restrictions (which parents will be responsible for discussign with camp staff/ counselor upon arrival to camp, to assure tehse restrictions are able to be met', validators=[Optional()])
     insu = RadioField('This camper is covered by family medical/hospital insurance', coerce=int, choices=YESNO, validators=[InputRequired()])
@@ -101,7 +102,7 @@ class MedicalForm(FlaskForm):
 class UpdateCamperProfileForm(FlaskForm):
     fn = StringField('First Name', validators=[Required()])
     ln = StringField('Last Name', validators=[Required()])
-    dob = DateField('Date of Birth', format=FDATE, validators=[Required()], render_kw={"placeholder": "mm/dd/yyyy"})
+    dob = DateField('Date of Birth', format=FDATE, validators=[Required()], render_kw={"placeholder": DATEPH})
     gender = RadioField('Gender', choices=[('Male', 'Male'),('Female', 'Female')], validators=[Required()])
     street = StringField('Street', validators=[Required()])
     state = StringField('State', validators=[Required()])

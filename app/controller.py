@@ -235,8 +235,7 @@ def register_camper(camper_id):
             travel = form.travel.data,
             accept = form.acceptterms.data,
             )
-        send_email("Child Registered", recipients=[current_user.email], text_body="This is the testing email body. Your child has been registered!")
-
+        send_email("Child Registered", recipients=[current_user.email], text_body="Your child has been registered!")
         db.session.add(camper_registration)
         db.session.commit()
         flash('Camper Registered')
@@ -253,7 +252,6 @@ def edit_registration(reg_id):
     errors = None
     print type(to_bool(form.previouscamper.data))
     if form.validate_on_submit():
-        reg.submission_timestamp = datetime.now()
         reg.camp_session_id = form.session.data
         reg.gradeinfall = form.gradeinfall.data
         reg.prevcamper = to_bool(form.previouscamper.data)
@@ -313,7 +311,6 @@ def edit_medical_form(med_id):
         mf.insuphon = form.insuphone.data
         mf.sign = form.sign.data
         mf.parent = form.parent.data
-        mf.submission_timestamp = datetime.now()
         db.session.commit()
         flash('Medical Form Updated')
         return redirect(url_for('dashboard'))

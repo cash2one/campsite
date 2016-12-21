@@ -21,7 +21,7 @@
                     </tr>
                     <tr>
                         <th>Address</th>
-                        <td>{{ current_user.parents.g1street}}, {{ current_user.parents.g1state}} {{current_user.parents.g1zipcode }}
+                        <td>{{ current_user.parents.g1street}}, {{current_user.parents.g1city}}, {{ current_user.parents.g1state}} {{current_user.parents.g1zipcode }}
                     </tr>
                     <tr>
                         <th>Email</th>
@@ -44,7 +44,7 @@
                     </tr>
                     <tr>
                         <th>Address</th>
-                        <td>{{ current_user.parents.g2street}}, {{ current_user.parents.g2state}} {{current_user.parents.g2zipcode }}
+                        <td>{{ current_user.parents.g2street}}, {{current_user.parents.g2city}}, {{ current_user.parents.g2state}} {{current_user.parents.g2zipcode }}
                     </tr>
                     <tr>
                         <th>Email</th>
@@ -137,9 +137,6 @@
         {% endif %}
     </div>
     <div class="row">
-        <p class="fc-blue text-center">REGISTRATION IS NOT COMPLETE UNTIL THE FEES ARE PAID!<br><br>
-        Please click here to see how much to pay and where to mail the check.<br>
-        When the check is received you will see the status change above and
-        receive an email.
+        <p class="fc-blue text-center"><p class="text-center"><strong>Registration is not complete until the <a href="{{ url_for('fees') }}">camp fees</a> are received and medical forms are submitted. Admission will be on a first come first serve basis depending on the camp capacity. We will confirm acceptance of your camper by email.</strong></p>
     </div>
 {% endblock %}

@@ -19,7 +19,7 @@
                 {% if edit == 'True' %}
                 <form method=post action="{{url_for('edit_registration', reg_id=reg_id)}}">
                 {% else %}
-                <form method=post action="{{ url_for('register_camper', camper_id=camper_id) }}">
+                <form method=post action="{{ url_for('register_camper', camper_id=camper.id) }}">
                 {% endif %}
                 {{ form.hidden_tag() }}
                     <dl class="dl-horizontal">
@@ -28,17 +28,51 @@
                         {{render_field(form.previouscamper)}}
                         {{render_field(form.tshirtsize, class="form-control")}}
                         {{render_field(form.cabinpalname, class="form-control")}}
+                        <dd>You may request ONE other camper to be housed
+                        with your child in the same cabin. Multiple names
+                        will not be honored. For this to work, the other
+                        camper must request your child. We will try our best
+                        to accommodate this request, but we do not
+                        guarantee it.
+                        </dd>
                     </dl>
+
+                    <p><strong>Emergency Contact Information</strong></p>
                     <dl class="dl-horizontal">
-                        <p><strong>Emergency Contact Information</strong></p>
                         {{render_field(form.emgname, class="form-control")}}
                         {{render_field(form.emgrelation, class="form-control")}}
                         {{render_field(form.emgphone, class="form-control")}}
                         {{render_field(form.emgemail, class="form-control")}}
-                        {{render_field(form.travel, class="form-control")}}
-                        {{render_field(form.acceptterms)}}
-                        {{wtf.form_field(form.submit)}}
                     </dl>
+                    <dl class="dl-horizontal">
+                        {{render_field(form.travel, class="form-control")}}
+                        <dd>If your child will be traveling by plane/bus/train and requires transportation between the airport/bus/train terminal and the camp grounds, there is a fee each way. Refer to the <a href="{{ url_for('fees') }}">camp fees</a> page for details on the transportation fees.</dd>
+                        {{render_field(form.acceptterms)}}
+                        I consent to the enrollment of my child in the Hindu Heritage Summer
+
+                        Camp Program.
+
+                         I hereby release Hindu Heritage Summer Camp and India Community
+
+                        Center of Rochester, its employees and agents from any liability for any
+
+                        accident or injuries that my child of family may incur while attending the
+
+                        Hindu Heritage Summer Camp program.
+
+                         I understand that if all parts of the application is not complete, the camper
+
+                        will not be guaranteed a spot until all the necessary information has been
+
+                        submitted and enrollment is still open at that point.
+
+                         I understand that if the camper requires transportation at the beginning or
+
+                        end of camp, I will provide the information at least 2 full weeks before
+
+                        camp starts or pay a $50 fee for information sent later than that.
+                    </dl>
+                        {{wtf.form_field(form.submit)}}
                 </form>
             </div>
         </div>

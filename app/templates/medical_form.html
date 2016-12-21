@@ -23,62 +23,80 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td> {{ mform.dtap.label}}</td>
-                                    <td> {{ mform.dtap}}</td>
+                                    {{render_table_field(mform.dtap)}}
                                 </tr>
                                 <tr>
-                                    <td> {{ mform.mump.label}}</td>
-                                    <td> {{ mform.mump}} </td>
+                                    {{render_table_field(mform.mump)}}
                                 </tr>
                                 <tr>
-                                    <td> {{ mform.polio.label}}</td>
-                                    <td> {{ mform.polio }} </td>
+                                    {{render_table_field(mform.polio)}}
                                 </tr>
                                 <tr>
-                                    <td> {{ mform.ckpox.label }} </td>
-                                    <td> {{ mform.ckpox }} </td>
+                                    {{render_table_field(mform.ckpox)}}
                                 </tr>
                                 <tr>
-                                    <td> {{ mform.meningitis.label }} </td>
-                                    <td> {{ mform.meningitis }} </td>
+                                    {{render_table_field(mform.meningitis)}}
                                 </tr>
                                 <tr>
-                                    <td> {{ mform.hib.label }} </td>
-                                    <td> {{ mform.hib }} </td>
+                                    {{render_table_field(mform.hib)}}
                                 </tr>
                                 <tr>
-                                    <td> {{ mform.pcv.label }} </td>
-                                    <td> {{ mform.pcv }} </td>
+                                    {{render_table_field(mform.pcv)}}
                                 </tr>
                                 <tr>
-                                    <td> {{ mform.tb.label }} </td>
-                                    <td> {{ mform.tb }} </td>
-                                    <td> {{ mform.tbtest }} </td>
+                                    {{render_table_field(mform.tb)}}
+                                    <td> {{ mform.tbtest() }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <h2>Health History</h2>
-                    {{ mform.hosp.label }} {{ mform.hosp }}
-                    {{ mform.surg.label }} {{ mform.surg }}
-                    {{ mform.chro.label }} {{ mform.chro }}
-                    {{ mform.bedw.label }} {{ mform.bedw }}
-                    {{ mform.recinj.label }} {{ mform.recinj }}
-                    {{ mform.asth.label }} {{ mform.asth }}
-                    {{ mform.diab.label }} {{ mform.diab }}
-                    {{ mform.envallg.label }} {{ mform.envallg }}
-                    {{ mform.seiz.label }} {{ mform.seiz }}
-                    {{ mform.dizz.label }} {{ mform.dizz }}
-                    {{ mform.chestpain.label }} {{ mform.chestpain }}
-                    {{ mform.add.label }} {{ mform.add }}
-                    {{ mform.emodisorder.label }} {{ mform.emodisorder }}
-                    {{ mform.seenprof.label }} {{ mform.seenprof }}
-                    {{ mform.other.label }} {{ mform.other }}
-                    {{ wtf.form_field(mform.explain) }}
-                    {{ mform.swim.label }} {{ mform.swim }}
+                    <div class='table-responsive'>
+                        <table class='table table-striped'>
+                            <thead>
+                                <tr>
+                                    <th>General History</th>
+                                    <th>Yes</th>
+                                    <th>No</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr>{{render_radio_field(mform.hosp)}}</tr>
+                            <tr>{{render_radio_field(mform.surg)}}</tr>
+                            <tr>{{render_radio_field(mform.chro)}}</tr>
+                            <tr>{{render_radio_field(mform.bedw)}}</tr>
+                            <tr>{{render_radio_field(mform.recinj)}}</tr>
+                            <tr>{{render_radio_field(mform.asth)}}</tr>
+                            <tr>{{render_radio_field(mform.diab)}}</tr>
+                            <tr>{{render_radio_field(mform.envallg)}}</tr>
+                            <tr>{{render_radio_field(mform.seiz)}}</tr>
+                            <tr>{{render_radio_field(mform.dizz)}}</tr>
+                            <tr>{{render_radio_field(mform.chestpain)}}</tr>
+                            </tbody>
+                        </table>
+                        {{ render_field(mform.explain, class="form-control")}}
+                    </div>
+                    <div class='table-responsive'>
+                        <table class='table table-striped'>
+                            <thead>
+                                <tr>
+                                    <th>Mental, Emotional and Social Health History</th>
+                                    <th>Yes</th>
+                                    <th>No</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr>{{render_radio_field(mform.add)}}</tr>
+                            <tr>{{render_radio_field(mform.emodisorder)}}</tr>
+                            <tr>{{render_radio_field(mform.seenprof)}}</tr>
+                            <tr>{{render_radio_field(mform.other)}}</tr>
+                            </tbody>
+                        </table>
+                        {{ render_field(mform.explain, class="form-control")}}
+                    </div>
+                    {{render_field(mform.swim)}}
                     <h2>Insurance Details</h2>
-                    {{ mform.insu.label}}
-                    {{ mform.insu }}
+                    {{ render_field(mform.insu) }}
                     <div class='table-responsive'>
                         <table class='table table-striped'>
                             <tbody>
@@ -98,7 +116,7 @@
                         </table>
                     </div>
                     {{ wtf.form_field(mform.sign) }}
-                    {{ wtf.form_field(mform.parent) }}
+                    {{ render_field(mform.parent, class="form-control") }}
                     {{ wtf.form_field(mform.submit) }}
                 </form>
                 <hr>

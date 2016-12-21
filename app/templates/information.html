@@ -2,7 +2,7 @@
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <h2 style="padding-bottom:15px">Camp Information</h2>
+        <h2 style="padding-bottom:15px">General Information</h2>
         <div class="table-responsive">
             <table class="table">
                 <tr>
@@ -40,8 +40,8 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Note: Campers should arrive to the camp grounds between 10:30 am and 12:30 pm</td>
-                    <td>Note: Campers should depart the camp grounds between 8:00 am and 2:00 pm</td>
+                    <td>Note: Campers should arrive to the camp grounds between 9:00 am and 12:00 pm</td>
+                    <td>Note: Campers should depart the camp grounds between 11:00 am and 4:00 pm</td>
                 </tr>
                 <tr class='bg-og-light'>
                     <td class="infolabel">Schedule</td>
@@ -54,10 +54,10 @@
 
                         </div>
                         <div class="col-md-6">
-                            10:30 – 12:30 pm <br>
-                            12:30 – 1:30 pm <br>
-                            1:45  - 2:30 pm <br>
-                            2:45 – 3:00 pm <br>
+                            9:00 – 4:00 pm <br>
+                            12:00 – 1:00 pm <br>
+                            1:00  - 2:00 pm <br>
+                            2:00 – 2:15 pm <br>
                         </div>
                     </td>
                     <td>
@@ -66,13 +66,13 @@
                             Parent Lunch: <br>
                         </div>
                         <div class="col-md-6">
-                            11:00 – 11:30 pm <br>
-                            11:30 – 12:30 pm <br>
-
+                            11:15 – 11:45 am <br>
+                            11:45 – 12:30 pm <br>
                         </div>
                     </td>
                 </tr>
             </table>
+            <h3 class='text-center'><a href="{{ url_for('auth.create_account') }}">Registration</a> Begins January 1, 2017</h3>
         </div>
     </div>
 </div>
@@ -101,6 +101,15 @@
                         There is a licensed physician on the camp grounds 24/7. Please make sure your child’s medical form (in the registration) is up-to-date or you risk your child’s safety. 
                     </td>
                 </tr>
+                <tr>
+                    <th>Typical Camp Day</th>
+                    <td>
+                    <p>Please <a href="{{ url_for('static', filename='pdf/TypicalCampDay.pdf') }}">see attached</a> for what a typical camp day looks like. It is quite busy! The Camp Schedule for 2017 will be posted online in June. Please note that the schedule may change.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Packing List</th>
+                    <td>Please <a href="{{ url_for('static', filename='pdf/HHSCPackingList.pdf') }}">click here</a> to view the camp packing list</td>
 
             </table>
         </div>
