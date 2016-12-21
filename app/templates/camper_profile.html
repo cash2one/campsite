@@ -4,8 +4,27 @@
     <div class= "container">
         <div class="row">
             <div class= "col-md-offset-4 col-md-4">
-                <h1> Camper Profile </h1>
-                    {{ wtf.quick_form(form) }}
+                <h2> Camper Profile </h2>
+                    {% if edit == 'True' %}
+                        <form method=post action="{{ url_for('edit_camper_profile', camper_id=camper_id) }}">
+                    {% else %}
+                        <form method=post action="{{ url_for('add_camper') }}">
+                    {% endif %}
+                        {{ form.hidden_tag() }}
+                        <dl class="dl-horizontal left-indent">
+                            {{ render_field(form.fn, class='form-control')}}
+                            {{ render_field(form.ln, class='form-control')}}
+                            {{ render_field(form.dob, class='form-control')}}
+                            {{ render_field(form.gender) }}
+                            {{ render_field(form.street, class='form-control')}}
+                            {{ render_field(form.state, class='form-control')}}
+                            {{ render_field(form.zipcode, class='form-control')}}
+                            {{ render_field(form.country, class='form-control')}}
+                            {{ render_field(form.campercell, class='form-control')}}
+                            {{ render_field(form.camperemail, class='form-control')}}
+                        </dl>
+                        <span class="center-block">{{ wtf.form_field(form.submit)}}</span>
+                    </form>
             </div>
         </div>
     </div>

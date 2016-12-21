@@ -5,6 +5,7 @@ from flask_login import login_required, current_user
 from .models import *
 from datetime import datetime
 from emails import send_email
+from ._helpers import flash_errors, to_bool
 
 # Sample HTTP error handling
 @app.errorhandler(404)
@@ -95,7 +96,8 @@ def edit_parent_profile(parents_id):
         db.session.commit()
         flash('Parent Profile Updated')
         return redirect(url_for('dashboard'))
-    return render_template('parent_profile.html', form=form)
+    flash_errors(form)
+    return render_template('parent_profile.html', form=form, edit='True', parents_id=parents.id)
 
 @app.route('/add_parent_profile', methods=['GET', 'POST'])
 @login_required
@@ -130,7 +132,7 @@ def create_parent_profile():
         db.session.commit()
         flash('Parent Profile Created')
         return redirect(url_for('dashboard'))
-    return render_template('parent_profile.html', form=form)
+    return render_template('parent_profile.html', form=form, edit='False')
 
 @app.route('/dashboard', methods=['GET'])
 @login_required
@@ -176,8 +178,7 @@ def edit_camper(camper_id):
         db.session.commit()
         flash('Camper Profile Updated')
         return redirect(url_for('dashboard'))
-    return render_template('camper_profile.html', form=form, errors=errors)
-
+    return render_template('camper_profile.html', form=form, errors=errors, edit='True', camper_id=camper.id)
 
 @app.route('/add_camper', methods=['GET','POST'])
 @login_required
@@ -202,7 +203,7 @@ def add_camper():
         db.session.commit()
         flash("Camper {0} added".format(form.fn.data))
         return redirect(url_for('dashboard'))
-    return render_template('camper_profile.html', form=form, errors=errors)
+    return render_template('camper_profile.html', form=form, errors=errors, edit='False')
 
 @app.route('/register_camper/<int:camper_id>', methods=['GET','POST'])
 @login_required
@@ -216,6 +217,7 @@ def register_camper(camper_id):
         return redirect(url_for('dashboard'))
 
     form = CamperRegistrationForm()
+    print type(to_bool(form.previouscamper.data))
     errors = None
     if form.validate_on_submit():
         camper_registration = Camper_Registration(
@@ -249,11 +251,12 @@ def edit_registration(reg_id):
     reg = Camper_Registration.query.get(reg_id)
     form = CamperRegistrationForm(obj=reg)
     errors = None
+    print type(to_bool(form.previouscamper.data))
     if form.validate_on_submit():
         reg.submission_timestamp = datetime.now()
         reg.camp_session_id = form.session.data
         reg.gradeinfall = form.gradeinfall.data
-        reg.prevcamper = form.previouscamper.data
+        reg.prevcamper = to_bool(form.previouscamper.data)
         reg.cabin_pal_name = form.cabinpalname.data
         reg.shirtsize = form.tshirtsize.data
         reg.emgname = form.emgname.data
@@ -385,17 +388,3 @@ def medical_form(camper_id):
         return redirect(url_for('dashboard'))
     flash_errors(mform)
     return render_template('medical_form.html', mform=mform, camper_id=camper_id, edit='False')
-
-def to_bool(n):
-    if n == 0:
-        return False
-    else:
-        return True
-
-def flash_errors(form):
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash(u"Error in the %s field - %s" % (
-                getattr(form, field).label.text,
-                error
-            ))

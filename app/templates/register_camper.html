@@ -3,34 +3,41 @@
 {% block content %}
     <div class= "container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-offset-2 col-md-3">
                 <h2>Camper Profile</h2>
                 <ul>
                     <li>{{camper.fn}} {{camper.ln}}</li>
                     <li>{{camper.dob.strftime('%m/%d/%Y')}}</li>
+                    <li>{{camper.gender}}</li>
+                    <li>{{camper.street}} {{camper.state}}, {{camper.zipcode}}</li>
+                    <li>{{camper.campercell}}</li>
+                    <li>{{camper.camperemail}}</li>
                 </ul>
             </div>
-            <div class= "col-md-offset-3 col-md-6">
-                <h1> Register Camper </h1>
+            <div class= "col-md-6">
+                <h2> Register Camper </h2>
                 {% if edit == 'True' %}
                 <form method=post action="{{url_for('edit_registration', reg_id=reg_id)}}">
                 {% else %}
                 <form method=post action="{{ url_for('register_camper', camper_id=camper_id) }}">
                 {% endif %}
                 {{ form.hidden_tag() }}
-                    <dl>
-                        {{render_field(form.session)}}
-                        {{render_field(form.gradeinfall)}}
+                    <dl class="dl-horizontal">
+                        {{render_field(form.session, class="form-control")}}
+                        {{render_field(form.gradeinfall, class="form-control")}}
                         {{render_field(form.previouscamper)}}
-                        {{render_field(form.tshirtsize)}}
-                        {{render_field(form.cabinpalname)}}
-                        {{render_field(form.emgname)}}
-                        {{render_field(form.emgrelation)}}
-                        {{render_field(form.emgphone)}}
-                        {{render_field(form.emgemail)}}
-                        {{render_field(form.travel)}}
+                        {{render_field(form.tshirtsize, class="form-control")}}
+                        {{render_field(form.cabinpalname, class="form-control")}}
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <p><strong>Emergency Contact Information</strong></p>
+                        {{render_field(form.emgname, class="form-control")}}
+                        {{render_field(form.emgrelation, class="form-control")}}
+                        {{render_field(form.emgphone, class="form-control")}}
+                        {{render_field(form.emgemail, class="form-control")}}
+                        {{render_field(form.travel, class="form-control")}}
                         {{render_field(form.acceptterms)}}
-                        {{render_field(form.submit)}}
+                        {{wtf.form_field(form.submit)}}
                     </dl>
                 </form>
             </div>

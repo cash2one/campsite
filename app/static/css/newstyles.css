@@ -55,7 +55,36 @@ dl {
     color: #f5f5f5;
 }
 
-.error-red {
+.fc-blue {
+    color: #337ab7;
+}
+
+.fc-red {
     color: #FF1800;
 }
+
+.fc-yellow {
+    color: #D6AB00;
+}
+
+.fc-green {
+    color: #0CAF0C;
+}
+
+.error-red {
+    vertical-align: super;
+    font-size: 12px;
+    color: #FF1800;
+}
+
+.left-indent {
+    margin-left: 25px;
+}
+
+.fll{
+    float: left;
+}
+
+.flr {
+    float: right;
 }

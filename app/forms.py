@@ -7,31 +7,31 @@ from .models import User, Camp_Session
 
 STATES = [('AK','AK'),('AL','AL'),("AR","AR"),("AZ","AZ"),("CA","CA"),("CO","CO"),("CT","CT"),("DC","DC"),("DE","DE"),("FL","FL"),("GA","GA"),("HI","HI"),("IA","IA"),("ID","ID"), ("IL","IL"),("IN","IN"),("KS","KS"),("KY","KY"),("LA","LA"),("MA","MA"),("MD","MD"),("ME","ME"),("MH","MH"),("MI","MI"),("MN","MN"),("MO","MO"),("MS","MS"),("MT","MT"),("NC","NC"),("ND","ND"),("NE","NE"),("NH","NH"),("NJ","NJ"),("NM","NM"),("NV","NV"),("NY","NY"), ("OH","OH"),("OK","OK"),("OR","OR"),("PA","PA"),("PR","PR"),("PW","PW"),("RI","RI"),("SC","SC"),("SD","SD"),("TN","TN"),("TX","TX"),("UT","UT"),("VA","VA"),("VI","VI"),("VT","VT"),("WA","WA"),("WI","WI"),("WV","WV"),("WY","WY")]
 
-GRADES = [(str(i), str(i)) for i in xrange(1,12)]
-TSIZES = [('S', 'Small'), ('M', 'Medium'), ('L', 'Large')]
+GRADES = [('1st','1st'),('2nd','2nd'),('3rd','3rd'),('4th','4th'),('5th','5th'),('6th','6th'),('7th','7th'),('8th','8th'),('9th','9th'),('10th','10th'),('11th','11th'),('12th','12th')]
+TSIZES = [('S', 'Small'), ('M', 'Medium'), ('L', 'Large'), ('XL', 'X Large')]
 ALLERGIES = [('None', 'None'), ('Food', 'Food'), ('Medicine', 'Medicine'), ('Enviornment', 'Enviornment'), ('Insect Bites', 'Insect Bites'), ('Other', 'Other')]
 YESNO = [(1, 'Yes'),(0, 'No')]
 TRAVEL = [('Flight', 'Flight'), ('Bus', 'Bus'), ('Train', 'Train'), ('Own arrangement', 'Own arrangement')]
 FDATE = '%m/%d/%Y'
 
 class UpdateParentProfileForm(FlaskForm):
-    g1fn = StringField('Guardian 1: First Name', validators=[Required()])
-    g1ln = StringField('Guradian 1: Last Name', validators=[Required()])
-    g1street = StringField('Guradian 1: Street', validators=[Required()])
-    g1city = StringField('Guardian 1: City', validators=[Required()])
-    g1state = SelectField('State', choices = STATES, validators=[Required()])
-    g1zipcode = StringField('Guardian 1: Zipcode', validators=[Required()])
-    g1country = StringField('Guardian 1: Country', default='USA', validators=[Required()])
-    g1phone = StringField('Guardian 1: Phone', validators=[Required()])
-    g2fn = StringField('Guardian 2: First Name' , validators=[Optional()])
-    g2ln = StringField('Guradian 2: Last Name', validators=[Optional()])
-    g2street = StringField('Guardian 2: Street', validators=[Optional()])
-    g2city = StringField('Guardian 2: City', validators=[Optional()])
-    g2state = SelectField('Guardian 2: State', choices = STATES, validators=[Optional()])
-    g2zipcode = StringField('Guardian 2: Zipcode', validators=[Optional()])
-    g2country = StringField('Guardian 2: Country', default='USA', validators=[Optional()])
-    g2phone = StringField('Guardian 2: Phone', validators=[Optional()])
-    g2email = StringField('Guardian 2: Email', validators=[Optional()])
+    g1fn = StringField('First Name', validators=[Required()])
+    g1ln = StringField('Last Name', validators=[Required()])
+    g1street = StringField('Street', validators=[Required()])
+    g1city = StringField('City', validators=[Required()])
+    g1state = StringField('State', validators=[Required()])
+    g1zipcode = StringField('Zipcode', validators=[Required()])
+    g1country = StringField('Country', default='USA', validators=[Required()])
+    g1phone = StringField('Phone', validators=[Required()])
+    g2fn = StringField('First Name' , validators=[Required()])
+    g2ln = StringField('Last Name', validators=[Required()])
+    g2street = StringField('Street', validators=[Required()])
+    g2city = StringField('City', validators=[Required()])
+    g2state = StringField('State', validators=[Required()])
+    g2zipcode = StringField('Zipcode', validators=[Required()])
+    g2country = StringField('Country', default='USA', validators=[Required()])
+    g2phone = StringField('Phone', validators=[Required()])
+    g2email = StringField('Email', validators=[Required()])
     submit = SubmitField('Create/Update Parent Profile')
 
 
@@ -41,11 +41,11 @@ class CamperRegistrationForm(FlaskForm):
     previouscamper = RadioField('Previous Camper', choices=YESNO, coerce=int, validators=[Optional()])
     tshirtsize = SelectField('Adult T-Shirt Size', choices=TSIZES, validators=[Required()])
     cabinpalname = StringField('Cabin Pal Name', validators=[Optional()])
-    emgname = StringField('Emergency Contact Name', validators=[Required()])
+    emgname = StringField('Name', validators=[Required()])
     emgrelation = StringField('Relation', validators=[Required()])
     emgphone = StringField('Phone', validators=[Required()])
     emgemail = StringField('Email', validators=[Required(), Email()])
-    travel = SelectField('Mode of Travel', choices=TRAVEL, validators=[Optional()])
+    travel = SelectField('Mode of Travel', choices=TRAVEL, validators=[Required()])
     acceptterms = BooleanField('Accept Terms', validators=[Required()])
     submit = SubmitField('Submit Application')
 
@@ -101,10 +101,10 @@ class MedicalForm(FlaskForm):
 class UpdateCamperProfileForm(FlaskForm):
     fn = StringField('First Name', validators=[Required()])
     ln = StringField('Last Name', validators=[Required()])
-    dob = DateField('Date of Birth', format=FDATE, validators=[Required()])
-    gender = RadioField('Gender', choices=[('M', 'Male'),('F', 'Female')], validators=[Required()])
+    dob = DateField('Date of Birth', format=FDATE, validators=[Required()], render_kw={"placeholder": "mm/dd/yyyy"})
+    gender = RadioField('Gender', choices=[('Male', 'Male'),('Female', 'Female')], validators=[Required()])
     street = StringField('Street', validators=[Required()])
-    state = SelectField('State', choices = STATES, validators=[Required()])
+    state = StringField('State', validators=[Required()])
     country = StringField('Country', default = "USA", validators=[Required()])
     zipcode = StringField('Zipcode', validators=[Required()])
     campercell = StringField('Camper Cell', validators=[Optional()])
