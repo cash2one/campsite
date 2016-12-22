@@ -11,7 +11,10 @@
                 {% endif %}
                     {{ mform.hidden_tag() }}
                     <h1> Medical Form </h1>
-                    {{ wtf.form_field(mform.allergies) }}
+                    <dl class="dl-horizontal">
+                        {{ render_field(mform.allergies) }}
+                        {{ render_text_field(mform.allexplain)}}
+                    </dl>
                     <h2>Immunization History</h2>
                     <div class='table-responsive'>
                         <table class='table table-striped'>
@@ -23,33 +26,112 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    {{render_table_field(mform.dtap)}}
+                                    {{render_table_field(mform.dtap, class='form-control')}}
                                 </tr>
                                 <tr>
-                                    {{render_table_field(mform.mump)}}
+                                    {{render_table_field(mform.mump, class='form-control')}}
                                 </tr>
                                 <tr>
-                                    {{render_table_field(mform.polio)}}
+                                    {{render_table_field(mform.polio, class='form-control')}}
                                 </tr>
                                 <tr>
-                                    {{render_table_field(mform.ckpox)}}
+                                    {{render_table_field(mform.ckpox, class='form-control')}}
                                 </tr>
                                 <tr>
-                                    {{render_table_field(mform.meningitis)}}
+                                    {{render_table_field(mform.hadckpox, class='form-control')}}
                                 </tr>
                                 <tr>
-                                    {{render_table_field(mform.hib)}}
+                                    {{render_table_field(mform.meningitis, class='form-control')}}
                                 </tr>
                                 <tr>
-                                    {{render_table_field(mform.pcv)}}
+                                    {{render_table_field(mform.hib, class='form-control')}}
                                 </tr>
                                 <tr>
-                                    {{render_table_field(mform.tb)}}
+                                    {{render_table_field(mform.pcv, class='form-control')}}
+                                </tr>
+                                <tr>
+                                    {{render_table_field(mform.tb, class='form-control')}}
                                     <td> {{ mform.tbtest() }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                    <h2>Prescription Medications</h2>
+                    <p>Must be brought to camp in original bottle from pharmacy, to include pharmacy label, otherwise cannot be given</p>
+                    <dl class="dl-horizontal">
+                        {{mform.presmeds.label}}<span class="error-red">*</span>
+                        {{mform.presmeds()}}                        
+                    </dl>
+                    <h3>Prescription Medication 1</h3>
+                    <dl class="dl-horizontal">
+                        {{render_field(mform.pmed1name, class='form-control')}}
+                        {{render_field(mform.pmed1reason, class='form-control')}}
+                        {{render_field(mform.pmed1dosage, class='form-control')}}
+                        {{render_field(mform.pmed1time, class='form-control')}}
+                        {{render_field(mform.pmed1admin)}}
+                    </dl>
+                    <h3>Prescription Medication 2</h3>
+                    <dl class="dl-horizontal">
+                        {{render_field(mform.pmed2name, class='form-control')}}
+                        {{render_field(mform.pmed2reason, class='form-control')}}
+                        {{render_field(mform.pmed2dosage, class='form-control')}}
+                        {{render_field(mform.pmed2time, class='form-control')}}
+                        {{render_field(mform.pmed2admin)}}
+                    </dl>
+                    <h3>Prescription Medication 3</h3>
+                    <dl class="dl-horizontal">
+                        {{render_field(mform.pmed3name, class='form-control')}}
+                        {{render_field(mform.pmed3reason, class='form-control')}}
+                        {{render_field(mform.pmed3dosage, class='form-control')}}
+                        {{render_field(mform.pmed3time, class='form-control')}}
+                        {{render_field(mform.pmed3admin)}}
+                    </dl>
+                    <h3>Prescription Medication 4</h3>
+                    <dl class="dl-horizontal">
+                        {{render_field(mform.pmed4name, class='form-control')}}
+                        {{render_field(mform.pmed4reason, class='form-control')}}
+                        {{render_field(mform.pmed4dosage, class='form-control')}}
+                        {{render_field(mform.pmed4time, class='form-control')}}
+                        {{render_field(mform.pmed4admin)}}
+                    </dl>
+                    <h2>Non-Prescription Medications</h2>
+                    <p>Includes over the counter, vitamins, natural remedies, and as needed medications</p>
+                    <dl class="dl-horizontal">
+                        {{mform.nonpresmeds.label}}<span class="error-red">*</span>
+                        {{mform.nonpresmeds()}}    
+                    </dl>
+                    <h3>Prescription Medication 1</h3>
+                    <dl class="dl-horizontal">
+                        {{render_field(mform.npmed1name, class='form-control')}}
+                        {{render_field(mform.npmed1reason, class='form-control')}}
+                        {{render_field(mform.npmed1dosage, class='form-control')}}
+                        {{render_field(mform.npmed1time, class='form-control')}}
+                        {{render_field(mform.npmed1admin)}}
+                    </dl>
+                    <h3>Prescription Medication 2</h3>
+                    <dl class="dl-horizontal">
+                        {{render_field(mform.npmed2name, class='form-control')}}
+                        {{render_field(mform.npmed2reason, class='form-control')}}
+                        {{render_field(mform.npmed2dosage, class='form-control')}}
+                        {{render_field(mform.npmed2time, class='form-control')}}
+                        {{render_field(mform.npmed2admin)}}
+                    </dl>
+                    <h3>Prescription Medication 3</h3>
+                    <dl class="dl-horizontal">
+                        {{render_field(mform.npmed3name, class='form-control')}}
+                        {{render_field(mform.npmed3reason, class='form-control')}}
+                        {{render_field(mform.npmed3dosage, class='form-control')}}
+                        {{render_field(mform.npmed3time, class='form-control')}}
+                        {{render_field(mform.npmed3admin)}}
+                    </dl>
+                    <h3>Prescription Medication 4</h3>
+                    <dl class="dl-horizontal">
+                        {{render_field(mform.npmed4name, class='form-control')}}
+                        {{render_field(mform.npmed4reason, class='form-control')}}
+                        {{render_field(mform.npmed4dosage, class='form-control')}}
+                        {{render_field(mform.npmed4time, class='form-control')}}
+                        {{render_field(mform.npmed4admin)}}
+                    </dl>
                     <h2>Health History</h2>
                     <div class='table-responsive'>
                         <table class='table table-striped'>
@@ -74,7 +156,7 @@
                             <tr>{{render_radio_field(mform.chestpain)}}</tr>
                             </tbody>
                         </table>
-                        {{ render_field(mform.explain, class="form-control")}}
+                        {{ render_text_field(mform.genexplain) }}
                     </div>
                     <div class='table-responsive'>
                         <table class='table table-striped'>
@@ -92,31 +174,32 @@
                             <tr>{{render_radio_field(mform.other)}}</tr>
                             </tbody>
                         </table>
-                        {{ render_field(mform.explain, class="form-control")}}
+                        {{ render_text_field(mform.explain)}}
                     </div>
-                    {{render_field(mform.swim)}}
+                    {{ render_field(mform.swim) }}
+                    <br>
+                    {{ render_text_field(mform.restrictions) }}
+                    <br><br>
                     <h2>Insurance Details</h2>
                     {{ render_field(mform.insu) }}
                     <div class='table-responsive'>
                         <table class='table table-striped'>
                             <tbody>
                                 <tr>
-                                    <td>{{ mform.insucomp.label }}</td>
-                                    <td>{{ mform.insucomp }}</td>
+                                    {{ render_table_field(mform.insucomp, class="form-control")}}
                                 </tr>
                                 <tr>
-                                    <td>{{ mform.insupoli.label }}</td>
-                                    <td>{{ mform.insupoli }}</td>
+                                    {{ render_table_field(mform.insupoli, class="form-control")}}
                                 </tr>
                                 <tr>
-                                    <td>{{ mform.insusubs.label }}</td>
-                                    <td>{{ mform.insusubs }}</td>
+                                    {{ render_table_field(mform.insusubs, class="form-control")}}
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    {{ wtf.form_field(mform.sign) }}
-                    {{ render_field(mform.parent, class="form-control") }}
+                    {{ render_field(mform.sign, class="form-control") }}
+                    {{ render_field(mform.parentrelation, class="form-control") }}
+                    {{ render_field(mform.dateofsign, class="form-control")}}
                     {{ wtf.form_field(mform.submit) }}
                 </form>
                 <hr>
