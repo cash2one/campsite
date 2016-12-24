@@ -8,6 +8,7 @@ Flask-Bootstrap==3.3.7.0
 Flask-Login==0.2.11
 Flask-Mail==0.9.1
 Flask-MySQL==1.4.0
+Flask-Principal==0.4.0
 Flask-SQLAlchemy==2.1
 Flask-WTF==0.13.1
 gunicorn==19.6.0
