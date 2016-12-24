@@ -3,11 +3,22 @@
 {% block content %}
     <div class= "container">
         <div class="row">
-            <div class= "col-md-offset-2 col-md-8">
+            <div class="col-md-2">
+                <h2>Camper Profile</h2>
+                <ul>
+                    <li>{{camper.fn}} {{camper.ln}}</li>
+                    <li>{{camper.dob.strftime('%m/%d/%Y')}}</li>
+                    <li>{{camper.gender}}</li>
+                    <li>{{camper.street}} {{camper.state}}, {{camper.zipcode}}</li>
+                    <li>{{camper.campercell}}</li>
+                    <li>{{camper.camperemail}}</li>
+                </ul>
+            </div>
+            <div class= "col-md-8">
                 {% if edit == 'True' %}
                 <form method=post action="{{url_for('edit_medical_form', med_id=med_id)}}">
                 {% else %}
-                <form method=post action="{{url_for('medical_form', camper_id=camper_id)}}">
+                <form method=post action="{{url_for('medical_form', camper_id=camper.id)}}">
                 {% endif %}
                     {{ mform.hidden_tag() }}
                     <h1> Medical Form </h1>
@@ -197,12 +208,12 @@
                             </tbody>
                         </table>
                     </div>
+                    <h2>Parent/Guardian Authorization for Health Care:</h2>
+                    <p>This health history is correct and accurately reflects the health status of the camper to whom it pertains. The person described has permission to participate in all camp activities except as noted by me and/or an examining physician. I give permission to the medical provider selected by the camp to order x-rays, routine tests, and treatment related to the health of my child for both routine health care and in emergency situations. If I cannot be reached in an emergency, I give my permission to the physician to hospitalize, secure proper treatment for, and order injection, anesthesia, or surgery for this child. I understand the information on this form will be shared on a "need to know" basis with camp staff. I give permission to photocopy this form. In addition, the camp has permission to obtain a copy of my child’s health record from providers who treat my child and these providers may talk with the program’s staff about my child’s health status.</p>
                     {{ render_field(mform.sign, class="form-control") }}
                     {{ render_field(mform.parentrelation, class="form-control") }}
-                    {{ render_field(mform.dateofsign, class="form-control")}}
                     {{ wtf.form_field(mform.submit) }}
                 </form>
-                <hr>
             </div>
 
         </div>

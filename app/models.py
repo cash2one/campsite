@@ -19,12 +19,16 @@ class Camp_Session(db.Model):
     camper_registrations = db.relationship('Camper_Registration', backref='camp_session',lazy='dynamic')
     counselor_registrations = db.relationship('Counselor_Registration', backref='camp_session', lazy='dynamic')
 
+    @property
+    def formatdate(self):
+        return "Session {0} {1} ({2} - {3})".format(str(self.session), self.year, self.startdate.strftime('%B %d'), self.enddate.strftime('%B %d'))
+
     @classmethod
     def active_sessions(self):
         current_year = str(datetime.now().year)
         sessions = Camp_Session.query.filter_by(year=current_year).all()
         if sessions != None:
-            sessions = [(str(s.id), "Session {0} {1}".format(str(s.session), s.year)) for s in sessions]
+            sessions = [(str(s.id), s.formatdate) for s in sessions]
         return sessions
 
     @classmethod

@@ -3,18 +3,46 @@ from app import app, mail
 from .forms import UpdateParentProfileForm, UpdateCamperProfileForm, CamperRegistrationForm, MedicalForm, MedicationForm
 from flask_login import login_required, current_user
 from .models import *
-from datetime import datetime
+from datetime import datetime, timedelta
 from emails import send_email
 from ._helpers import flash_errors, to_bool
 from flask import Response
 from flask.ext.principal import Principal, Permission, RoleNeed
+from flask_admin.contrib import sqla
+from flask_admin import helpers, expose
+import flask_admin as admin
 
 admin_permission = Permission(RoleNeed('admin'))
 
-@app.route('/admin')
-@admin_permission.require()
-def do_admin_index():
-    return Response('Only if you are an admin')
+# Create customized index view class that handles login & registration
+# class MyAdminIndexView(admin.AdminIndexView):
+
+#     @expose('/admin/index')
+#     def admin_index(self):
+#         if not login.current_user.is_authenticated:
+#             return redirect(url_for('.login_view'))
+#         return super(MyAdminIndexView, self).index()
+
+#     @expose('/admin/login', methods=('GET', 'POST'))
+#     def admin_login_view(self):
+#         # handle user login
+#         form = LoginForm()
+#         if helpers.validate_form_on_submit(form):
+#             user = form.get_user()
+#             login.login_user(user)
+
+#         if login.current_user.is_authenticated:
+#             return redirect(url_for('.admin_index'))
+#         link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>'
+#         self._template_args['form'] = form
+#         self._template_args['link'] = link
+#         return super(MyAdminIndexView, self).index()
+
+
+# @app.route('/admin')
+# @admin_permission.require()
+# def do_admin_index():
+#     return Response('Only if you are an admin')
 
 # Sample HTTP error handling
 @app.errorhandler(404)
@@ -139,6 +167,7 @@ def create_parent_profile():
             )
         db.session.add(parents)
         db.session.commit()
+        send_email("Account Created!", recipients=[current_user.email], html_body="<p> Dear {0} {1}, <br> <br> Thank you for creating an HHSC Camper Registration Account. <br> <br>Please note that for the Registration Process to be complete, we must receive the <i> registration form</i>, the <i>medical form</i>, and the <i>full <a href='{2}'>camp fees</a></i>. After the Registration Process is complete, we will inform you of whether your camper has secured a spot in the selected session or is waitlisted.  <br> <br>Thank you, <br>HHSC Administration <p>".format(current_user.parents.g1fn, current_user.parents.g1ln, url_for('fees')))
         flash('Parent Profile Created')
         return redirect(url_for('dashboard'))
     return render_template('parent_profile.html', form=form, edit='False')
@@ -157,12 +186,12 @@ def dashboard():
     for c in campers:
         if regs[c] is None:
             med[c] = None
-            sess[c] = "None"
+            sess[c] = 'None'
+            pay[c] = 'None'
         else:
             sess[c] = regs[c].get_session()
             med[c] = Medical_Form.query.filter_by(camper_registration_id=regs[c].id).first()
             pay[c] = str(regs[c].payment_received)
-            print regs[c].accept
         # print str(regs[c].payment_received)
 
     return render_template('dashboard.html', campers=campers, regs=regs, sess=sess, med=med, pay=pay)
@@ -213,6 +242,7 @@ def add_camper():
         db.session.add(camper)
         db.session.commit()
         flash("Camper {0} added".format(form.fn.data))
+
         return redirect(url_for('dashboard'))
     return render_template('camper_profile.html', form=form, errors=errors, edit='False')
 
@@ -228,7 +258,7 @@ def register_camper(camper_id):
         return redirect(url_for('dashboard'))
 
     form = CamperRegistrationForm()
-    print type(to_bool(form.previouscamper.data))
+    camper = Camper.query.filter_by(id=camper_id).first()
     errors = None
     if form.validate_on_submit():
         camper_registration = Camper_Registration(
@@ -246,13 +276,14 @@ def register_camper(camper_id):
             travel = form.travel.data,
             accept = form.acceptterms.data,
             )
-        send_email("Child Registered", recipients=[current_user.email], text_body="Your child has been registered!")
+        session = Camp_Session.query.get(camper_registration.camp_session_id)
+        send_email("HHSC Registration {0} {1} - {2}".format(camper.fn, camper.ln, session.formatdate), recipients=[current_user.email, 'hhsc.register@gmail.com'], html_body="<p> Dear {0} {1}, <br> <br> Thank you for registering <b>{2} {3} to HHSC {7}</b>. Please note that to complete the registration process, you must submit the following by <b>{4}</b> or forfeit your child's position in the Queue: <br> <br> 1.  Medical Form (must be filled out online by parent) <br>2.  Full <a href='{5}'>Camp Fees</a> (Check) <br> <br> The Full Registration Fee is to be sent by First Class mail to <br> <br> <center> Hema Bhaskaran <br>HHSC Treasurer <br>8 Tenbury Way  <br>Fairport, NY 14450 </center><br><br><em> Note: HHSC can only accept 57 boys and 57 girls for each session. After the Registration Process is complete, we will inform you of whether your camper has secured a spot in the above selected session or is waitlisted. </em> <br> <br> <b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{6}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br> <br>Thank you, <br>HHSC Administration <p>".format(current_user.parents.g1fn, current_user.parents.g1ln, camper.fn, camper.ln, (datetime.today() + timedelta(days=14)).strftime('%B %d, %Y'), url_for('fees'), url_for('fees'), session.formatdate))
+
         db.session.add(camper_registration)
         db.session.commit()
         flash('Camper Registered')
         return redirect(url_for('dashboard'))
     flash_errors(form)
-    camper = Camper.query.filter_by(id=camper_id).first()
     return render_template('register_camper.html', edit='False', form=form, errors=errors, camper=camper)
 
 @app.route('/edit_camper_registration/<int:reg_id>', methods=['GET','POST'])
@@ -369,8 +400,8 @@ def edit_medical_form(med_id):
         return redirect(url_for('dashboard'))
     print "Invalid Submission"
     flash_errors(form)
-    camper_id = mf.camper_registration.camper_id
-    return render_template('medical_form.html', mform=form, camper_id=camper_id, edit='True', med_id=med_id)
+    camper = Camper.query.get(mf.camper_registration.camper_id)
+    return render_template('medical_form.html', mform=form, camper=camper, edit='True', med_id=med_id)
 
 @app.route('/medical_form/<int:camper_id>', methods=['GET', 'POST'])
 @login_required
@@ -475,12 +506,11 @@ def medical_form(camper_id):
             submission_timestamp = datetime.now(),
             camper_registration_id = reg.id
         )
-        print "no form added yet"
-        db.session.commit()
+        send_email("HHSC Medical Form {0} {1} - {2}".format(camper.fn, camper.ln, session.formatdate), recipients=[current_user.email, 'hhsc.register@gmail.com'], html_body="<p> Dear {0} {1}, <br> <br>We have received the online medical form for <b>{2} {3} to HHSC {4}</b>. <br> <br> Please note that for the Registration Process to be complete, we must receive the <i> registration form</i>, the <i>medical form</i>, and the <i>full <a href='{5}'>camp fees</a></i>. After the Registration Process is complete, we will inform you of whether your camper has secured a spot in the selected session or is waitlisted.  <br> <br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{6}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br> <br> Thank you, <br> HHSC Administration <p>".format(current_user.parents.g1fn, current_user.parents.g1ln, camper.fn, camper.ln, datetime.today().strftime('%B %d, %Y'), url_for('fees'), url_for('fees')))
         db.session.add(med_form)
-        print "form added to session"
         db.session.commit()
         flash("Medical Form Submitted")
         return redirect(url_for('dashboard'))
     flash_errors(mform)
-    return render_template('medical_form.html', mform=mform, camper_id=camper_id, edit='False')
+    camper = Camper.query.get(camper_id)
+    return render_template('medical_form.html', mform=mform, camper=camper, edit='False')
