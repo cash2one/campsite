@@ -223,7 +223,12 @@ class Camper_Registration(db.Model):
 
     def __repr__(self):
         camper = Camper.query.get(self.camper_id)
-        return '<Registration for {0} - id:{1}>'.format(camper.fn, self.id)
+        if self.camp_session_id is not None:
+            sess = Camp_Session.query.get(self.camp_session_id)
+            session = sess.session
+        else:
+            session = None
+        return '<Registration name - {0} {1}:\n dob - {2}:\n sess = {3}\n gender = {4} - id:{5}>'.format(camper.fn, camper.ln, self.id, session, camper.gender, self.id)
 
     def get_session(self):
         session = Camp_Session.query.get(self.camp_session_id)

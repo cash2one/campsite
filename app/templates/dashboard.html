@@ -11,7 +11,7 @@
         <a style="margin-left: 25px;" class="btn fll" href="{{ url_for('edit_parent_profile', parents_id=current_user.parents.id) }}"> Edit Parent Profile</a>
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="table-responsive">
                 <table class="table table-striped">
                     <h3>Guardian 1</h3>
@@ -34,7 +34,7 @@
                 </table>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="table-responsive">
                 <table class="table table-striped">
                     <h3>Guardian 2</h3>
@@ -48,7 +48,7 @@
                     </tr>
                     <tr>
                         <th>Email</th>
-                        <td>{{ current_user.email}}</td>
+                        <td>{{ current_user.parents.g2email}}</td>
                     </tr>
                     <tr>
                         <th>Phone</th>
@@ -116,18 +116,24 @@
                         {% else %}
                         <td class="fc-yellow">Decision Pending</td>
                         {% endif %}
-                        <td><a class="btn" href="{{ url_for('register_camper', camper_id=camper.id) }}">
+                        <td>
+                        {% if regs[camper] == None %}
+                        <a class="btn" href="{{ url_for('register_camper', camper_id=camper.id) }}">
                         {% if regs[camper] == None %}
                             Register
                         {% else %}
                             Edit
                         {% endif %}
-                        </a></td>
-                        <td><a class="btn" href="{{ url_for('medical_form', camper_id=camper.id) }}">
-                        {% if med[camper] == None %}
-                            Fill Out
+                        </a>
                         {% else %}
-                            Edit
+                        <span class="fc-green">Complete</span>
+                        {% endif %}
+                        </td>
+                        <td>
+                        {% if med[camper] == None %}
+                        <a class="btn" href="{{ url_for('medical_form', camper_id=camper.id) }}">Fill Out</a>
+                        {% else %}
+                        <span class="fc-green">Complete</span>
                         {% endif %}
                         </a></td>
                     </tr>

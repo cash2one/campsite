@@ -1,0 +1,13 @@
+{% extends 'admin/model/list.html' %}
+
+{% block body %}
+    <h1>List HI many name is AShish</h1>
+    {{ super() }}
+    {% block list_header %}
+        <h3>YOlo</h3>
+    {% endblock list_header %}
+    {% block list_row %}
+        <td>{{ registration }}</td>
+        <h3>Single Row</h3>
+    {% endblock %}
+{% endblock %}

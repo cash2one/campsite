@@ -46,7 +46,7 @@ class UpdateParentProfileForm(FlaskForm):
 class CamperRegistrationForm(FlaskForm):
     session = SelectField('Camp Session', choices=Camp_Session.active_sessions(), validators=[Required()])
     gradeinfall = SelectField('Grade in Fall', choices=GRADES, validators=[Required()])
-    previouscamper = RadioField('Previous Camper', choices=YESNO, coerce=int, validators=[Optional()])
+    previouscamper = RadioField('Previous Camper', choices=YESNO, coerce=int, validators=[Required()])
     tshirtsize = SelectField('Adult T-Shirt Size', choices=TSIZES, validators=[Required()])
     cabinpalname = StringField('Cabin Pal Name', validators=[Optional()], render_kw={"placeholder": "Full Name"})
     emgname = StringField('Name', validators=[Required()])
@@ -150,7 +150,6 @@ class MedicalForm(FlaskForm):
     dateofsign = DateField('Date', default=datetime.now(), format=FDATE, validators=[Required()])
     parentrelation = StringField('Relation', validators=[Required()])
     submit = SubmitField('Submit Medical Form')
-
 
 class UpdateCamperProfileForm(FlaskForm):
     fn = StringField('First Name', validators=[Required()])

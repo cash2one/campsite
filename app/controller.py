@@ -6,6 +6,15 @@ from .models import *
 from datetime import datetime
 from emails import send_email
 from ._helpers import flash_errors, to_bool
+from flask import Response
+from flask.ext.principal import Principal, Permission, RoleNeed
+
+admin_permission = Permission(RoleNeed('admin'))
+
+@app.route('/admin')
+@admin_permission.require()
+def do_admin_index():
+    return Response('Only if you are an admin')
 
 # Sample HTTP error handling
 @app.errorhandler(404)
