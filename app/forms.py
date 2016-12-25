@@ -12,7 +12,7 @@ STATES = [('AK','AK'),('AL','AL'),("AR","AR"),("AZ","AZ"),("CA","CA"),("CO","CO"
 GRADES = [('1st','1st'),('2nd','2nd'),('3rd','3rd'),('4th','4th'),('5th','5th'),('6th','6th'),('7th','7th'),('8th','8th'),('9th','9th'),('10th','10th'),('11th','11th'),('12th','12th')]
 TSIZES = [('S', 'Small'), ('M', 'Medium'), ('L', 'Large'), ('XL', 'X Large')]
 ALLERGIES = [('None', 'None'), ('Food', 'Food'), ('Medicine', 'Medicine'), ('Enviornment', 'Enviornment'), ('Insect Bites', 'Insect Bites'), ('Other', 'Other')]
-YESNO = [(1, 'Yes'),(0, 'No')]
+YESNO = [('1', 'Yes'),('0', 'No')]
 TRAVEL = [('Flight', 'Flight'), ('Bus', 'Bus'), ('Train', 'Train'), ('Own arrangement', 'Own arrangement')]
 DOSAGETIMES = [(' ',' '),('Breakfast','Breakfast'),('Lunch','Lunch'),('Dinner','Dinner'),('Bedtime','Bedtime')]
 MEDADMIN = [('Oral', 'Oral'),('Nasal', 'Nasal'),('Inhalation', 'Inhalation'),('Injection', 'Injection'),('Other', 'Other')]
@@ -46,7 +46,7 @@ class UpdateParentProfileForm(FlaskForm):
 class CamperRegistrationForm(FlaskForm):
     session = SelectField('Camp Session', choices=Camp_Session.active_sessions(), validators=[Required()])
     gradeinfall = SelectField('Grade in Fall', choices=GRADES, validators=[Required()])
-    previouscamper = RadioField('Previous Camper', choices=YESNO, coerce=int, validators=[Required()])
+    previouscamper = RadioField('Previous Camper', choices=YESNO, coerce=int, validators=[InputRequired()])
     tshirtsize = SelectField('Adult T-Shirt Size', choices=TSIZES, validators=[Required()])
     cabinpalname = StringField('Cabin Pal Name', validators=[Optional()], render_kw={"placeholder": "Full Name"})
     emgname = StringField('Name', validators=[Required()])
@@ -58,7 +58,7 @@ class CamperRegistrationForm(FlaskForm):
     submit = SubmitField('Submit Application')
 
 class MedicationForm(FlaskForm):
-    presc = RadioField('Prescription Medication?', choices=YESNO, validators=[Required()])
+    presc = RadioField('Prescription Medication?', choices=YESNO, validators=[InputRequired()])
     name = StringField('Medication Name', validators=[Required()])
     reason = StringField('Reason for taking it', validators=[Required()])
     dosage = StringField('Dosage (include mg)', validators=[Required()])
@@ -80,7 +80,7 @@ class MedicalForm(FlaskForm):
     pcv = DateField('Pneumococcal (PCV)', format=FDATE, validators=[Required()], render_kw={"placeholder": DATEPH})
     tb = DateField('Tubercolosis test (TB) (PPD)', format=FDATE, validators=[Optional()], render_kw={"placeholder": DATEPH})
     tbtest = RadioField('Result', coerce=int, choices=[(0, 'neg'),(1, 'positive')], validators=[Optional()])
-    presmeds = RadioField('Does your child take any Daily Prescription Medications?', choices=YESNO, coerce=int, validators=[Required()])
+    presmeds = RadioField('Does your child take any Daily Prescription Medications?', choices=YESNO, coerce=int, validators=[InputRequired()])
     pmed1name = StringField('Medicaton Name', validators=[Optional()])
     pmed1reason = StringField('Reason', validators=[Optional()], render_kw={"placeholder": REASON})
     pmed1dosage = StringField('Dosage', validators=[Optional()], render_kw={"placeholder": DOSAGE})
@@ -101,7 +101,7 @@ class MedicalForm(FlaskForm):
     pmed4dosage = StringField('Dosage', validators=[Optional()], render_kw={"placeholder": DOSAGE})
     pmed4time = SelectField('Time to give', choices=DOSAGETIMES, validators=[Optional()], render_kw={"placeholder": TIME})
     pmed4admin = RadioField('Administration', choices=MEDADMIN, validators=[Optional()])
-    nonpresmeds = RadioField('Does your child take any Daily Non-Prescription Medications?', choices=YESNO, coerce=int, validators=[Required()])
+    nonpresmeds = RadioField('Does your child take any Daily Non-Prescription Medications?', choices=YESNO, coerce=int, validators=[InputRequired()])
     npmed1name = StringField('Medicaton Name', validators=[Optional()])
     npmed1reason = StringField('Reason', validators=[Optional()], render_kw={"placeholder": REASON})
     npmed1dosage = StringField('Dosage', validators=[Optional()], render_kw={"placeholder": DOSAGE})

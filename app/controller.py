@@ -283,6 +283,7 @@ def register_camper(camper_id):
         db.session.commit()
         flash('Camper Registered')
         return redirect(url_for('dashboard'))
+    print to_bool(form.previouscamper.data)
     flash_errors(form)
     return render_template('register_camper.html', edit='False', form=form, errors=errors, camper=camper)
 
