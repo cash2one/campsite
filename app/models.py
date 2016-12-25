@@ -1,10 +1,11 @@
-from app import db, login_manager
+from app import db, login_manager, adminFlask
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask import request, url_for
 from sqlalchemy import desc
 from datetime import datetime
 from sqlalchemy.orm import relationship, backref
+from .emails import send_email
 
 allergies = [(1,'No Allergies'), (2, 'Food'), (3, 'Medicine'),(4,'Enviornment'),(5,'Insect Bites'),(6,'Other')]
 
@@ -238,6 +239,11 @@ class Camper_Registration(db.Model):
         session = Camp_Session.query.get(self.camp_session_id)
         return "Session {0}".format(session.session)
 
+    def send_decision_email(self):
+        # if self.accepted == 1:
+        #     send_email()
+        return 
+        
     @property
     def sub_time(self):
         return self.submission_timestamp.strftime("%I:%M:%S%p %m/%d/%y")

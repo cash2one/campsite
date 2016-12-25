@@ -19,7 +19,7 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 login_manager = LoginManager(app)
-admin = Admin(app, name='campsite', template_mode='bootstrap3')
+adminFlask = Admin(app, name='campsite', template_mode='bootstrap3')
 mail = Mail(app)
 principals = Principal(app)
 
@@ -32,30 +32,3 @@ app.register_blueprint(auth_blueprint)
 
 # protect a view with a principal for that need
 
-from flask_admin.contrib.sqla import ModelView
-
-class UserModelView(ModelView):
-    can_export = True
-
-class CamperRegistrationModelView(ModelView):
-    can_export = True
-    # edit_template = 'admin/registration_edit.html'
-    # list_template = 'admin/registration_list.html'
-    inline_models = [models.Medical_Form,]
-
-class MedicalFormModelView(ModelView):
-    can_export = True
-
-class CamperModelView(ModelView):
-    can_export = True
-    column_searchable_list = ('fn', 'ln', 'dob')
-
-class ParentsModelView(ModelView):
-    inline_models = (models.Camper,)
-
-admin.add_view(UserModelView(models.User, db.session))
-admin.add_view(CamperRegistrationModelView(models.Camper_Registration, db.session))
-admin.add_view(ModelView(models.Camp_Session, db.session))
-admin.add_view(CamperModelView(models.Camper, db.session))
-admin.add_view(ParentsModelView(models.Parents, db.session))
-admin.add_view(MedicalFormModelView(models.Medical_Form, db.session))
