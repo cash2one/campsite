@@ -12,7 +12,7 @@ STATES = [('AK','AK'),('AL','AL'),("AR","AR"),("AZ","AZ"),("CA","CA"),("CO","CO"
 GRADES = [('1st','1st'),('2nd','2nd'),('3rd','3rd'),('4th','4th'),('5th','5th'),('6th','6th'),('7th','7th'),('8th','8th'),('9th','9th'),('10th','10th'),('11th','11th'),('12th','12th')]
 TSIZES = [('S', 'Small'), ('M', 'Medium'), ('L', 'Large'), ('XL', 'X Large')]
 ALLERGIES = [('None', 'None'), ('Food', 'Food'), ('Medicine', 'Medicine'), ('Enviornment', 'Enviornment'), ('Insect Bites', 'Insect Bites'), ('Other', 'Other')]
-YESNO = [('1', 'Yes'),('0', 'No')]
+YESNO = [(1, 'Yes'),(0, 'No')]
 TRAVEL = [('Flight', 'Flight'), ('Bus', 'Bus'), ('Train', 'Train'), ('Own arrangement', 'Own arrangement')]
 DOSAGETIMES = [(' ',' '),('Breakfast','Breakfast'),('Lunch','Lunch'),('Dinner','Dinner'),('Bedtime','Bedtime')]
 MEDADMIN = [('Oral', 'Oral'),('Nasal', 'Nasal'),('Inhalation', 'Inhalation'),('Injection', 'Injection'),('Other', 'Other')]
@@ -47,7 +47,7 @@ class CamperRegistrationForm(FlaskForm):
     session = SelectField('Camp Session', choices=Camp_Session.active_sessions(), validators=[Required()])
     gradeinfall = SelectField('Grade in Fall', choices=GRADES, validators=[Required()])
     previouscamper = RadioField('Previous Camper', choices=YESNO, coerce=int, validators=[InputRequired()])
-    tshirtsize = SelectField('Adult T-Shirt Size', choices=TSIZES, validators=[Required()])
+    tshirtsize = SelectField('Adult T-Shirt Size', choices=TSIZES, validators=[InputRequired()])
     cabinpalname = StringField('Cabin Pal Name', validators=[Optional()], render_kw={"placeholder": "Full Name"})
     emgname = StringField('Name', validators=[Required()])
     emgrelation = StringField('Relation', validators=[Required()])
