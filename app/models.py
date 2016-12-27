@@ -16,6 +16,8 @@ class Camp_Session(db.Model):
     year = db.Column(db.String(4))
     startdate = db.Column(db.Date)
     enddate = db.Column(db.Date)
+    numboys = db.Column(db.Integer)
+    numgirls = db.Column(db.Integer)
 
     camper_registrations = db.relationship('Camper_Registration', backref='camp_session',lazy='dynamic')
     counselor_registrations = db.relationship('Counselor_Registration', backref='camp_session', lazy='dynamic')
@@ -208,8 +210,10 @@ class Camper_Registration(db.Model):
     __tablename__ = 'camper_registration'
     id = db.Column(db.Integer, primary_key = True)
     submission_timestamp = db.Column(db.TIMESTAMP)
-    payment_received = db.Column(db.TIMESTAMP)
-    registration_complete = db.Column(db.Boolean)
+    payment_received = db.Column(db.Date)
+    payment_amount = db.Column(db.Integer)
+    payment_status = db.Column(db.String(32))
+    payment_email = db.Column(db.Boolean)
     accepted = db.Column(db.Integer)
     camper_id = db.Column(db.Integer, db.ForeignKey('camper.id'))
     camp_session_id = db.Column(db.Integer, db.ForeignKey('camp_session.id'))
@@ -243,7 +247,7 @@ class Camper_Registration(db.Model):
         # if self.accepted == 1:
         #     send_email()
         return 
-        
+
     @property
     def sub_time(self):
         return self.submission_timestamp.strftime("%I:%M:%S%p %m/%d/%y")

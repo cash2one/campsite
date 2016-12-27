@@ -44,22 +44,27 @@ class UserModelView(ModelView):
     can_export = True
     column_list = ['parents.g1ln', 'parents.g1fn','email', 'password_hash']
     column_labels = dict(user_parents_g1ln='Last Name')
+    page_size = 50
 
 class CamperRegistrationModelView(ModelView):
     can_export = True
     edit_template = 'admin/registration_edit.html'
     # list_template = 'admin/registration_list.html'
     # Calculate age of camper at camp
-    column_list = ["submission_timestamp", 'camper.fn', 'camper.ln', 'camper.dob', 'camper.gender', 'camp_session.formatdate', 'camper.parents.user.email', 'payment_received', 'accepted', 'gradeinfall', 'prevcamper', 'cabin_pal_name', 'shirtsize', 'emgname', 'emgrelation', 'emgemail', 'emgphone', 'travel', 'accept']
-    page_size = 20
+    column_list = ["submission_timestamp", 'camper.fn', 'camper.ln', 'camper.dob', 'camper.gender', 'camp_session.formatdate', 'camper.parents.user.email', 'payment_received', 'payment_amount', 'payment_status', 'accepted', 'gradeinfall', 'prevcamper', 'cabin_pal_name', 'shirtsize', 'emgname', 'emgrelation', 'emgemail', 'emgphone', 'travel', 'accept']
+    column_labels = dict(payment_email='Send Payment Email?')
+    page_size = 50
 
     def after_model_change(self, form, model, is_created):
         parents = model.camper.parents
         if model.accepted == 1:
-            send_email('HHSC HHSC Registration Accepted: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br>{2} {3} has been <b>accepted</b> to HHSC <b>{4}</b>.<br><br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{5}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br><br> <b> Important Camp Information</b> <br>Please visit the <a href='{6}'>Camp Website</a> to view a list of what to pack for your child. Attached is some detailed information for Enrolled Campers. <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, model.camper.fn, model.camper.ln, model.camp_session.formatdate, url_for('fees'), url_for('information')), attach=url_for('static', filename='pdf/ImportantInformationforEnrolledCampers.pdf'))
+            send_email('HHSC HHSC Registration Accepted: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br>{2} {3} has been <b>accepted</b> to HHSC <b>{4}</b>.<br><br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{5}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br><br> <b> Important Camp Information</b> <br>Please visit the <a href='{6}'>Camp Website</a> to view a list of what to pack for your child. <br><a href='https://drive.google.com/open?id=0Bx2Zk7UlXDv4LV9FSVVZdjQzdXM'>Click here</a>to view detailed information for enrolled campers <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, model.camper.fn, model.camper.ln, model.camp_session.formatdate, url_for('fees'), url_for('information')), attach=url_for('static', filename='pdf/ImportantInformationforEnrolledCampers.pdf'))
         elif model.accepted == -1:
             send_email('HHSC Registration Waitlisted: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br> {2} {3} has been <b>waitlisted</b> for HHSC <b>{4}</b>.<br><br> We have reached our maximum capacity for enrollment at this time. However, we have added your child's name to the waitlist and will hold your check until and if a space becomes available. If a space does not become available, we will void your check. <br> <br> If you would like to withdraw your child from the waitlist, Please inform us by email and we will cancel out the check and shred it. <em> <br> <br> We will let you know if there is a status change. </em> <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, model.camper.fn, model.camper.ln, model.camp_session.formatdate))
-
+        if model.payment_email:
+            send_email('HHSC Payment Received: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br>We have received a total payment of ${2} for <b>{3} {4} to HHSC {5}</b>. <br> <br>Please note that for the Registration Process to be complete, we must receive the <i> registration form</i>, the <i>medical form</i>, and the <i>full <a href='{5}'>camp fees</a></i>. After the Registration Process is complete, we will inform you of whether your camper has secured a spot in the selected session or is waitlisted.  <br> <br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{6}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, str(model.payment_amount), model.camper.fn, model.camper.ln, model.camp_session.formatdate, url_for('fees')))
+            model.payment_email = True
+            db.session.commit()
     # @expose('/')
     # def index(self):
     #     print 'HELLOOO'
@@ -99,6 +104,7 @@ def not_found(error):
 @app.route('/index')
 @app.route('/home')
 def home():
+    print url_for('fees')
     return render_template('home.html')
 
 @app.route('/medicalassistant')
@@ -123,7 +129,22 @@ def assistantmanager():
 
 @app.route('/campinformation')
 def information():
-    return render_template('information.html')
+    sess1 = Camp_Session.query.filter_by(year=str(datetime.today().year), session='1').first()
+    sess2 = Camp_Session.query.filter_by(year=str(datetime.today().year), session='2').first()
+    if sess1 is None:
+        regs1male = 0
+        regs1female = 0
+    else:
+        regs1male = sess1.camper_registrations.filter_by(accepted=1).join(Camper, Camper_Registration.camper_id==Camper.id).filter_by(gender='Male').count()
+        regs1female = sess1.camper_registrations.filter_by(accepted=1).join(Camper, Camper_Registration.camper_id==Camper.id).filter_by(gender='Female').count()
+    if sess2 is None:
+        regs2male = 0
+        regs2female = 0
+    else:
+        regs2male = sess2.camper_registrations.filter_by(accepted=1).join(Camper, Camper_Registration.camper_id==Camper.id).filter_by(gender='Male').count()
+        regs2female = sess2.camper_registrations.filter_by(accepted=1).join(Camper, Camper_Registration.camper_id==Camper.id).filter_by(gender='Female').count()
+        
+    return render_template('information.html',  regs2female=regs2female, regs2male=regs2male, regs1male=regs1male, regs1female=regs1female, sess1=sess1, sess2=sess2)
 
 @app.route('/about')
 def about():
@@ -237,7 +258,16 @@ def dashboard():
         else:
             sess[c] = regs[c].get_session()
             med[c] = Medical_Form.query.filter_by(camper_registration_id=regs[c].id).first()
-            pay[c] = str(regs[c].payment_received)
+            if regs[c].payment_received is None:
+                pay_received = 'Not Received'
+            else:
+                pay_received = str(regs[c].payment_received)
+            if regs[c].payment_status is None:
+                pay_status = ''
+            else:
+                pay_status = str(regs[c].payment_status)
+
+            pay[c] = [pay_received, '$' + str(regs[c].payment_amount), pay_status]
         # print str(regs[c].payment_received)
 
     return render_template('dashboard.html', campers=campers, regs=regs, sess=sess, med=med, pay=pay)
@@ -321,6 +351,7 @@ def register_camper(camper_id):
             emgphone = form.emgphone.data,
             travel = form.travel.data,
             accept = form.acceptterms.data,
+            payment_amount = 0
             )
         session = Camp_Session.query.get(camper_registration.camp_session_id)
         send_email("HHSC Registration {0} {1} - {2}".format(camper.fn, camper.ln, session.formatdate), recipients=[current_user.email, 'hhsc.register@gmail.com'], html_body="<p> Dear {0} {1}, <br> <br> Thank you for registering <b>{2} {3} to HHSC {7}</b>. Please note that to complete the registration process, you must submit the following by <b>{4}</b> or forfeit your child's position in the Queue: <br> <br> 1.  Medical Form (must be filled out online by parent) <br>2.  Full <a href='{5}'>Camp Fees</a> (Check) <br> <br> The Full Registration Fee is to be sent by First Class mail to <br> <br> <center> Hema Bhaskaran <br>HHSC Treasurer <br>8 Tenbury Way  <br>Fairport, NY 14450 </center><br><br><em> Note: HHSC can only accept 57 boys and 57 girls for each session. After the Registration Process is complete, we will inform you of whether your camper has secured a spot in the above selected session or is waitlisted. </em> <br> <br> <b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{6}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br> <br>Thank you, <br>HHSC Administration <p>".format(current_user.parents.g1fn, current_user.parents.g1ln, camper.fn, camper.ln, (datetime.today() + timedelta(days=14)).strftime('%B %d, %Y'), url_for('fees'), url_for('fees'), session.formatdate))

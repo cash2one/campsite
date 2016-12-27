@@ -29,17 +29,31 @@
                 </tr>
                 <tr>
                     <td>Session 1</td>
+                    {% if sess1 == None %}
                     <td>0</td>
                     <td>0</td>
                     <td>0</td>
                     <td>0</td>
+                    {% else %}
+                    <td>{{ regs1male }}</td>
+                    <td>{{ sess1.numboys - regs1male }}</td>
+                    <td>{{ regs1female }}</td>
+                    <td>{{ sess1.numgirls - regs1female }}</td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td>Session 2</td>
+                    {% if sess2 == None %}
                     <td>0</td>
                     <td>0</td>
                     <td>0</td>
                     <td>0</td>
+                    {% else %}
+                    <td>{{ regs2male }}</td>
+                    <td>{{ sess2.numboys - regs2male }}</td>
+                    <td>{{ regs2female }}</td>
+                    <td>{{ sess2.numgirls - regs2female }}</td>
+                    {% endif %}
                 </tr>
             </table>
     </div>

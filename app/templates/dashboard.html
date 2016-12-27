@@ -77,7 +77,7 @@
                             <th width="9%">Session</th>
                             <th>Application</th>
                             <th>Medical Form</th>
-                            <th>Fee Received</th>
+                            <th>Camp Fees</th>
                             <th>Decision</th>
                             <th>Register</th>
                             <th>Medical Form</th>
@@ -104,7 +104,17 @@
                         {% if pay[camper] == 'None' %}
                         <td class="fc-red">Not Received</td>
                         {% else %}
-                        <td class="fc-green"> {{ pay[camper] }}</td>
+                        <td> 
+                            {% if pay[camper][0] != 'Not Received' %}
+                            <p class='fc-green'>
+                            {% else %}
+                            <p class='fc-red'>
+                            {% endif %}
+
+                            {% for p in pay[camper] %}
+                                {{ p }}<br>
+                            {% endfor %}
+                        </td>
                         {% endif %}
 
                         {% if regs[camper] == None %}

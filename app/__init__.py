@@ -7,7 +7,7 @@ from flask_login import LoginManager
 from flask_admin import Admin
 from flask import Blueprint
 from flask import Flask, Response
-from flask.ext.principal import Principal, Permission, RoleNeed
+from flask_principal import Principal, Permission, RoleNeed
 
 # from flask_pagedown import PageDown
 
