@@ -31,6 +31,7 @@ MAIL_SUPPRESS_SEND = False
 MAIL_ASCII_ATTACHMENTS = False
 # administrator list
 ADMINS = ['ankurtoshniwal4@gmail.com']
+APPLICATION_ROOT = "omhhsc.org"
 
 # Protection against Cross-site Request Forgery (CSRF)
 WTF_CSRF_ENABLED = True
