@@ -10,8 +10,8 @@
                     {{ form.csrf_token }}
                     <h3>Primary Parent / Guardian Contact Information</h3>
                     <dl class="dl-horizontal">
-                        {{ render_field(form.email, class='form-control')}}
-                        {{ render_field(form.password, class='form-control')}}
+                        {{ wtf.form_field(form.email) }}
+                        {{ wtf.form_field(form.password) }}
                     </dl>
                     <span class="center-block">{{ wtf.form_field(form.submit)}}</span>
                 </form>
