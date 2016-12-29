@@ -36,6 +36,6 @@ APPLICATION_ROOT = "omhhsc.org"
 # Protection against Cross-site Request Forgery (CSRF)
 WTF_CSRF_ENABLED = True
 
-# CSRF_SESSION_KEY = "secret"
+CSRF_SESSION_KEY = "BASDboasdfkjewrBASD"
 
-SECRET_KEY = "secret"
+SECRET_KEY = "ASDFLKERJAaskdjfewoir5"

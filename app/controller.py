@@ -15,7 +15,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask.ext import admin
 
 admin_permission = Permission(RoleNeed('admin'))
-siteroot = 'hhscwebsite.heroku.com'
+siteroot = 'omhhsc.org'
 
 class UserModelView(ModelView):
     can_export = True
@@ -35,7 +35,7 @@ class CamperRegistrationModelView(ModelView):
     def after_model_change(self, form, model, is_created):
         parents = model.camper.parents
         if model.accepted == 1:
-            send_email('HHSC HHSC Registration Accepted: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br>{2} {3} has been <b>accepted</b> to HHSC <b>{4}</b>.<br><br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{5}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br><br> <b> Important Camp Information</b> <br>Please visit the <a href='{6}'>Camp Website</a> to view a list of what to pack for your child. <br><a href='https://drive.google.com/open?id=0Bx2Zk7UlXDv4LV9FSVVZdjQzdXM'>Click here</a>to view detailed information for enrolled campers <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, model.camper.fn, model.camper.ln, model.camp_session.formatdate, siteroot + url_for('fees'), siteroot + url_for('information')), attach=url_for('static', filename='pdf/ImportantInformationforEnrolledCampers.pdf'))
+            send_email('HHSC HHSC Registration Accepted: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br>{2} {3} has been <b>accepted</b> to HHSC <b>{4}</b>.<br><br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{5}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br><br> <b> Important Camp Information</b> <br>Please visit the <a href='{6}'>Camp Website</a> to view a list of what to pack for your child. <br><a href='https://drive.google.com/open?id=0Bx2Zk7UlXDv4LV9FSVVZdjQzdXM'>Click here</a> to view detailed information for enrolled campers <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, model.camper.fn, model.camper.ln, model.camp_session.formatdate, siteroot + url_for('fees'), siteroot + url_for('information')), attach=url_for('static', filename='pdf/ImportantInformationforEnrolledCampers.pdf'))
         elif model.accepted == -1:
             send_email('HHSC Registration Waitlisted: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br> {2} {3} has been <b>waitlisted</b> for HHSC <b>{4}</b>.<br><br> We have reached our maximum capacity for enrollment at this time. However, we have added your child's name to the waitlist and will hold your check until and if a space becomes available. If a space does not become available, we will void your check. <br> <br> If you would like to withdraw your child from the waitlist, Please inform us by email and we will cancel out the check and shred it. <em> <br> <br> We will let you know if there is a status change. </em> <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, model.camper.fn, model.camper.ln, model.camp_session.formatdate))
         if model.payment_email:
@@ -81,7 +81,6 @@ def not_found(error):
 @app.route('/index')
 @app.route('/home')
 def home():
-    send_email('Test', recipients=['hhsc.register@gmail.com'], html_body="<p> {0} <p>".format(siteroot + url_for('information')))
     return render_template('home.html')
 
 @app.route('/medicalassistant')

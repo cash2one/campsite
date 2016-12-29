@@ -6,9 +6,17 @@
         <div class="row">
             <div class= "col-md-offset-4 col-md-4">
                 <h1> Parents Sign In </h1>
-                {{ wtf.quick_form(form) }}
+                <form method=post action="{{ url_for('auth.login') }}">
+                    {{ form.hidden_tag() }}
+                    <h3>Primary Parent / Guardian Contact Information</h3>
+                    <dl class="dl-horizontal left-indent">
+                        {{ render_field(form.email, class='form-control')}}
+                        {{ render_field(form.password, class='form-control')}}
+                    </dl>
+                    <span class="center-block">{{ wtf.form_field(form.submit)}}</span>
+                </form>
                 <br>
-                <a href="">Forgot Password?</a>
+                <!-- <a href="">Forgot Password?</a> -->
             </div>
         </div>
     </div>
