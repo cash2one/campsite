@@ -7,9 +7,9 @@
             <div class= "col-md-offset-4 col-md-4">
                 <h1> Parents Sign In </h1>
                 <form method=post action="{{ url_for('auth.login') }}">
-                    {{ form.hidden_tag() }}
+                    {{ form.csrf_token }}
                     <h3>Primary Parent / Guardian Contact Information</h3>
-                    <dl class="dl-horizontal left-indent">
+                    <dl class="dl-horizontal">
                         {{ render_field(form.email, class='form-control')}}
                         {{ render_field(form.password, class='form-control')}}
                     </dl>

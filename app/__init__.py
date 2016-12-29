@@ -8,6 +8,7 @@ from flask_admin import Admin
 from flask import Blueprint
 from flask import Flask, Response
 from flask_principal import Principal, Permission, RoleNeed
+from flask_wtf.csrf import CsrfProtect
 
 # from flask_pagedown import PageDown
 
@@ -22,6 +23,7 @@ login_manager = LoginManager(app)
 adminFlask = Admin(app, name='campsite', template_mode='bootstrap3')
 mail = Mail(app)
 principals = Principal(app)
+csrf = CsrfProtect(app)
 
 from app import controller, models
 

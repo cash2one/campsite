@@ -6,6 +6,8 @@ from .. import db
 from ..models import User
 # from ..email import send_email
 from .forms import LoginForm, CreateAccountForm
+from .._helpers import flash_errors, to_bool
+
     # ChangePasswordForm,\
     # PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 
@@ -41,6 +43,7 @@ def login():
             return redirect(url_for('dashboard'))
         flash('Invalid username or password')
         return redirect(url_for('auth.login'))
+    flash_errors(form)
     return render_template('auth/login.html', form=form, errors=errors)
 
 @login_required
@@ -65,6 +68,7 @@ def create_account():
         # send_email(user.email. .... etc)
         flash('Account Created for {0}'.format(form.email.data))
         return redirect(url_for('auth.login'))
+    flash_errors(form)
     return render_template('auth/create_account.html', form=form)
 
 
