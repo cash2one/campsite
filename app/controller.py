@@ -7,75 +7,14 @@ from datetime import datetime, timedelta
 from emails import send_email
 from ._helpers import flash_errors, to_bool
 from flask import Response
-from flask.ext.principal import Principal, Permission, RoleNeed
-from flask_admin.contrib import sqla
-from flask_admin import helpers, expose
-from flask.ext.admin.contrib import sqlamodel
+from flask_principal import Principal, Permission, RoleNeed
 from flask_admin.contrib.sqla import ModelView
-from flask.ext import admin
+from flask_admin import helpers, expose
+from werkzeug.wrappers import BaseRequest
+from werkzeug.exceptions import HTTPException, NotFound, Unauthorized
 
 admin_permission = Permission(RoleNeed('admin'))
 siteroot = 'omhhsc.org'
-
-class UserModelView(ModelView):
-    can_export = True
-    column_list = ['parents.g1ln', 'parents.g1fn','email', 'password_hash']
-    column_labels = dict(user_parents_g1ln='Last Name')
-    page_size = 50
-
-class CamperRegistrationModelView(ModelView):
-    can_export = True
-    edit_template = 'admin/registration_edit.html'
-    # list_template = 'admin/registration_list.html'
-    # Calculate age of camper at camp
-    column_list = ["submission_timestamp", 'camper.fn', 'camper.ln', 'camper.dob', 'camper.gender', 'camp_session.formatdate', 'camper.parents.user.email', 'payment_received', 'payment_amount', 'payment_status', 'accepted', 'gradeinfall', 'prevcamper', 'cabin_pal_name', 'shirtsize', 'emgname', 'emgrelation', 'emgemail', 'emgphone', 'travel', 'accept']
-    column_labels = dict(payment_email='Send Payment Email?')
-    page_size = 50
-
-    def after_model_change(self, form, model, is_created):
-        parents = model.camper.parents
-        if model.accepted == 1:
-            send_email('HHSC HHSC Registration Accepted: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br>{2} {3} has been <b>accepted</b> to HHSC <b>{4}</b>.<br><br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{5}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br><br> <b> Important Camp Information</b> <br>Please visit the <a href='{6}'>Camp Website</a> to view a list of what to pack for your child. <br><a href='https://drive.google.com/open?id=0Bx2Zk7UlXDv4LV9FSVVZdjQzdXM'>Click here</a> to view detailed information for enrolled campers <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, model.camper.fn, model.camper.ln, model.camp_session.formatdate, siteroot + url_for('fees'), siteroot + url_for('information')), attach=url_for('static', filename='pdf/ImportantInformationforEnrolledCampers.pdf'))
-        elif model.accepted == -1:
-            send_email('HHSC Registration Waitlisted: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br> {2} {3} has been <b>waitlisted</b> for HHSC <b>{4}</b>.<br><br> We have reached our maximum capacity for enrollment at this time. However, we have added your child's name to the waitlist and will hold your check until and if a space becomes available. If a space does not become available, we will void your check. <br> <br> If you would like to withdraw your child from the waitlist, Please inform us by email and we will cancel out the check and shred it. <em> <br> <br> We will let you know if there is a status change. </em> <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, model.camper.fn, model.camper.ln, model.camp_session.formatdate))
-        if model.payment_email:
-            send_email('HHSC Payment Received: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br>We have received a total payment of ${2} for <b>{3} {4} to HHSC {5}</b>. <br> <br>Please note that for the Registration Process to be complete, we must receive the <i> registration form</i>, the <i>medical form</i>, and the <i>full <a href='{5}'>camp fees</a></i>. After the Registration Process is complete, we will inform you of whether your camper has secured a spot in the selected session or is waitlisted.  <br> <br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{6}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, str(model.payment_amount), model.camper.fn, model.camper.ln, model.camp_session.formatdate, siteroot + url_for('fees')))
-            model.payment_email = True
-            db.session.commit()
-    # @expose('/')
-    # def index(self):
-    #     print 'HELLOOO'
-    #     return self.render('admin/registration_list.html')
-
-class MedicalFormModelView(ModelView):
-    can_export = True
-    column_list = ['submission_timestamp', 'camper_registration.camper.fn', 'camper_registration.camper.ln', 'camper_registration.camper.dob', 'camper_registration.camper.gender', 'camper_registration.camp_session.formatdate', 'allergies','allexplain','dtap','mump','polio','ckpox','hadckpox','meningitis','hib','pcv','tb','tbtest','hosp','surg','chro','bedw','recinj','asth','envallg','diab','seiz','dizz','chestpain','add','genexplain','emodisorder','seenprof','other','explain','swim','restrictions','presmeds','pmed1name','pmed1reason','pmed1dosage','pmed1time','pmed1admin','pmed2name','pmed2reason','pmed2dosage','pmed2time','pmed2admin','pmed3name','pmed3reason','pmed3dosage','pmed3time','pmed3admin','pmed4name','pmed4reason','pmed4dosage','pmed4time','pmed4admin','nonpresmeds','npmed1name','npmed1reason','npmed1dosage','npmed1time','npmed1admin','npmed2name','npmed2reason','npmed2dosage','npmed2time','npmed2admin','npmed3name','npmed3reason','npmed3dosage','npmed3time','npmed3admin','npmed4name','npmed4reason','npmed4dosage','npmed4time','npmed4admin','insu','insucomp','insupoli','insusubs','insuphon','sign','parentrelation','datesigned']
-
-class CamperModelView(ModelView):
-    can_export = True
-    column_searchable_list = ('fn', 'ln', 'dob')
-    column_list = ['fn', 'ln', 'dob', 'gender', 'street', 'city', 'state', 'zipcode', 'campercell', 'camperemail', 'parents.g1fn', 'parents.g1ln']
-
-class ParentsModelView(ModelView):
-    inline_models = (Camper,)
-    column_list = ['g1fn', 'g1ln', 'g1street', 'g1city', 'g1state', 'g1zipcode', 'g1country', 'g1phone', 'user.email', 'g2fn', 'g2ln', 'g2street', 'g2city', 'g2state', 'g2zipcode', 'g2country', 'g2phone', 'g2email']
-
-adminFlask.add_view(UserModelView(User, db.session))
-adminFlask.add_view(CamperRegistrationModelView(Camper_Registration, db.session))
-adminFlask.add_view(ModelView(Camp_Session, db.session))
-adminFlask.add_view(CamperModelView(Camper, db.session))
-adminFlask.add_view(ParentsModelView(Parents, db.session))
-adminFlask.add_view(MedicalFormModelView(Medical_Form, db.session))
-
-# @app.route('/admin')
-# @admin_permission.require()
-# def do_admin_index():
-#     return Response('Only if you are an admin')
-
-# Sample HTTP error handling
-@app.errorhandler(404)
-def not_found(error):
-    return render_template('error_pages/not_found.html'), 404
 
 @app.route('/')
 @app.route('/index')
@@ -105,14 +44,20 @@ def assistantmanager():
 
 @app.route('/campinformation')
 def information():
-    sess1 = Camp_Session.query.filter_by(year=str(datetime.today().year), session='1').first()
-    sess2 = Camp_Session.query.filter_by(year=str(datetime.today().year), session='2').first()
+
+    # Compute values for dashboard
+    sess1 = Camp_Session.query.filter_by(year=str(datetime.today().year), session=1).first()
+    sess2 = Camp_Session.query.filter_by(year=str(datetime.today().year), session=2).first()
+
+    # Build table for session 1
     if sess1 is None:
         regs1male = 0
         regs1female = 0
     else:
         regs1male = sess1.camper_registrations.filter_by(accepted=1).join(Camper, Camper_Registration.camper_id==Camper.id).filter_by(gender='Male').count()
         regs1female = sess1.camper_registrations.filter_by(accepted=1).join(Camper, Camper_Registration.camper_id==Camper.id).filter_by(gender='Female').count()
+
+    # Build table for session 2
     if sess2 is None:
         regs2male = 0
         regs2female = 0
@@ -154,6 +99,11 @@ def counselor():
 @login_required
 def edit_parent_profile(parents_id):
     parents = Parents.query.get(parents_id)
+
+    # Check authorization
+    if current_user.parents != parents:
+        raise Unauthorized()
+
     form = UpdateParentProfileForm(obj=parents)
     if form.validate_on_submit():
         parents.g1fn = form.g1fn.data
@@ -183,6 +133,8 @@ def edit_parent_profile(parents_id):
 @login_required
 def create_parent_profile():
     parents = Parents.query.filter_by(user_id=current_user.id).first()
+
+    # Do not allow user to add additional parent profiles, only edit current
     if parents is not None:
         return redirect(url_for('edit_parent_profile',parents_id=parents.id))
 
@@ -219,8 +171,12 @@ def create_parent_profile():
 @login_required
 def dashboard():
     parents = Parents.query.filter_by(user_id=current_user.id).first()
+
+    # Force user to create parent profile before proceeding to dashboard
     if parents is None:
         return redirect(url_for('create_parent_profile'))
+
+    # Query database for all dashboard content
     campers = Camper.query.filter_by(parents_id=current_user.parents.id).all()
     regs = {c:c.find_active_registration() for c in campers}
     med = {}
@@ -252,6 +208,10 @@ def dashboard():
 @login_required
 def edit_camper(camper_id):
     camper = Camper.query.get(camper_id)
+    # Check authorization
+    if current_user.parents.campers.filter_by(id=camper_id).first() is None:
+        raise Unauthorized()
+
     form = UpdateCamperProfileForm(obj=camper)
     errors = None
     if form.validate_on_submit():
@@ -301,7 +261,12 @@ def add_camper():
 @app.route('/register_camper/<int:camper_id>', methods=['GET','POST'])
 @login_required
 def register_camper(camper_id):
+    # Check authorization
+    if current_user.parents.campers.filter_by(id=camper_id).first() is None:
+        raise Unauthorized()
+
     reg = Camper.query.get(camper_id).find_active_registration()
+    # Do not allow user to add additional registrations if they've already registered
     if reg is not None:
         return redirect(url_for('edit_registration', reg_id=reg.id))
 
@@ -343,6 +308,10 @@ def register_camper(camper_id):
 @app.route('/edit_camper_registration/<int:reg_id>', methods=['GET','POST'])
 @login_required
 def edit_registration(reg_id):
+    # Check authorization
+    if current_user.parents.campers.join(Camper_Registration, Camper.id ==Camper_Registration.camper_id).filter_by(id=reg_id).first() is None:
+        raise Unauthorized()
+
     reg = Camper_Registration.query.get(reg_id)
     form = CamperRegistrationForm(obj=reg)
     errors = None
@@ -370,6 +339,11 @@ def edit_registration(reg_id):
 @login_required
 def edit_medical_form(med_id):
     mf = Medical_Form.query.get(med_id)
+
+    # Check authorization
+    if mf.camper_registration.camper.parents.user != current_user:
+        raise Unauthorized()
+
     form = MedicalForm(obj=mf)
     if form.validate_on_submit():
         mf.allergies = str(form.allergies.data)
@@ -460,7 +434,13 @@ def edit_medical_form(med_id):
 @app.route('/medical_form/<int:camper_id>', methods=['GET', 'POST'])
 @login_required
 def medical_form(camper_id):
-    reg = Camper.query.get(camper_id).find_active_registration()
+
+    # Check authorization
+    camper = Camper.query.get(camper_id)
+    if camper.parents.user != current_user:
+        raise Unauthorized()
+
+    reg = camper.find_active_registration()
     if reg is None:
         flash('Register Camper before filling out Medical Form')
         return redirect(url_for('register_camper', camper_id=camper_id))
@@ -471,10 +451,6 @@ def medical_form(camper_id):
 
     mform = MedicalForm()
     if mform.submit.data and mform.validate_on_submit():
-        print "registration id", reg.id
-        print mform.add.data
-        print str(mform.allergies.data)
-        print mform.sign.data
         med_form = Medical_Form(
             allergies = str(mform.allergies.data),
             allexplain = mform.allexplain.data,
@@ -562,19 +538,76 @@ def medical_form(camper_id):
         )
         camper = Camper.query.get(camper_id)
         session = Camp_Session.query.get(reg.camp_session_id)
-        email_body = "<p> Dear {0} {1}, <br> <br>We have received the online medical form for <b>{2} {3} to HHSC {4}</b>. <br> <br> Please note that for the Registration Process to be complete, we must receive the <i> registration form</i>, the <i>medical form</i>, and the <i>full <a href='{5}'>camp fees</a></i>. After the Registration Process is complete, we will inform you of whether your camper has secured a spot in the selected session or is waitlisted.  <br> <br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{5}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br> <br> Thank you, <br> HHSC Administration <p>".format(
-            current_user.parents.g1fn,
-            current_user.parents.g1ln,
-            camper.fn, 
-            camper.ln, 
-            session.formatdate, 
-            siteroot + url_for('fees')
-            )
+        email_body = "<p> Dear {0} {1}, <br> <br>We have received the online medical form for <b>{2} {3} to HHSC {4}</b>. <br> <br> Please note that for the Registration Process to be complete, we must receive the <i> registration form</i>, the <i>medical form</i>, and the <i>full <a href='{5}'>camp fees</a></i>. After the Registration Process is complete, we will inform you of whether your camper has secured a spot in the selected session or is waitlisted.  <br> <br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{5}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br> <br> Thank you, <br> HHSC Administration <p>".format(current_user.parents.g1fn, current_user.parents.g1ln, camper.fn, camper.ln, session.formatdate, siteroot + url_for('fees'))
         send_email("HHSC Medical Form {0} {1} - {2}".format(camper.fn, camper.ln, session.formatdate), recipients=[current_user.email, 'hhsc.register@gmail.com'], html_body=email_body)
         db.session.add(med_form)
         db.session.commit()
         flash("Medical Form Submitted")
         return redirect(url_for('dashboard'))
     flash_errors(mform)
-    camper = Camper.query.get(camper_id)
     return render_template('medical_form.html', mform=mform, camper=camper, edit='False')
+
+"""
+Admin page contents
+"""
+class UserModelView(ModelView):
+    can_export = True
+    column_list = ['parents.g1ln', 'parents.g1fn','email', 'password_hash']
+    column_labels = dict(user_parents_g1ln='Last Name')
+    page_size = 50
+
+class CamperRegistrationModelView(ModelView):
+    can_export = True
+    edit_template = 'admin/registration_edit.html'
+    # list_template = 'admin/registration_list.html'
+    # Calculate age of camper at camp
+    column_list = ["submission_timestamp", 'camper.fn', 'camper.ln', 'camper.dob', 'camper.gender', 'camp_session.formatdate', 'camper.parents.user.email', 'payment_received', 'payment_amount', 'payment_status', 'accepted', 'gradeinfall', 'prevcamper', 'cabin_pal_name', 'shirtsize', 'emgname', 'emgrelation', 'emgemail', 'emgphone', 'travel', 'accept']
+    column_labels = dict(payment_email='Send Payment Email?')
+    page_size = 50
+
+    def after_model_change(self, form, model, is_created):
+        parents = model.camper.parents
+        if model.accepted == 1:
+            send_email('HHSC HHSC Registration Accepted: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br>{2} {3} has been <b>accepted</b> to HHSC <b>{4}</b>.<br><br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{5}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br><br> <b> Important Camp Information</b> <br>Please visit the <a href='{6}'>Camp Website</a> to view a list of what to pack for your child. <br><a href='https://drive.google.com/open?id=0Bx2Zk7UlXDv4LV9FSVVZdjQzdXM'>Click here</a> to view detailed information for enrolled campers <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, model.camper.fn, model.camper.ln, model.camp_session.formatdate, siteroot + url_for('fees'), siteroot + url_for('information')), attach=url_for('static', filename='pdf/ImportantInformationforEnrolledCampers.pdf'))
+        elif model.accepted == -1:
+            send_email('HHSC Registration Waitlisted: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br> {2} {3} has been <b>waitlisted</b> for HHSC <b>{4}</b>.<br><br> We have reached our maximum capacity for enrollment at this time. However, we have added your child's name to the waitlist and will hold your check until and if a space becomes available. If a space does not become available, we will void your check. <br> <br> If you would like to withdraw your child from the waitlist, Please inform us by email and we will cancel out the check and shred it. <em> <br> <br> We will let you know if there is a status change. </em> <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, model.camper.fn, model.camper.ln, model.camp_session.formatdate))
+        if model.payment_email:
+            send_email('HHSC Payment Received: {0} {1} - {2}'.format(model.camper.fn, model.camper.ln, model.camp_session.formatdate), recipients=['hhsc.register@gmail.com', parents.user.email], html_body="<p> Dear {0} {1}, <br> <br>We have received a total payment of ${2} for <b>{3} {4} to HHSC {5}</b>. <br> <br>Please note that for the Registration Process to be complete, we must receive the <i> registration form</i>, the <i>medical form</i>, and the <i>full <a href='{5}'>camp fees</a></i>. After the Registration Process is complete, we will inform you of whether your camper has secured a spot in the selected session or is waitlisted.  <br> <br><b> Important Travel Information </b> <br>If your child is traveling by flight, bus or train and needs transportation between the airport/bus/train terminal and the camp grounds then please be sure to fill out the <a href='https://goo.gl/forms/WTcyOzk3wSnz90hX2'>HHSC Travel Form</a> with their travel information by no later than June 1. <em> Note: There are pick up and drop off <a href='{6}'>transportation fees</a>. Please include the travel fees along with your camper fees or send a check as soon as your travel plans have been made.  </em> <br> <br> Thank you, <br> HHSC Administration <p>".format(parents.g1fn, parents.g1ln, str(model.payment_amount), model.camper.fn, model.camper.ln, model.camp_session.formatdate, siteroot + url_for('fees')))
+            model.payment_email = True
+            db.session.commit()
+    # @expose('/')
+    # def index(self):
+    #     print 'HELLOOO'
+    #     return self.render('admin/registration_list.html')
+
+class MedicalFormModelView(ModelView):
+    can_export = True
+    column_list = ['submission_timestamp', 'camper_registration.camper.fn', 'camper_registration.camper.ln', 'camper_registration.camper.dob', 'camper_registration.camper.gender', 'camper_registration.camp_session.formatdate', 'allergies','allexplain','dtap','mump','polio','ckpox','hadckpox','meningitis','hib','pcv','tb','tbtest','hosp','surg','chro','bedw','recinj','asth','envallg','diab','seiz','dizz','chestpain','add','genexplain','emodisorder','seenprof','other','explain','swim','restrictions','presmeds','pmed1name','pmed1reason','pmed1dosage','pmed1time','pmed1admin','pmed2name','pmed2reason','pmed2dosage','pmed2time','pmed2admin','pmed3name','pmed3reason','pmed3dosage','pmed3time','pmed3admin','pmed4name','pmed4reason','pmed4dosage','pmed4time','pmed4admin','nonpresmeds','npmed1name','npmed1reason','npmed1dosage','npmed1time','npmed1admin','npmed2name','npmed2reason','npmed2dosage','npmed2time','npmed2admin','npmed3name','npmed3reason','npmed3dosage','npmed3time','npmed3admin','npmed4name','npmed4reason','npmed4dosage','npmed4time','npmed4admin','insu','insucomp','insupoli','insusubs','insuphon','sign','parentrelation','datesigned']
+
+class CamperModelView(ModelView):
+    can_export = True
+    column_searchable_list = ('fn', 'ln', 'dob')
+    column_list = ['fn', 'ln', 'dob', 'gender', 'street', 'city', 'state', 'zipcode', 'campercell', 'camperemail', 'parents.g1fn', 'parents.g1ln']
+
+class ParentsModelView(ModelView):
+    inline_models = (Camper,)
+    column_list = ['g1fn', 'g1ln', 'g1street', 'g1city', 'g1state', 'g1zipcode', 'g1country', 'g1phone', 'user.email', 'g2fn', 'g2ln', 'g2street', 'g2city', 'g2state', 'g2zipcode', 'g2country', 'g2phone', 'g2email']
+
+adminFlask.add_view(UserModelView(User, db.session))
+adminFlask.add_view(CamperRegistrationModelView(Camper_Registration, db.session))
+adminFlask.add_view(ModelView(Camp_Session, db.session))
+adminFlask.add_view(CamperModelView(Camper, db.session))
+adminFlask.add_view(ParentsModelView(Parents, db.session))
+adminFlask.add_view(MedicalFormModelView(Medical_Form, db.session))
+
+"""
+Error controller links
+"""
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('error_pages/not_found.html'), 404
+
+@app.errorhandler(401)
+def no_permission(error):
+    return render_template('error_pages/unauthorized.html'), 401
