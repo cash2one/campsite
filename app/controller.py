@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for
-from app import app, mail, adminFlask
+from app import app, mail
 from .forms import UpdateParentProfileForm, UpdateCamperProfileForm, CamperRegistrationForm, MedicalForm, MedicationForm
 from flask_login import login_required, current_user
 from .models import *
@@ -10,6 +10,8 @@ from flask import Response
 from flask_principal import Principal, Permission, RoleNeed
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import helpers, expose
+from flask_admin import Admin
+from flask.ext import admin
 from werkzeug.wrappers import BaseRequest
 from werkzeug.exceptions import HTTPException, NotFound, Unauthorized
 
@@ -550,13 +552,31 @@ def medical_form(camper_id):
 """
 Admin page contents
 """
-class UserModelView(ModelView):
+
+# class MyAdminIndexView(admin.AdminIndexView):
+
+#     @expose('/')
+#     def index(self):
+#         if not current_user.is_authenticated() or current_user.email != 'hhsc.register@gmail.com':
+#             return redirect(url_for('auth.login'))
+#         return super(MyAdminIndexView, self).index()
+
+class MyModelView(ModelView):
+
+    def is_accessible(self):
+        return current_user.is_authenticated() and current_user.email == 'hhsc.register@gmail.com'
+
+    def inaccessible_callback(self, name, **kwargs):
+        # redirect to login page if user doesn't have access
+        return redirect(url_for('login', next=request.url))
+
+class UserModelView(MyModelView):
     can_export = True
     column_list = ['parents.g1ln', 'parents.g1fn','email', 'password_hash']
     column_labels = dict(user_parents_g1ln='Last Name')
     page_size = 50
 
-class CamperRegistrationModelView(ModelView):
+class CamperRegistrationModelView(MyModelView):
     can_export = True
     edit_template = 'admin/registration_edit.html'
     # list_template = 'admin/registration_list.html'
@@ -580,29 +600,31 @@ class CamperRegistrationModelView(ModelView):
     #     print 'HELLOOO'
     #     return self.render('admin/registration_list.html')
 
-class MedicalFormModelView(ModelView):
+class MedicalFormModelView(MyModelView):
     can_export = True
     column_list = ['submission_timestamp', 'camper_registration.camper.fn', 'camper_registration.camper.ln', 'camper_registration.camper.dob', 'camper_registration.camper.gender', 'camper_registration.camp_session.formatdate', 'allergies','allexplain','dtap','mump','polio','ckpox','hadckpox','meningitis','hib','pcv','tb','tbtest','hosp','surg','chro','bedw','recinj','asth','envallg','diab','seiz','dizz','chestpain','add','genexplain','emodisorder','seenprof','other','explain','swim','restrictions','presmeds','pmed1name','pmed1reason','pmed1dosage','pmed1time','pmed1admin','pmed2name','pmed2reason','pmed2dosage','pmed2time','pmed2admin','pmed3name','pmed3reason','pmed3dosage','pmed3time','pmed3admin','pmed4name','pmed4reason','pmed4dosage','pmed4time','pmed4admin','nonpresmeds','npmed1name','npmed1reason','npmed1dosage','npmed1time','npmed1admin','npmed2name','npmed2reason','npmed2dosage','npmed2time','npmed2admin','npmed3name','npmed3reason','npmed3dosage','npmed3time','npmed3admin','npmed4name','npmed4reason','npmed4dosage','npmed4time','npmed4admin','insu','insucomp','insupoli','insusubs','insuphon','sign','parentrelation','datesigned']
 
-class CamperModelView(ModelView):
+class CamperModelView(MyModelView):
     can_export = True
     column_searchable_list = ('fn', 'ln', 'dob')
     column_list = ['fn', 'ln', 'dob', 'gender', 'street', 'city', 'state', 'zipcode', 'campercell', 'camperemail', 'parents.g1fn', 'parents.g1ln']
 
-class ParentsModelView(ModelView):
+class ParentsModelView(MyModelView):
     inline_models = (Camper,)
     column_list = ['g1fn', 'g1ln', 'g1street', 'g1city', 'g1state', 'g1zipcode', 'g1country', 'g1phone', 'user.email', 'g2fn', 'g2ln', 'g2street', 'g2city', 'g2state', 'g2zipcode', 'g2country', 'g2phone', 'g2email']
 
-class MessageBoardModelView(ModelView):
+class MessageBoardModelView(MyModelView):
     can_export = True
 
-adminFlask.add_view(UserModelView(User, db.session))
-adminFlask.add_view(CamperRegistrationModelView(Camper_Registration, db.session))
-adminFlask.add_view(ModelView(Camp_Session, db.session))
-adminFlask.add_view(CamperModelView(Camper, db.session))
-adminFlask.add_view(ParentsModelView(Parents, db.session))
-adminFlask.add_view(MedicalFormModelView(Medical_Form, db.session))
-adminFlask.add_view(MessageBoardModelView(Message_Board, db.session))
+admin = Admin(app, 'HHSC Admin', template_mode='bootstrap3')
+
+admin.add_view(UserModelView(User, db.session))
+admin.add_view(CamperRegistrationModelView(Camper_Registration, db.session))
+admin.add_view(MyModelView(Camp_Session, db.session))
+admin.add_view(CamperModelView(Camper, db.session))
+admin.add_view(ParentsModelView(Parents, db.session))
+admin.add_view(MedicalFormModelView(Medical_Form, db.session))
+admin.add_view(MessageBoardModelView(Message_Board, db.session))
 
 """
 Error controller links

@@ -32,7 +32,7 @@ ADMINS = ['ankurtoshniwal4@gmail.com']
 APPLICATION_ROOT = "omhhsc.org"
 
 # Protection against Cross-site Request Forgery (CSRF)
-WTF_CSRF_ENABLED = False
+WTF_CSRF_ENABLED = True
 WTF_CSRF_TIME_LIMIT = None
 WTF_CSRF_SECRET_KEY = "145qqkjelrkn2345h9HNSEMqffhsw5y5"
 
