@@ -9,6 +9,12 @@ from .emails import send_email
 
 allergies = [(1,'No Allergies'), (2, 'Food'), (3, 'Medicine'),(4,'Enviornment'),(5,'Insect Bites'),(6,'Other')]
 
+class Message_Board(db.Model):
+    __tablename__ = 'message_board'
+    id = db.Column(db.Integer, primary_key = True)
+    content = db.Column(db.String(4096))
+    submission_timestamp = db.Column(db.Date)
+
 class Camp_Session(db.Model):
     __tablename__ = 'camp_session'
     id = db.Column(db.Integer, primary_key = True)

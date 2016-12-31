@@ -593,12 +593,16 @@ class ParentsModelView(ModelView):
     inline_models = (Camper,)
     column_list = ['g1fn', 'g1ln', 'g1street', 'g1city', 'g1state', 'g1zipcode', 'g1country', 'g1phone', 'user.email', 'g2fn', 'g2ln', 'g2street', 'g2city', 'g2state', 'g2zipcode', 'g2country', 'g2phone', 'g2email']
 
+class MessageBoardModelView(ModelView):
+    can_export = True
+
 adminFlask.add_view(UserModelView(User, db.session))
 adminFlask.add_view(CamperRegistrationModelView(Camper_Registration, db.session))
 adminFlask.add_view(ModelView(Camp_Session, db.session))
 adminFlask.add_view(CamperModelView(Camper, db.session))
 adminFlask.add_view(ParentsModelView(Parents, db.session))
 adminFlask.add_view(MedicalFormModelView(Medical_Form, db.session))
+adminFlask.add_view(MessageBoardModelView(Message_Board, db.session))
 
 """
 Error controller links
