@@ -17,8 +17,6 @@ SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://ankur:weeks2+2@hhsc.citqsa4cgxcw.us-e
 THREADS_PER_PAGE = 5
 
 # email server
-# MAIL_SERVER = 'smtp.googlemail.com'
-# MAIL_PORT = 587
 MAIL_SERVER = 'smtp.gmail.com'
 MAIL_PORT = 465
 MAIL_USERNAME = 'hhsc.register@gmail.com'
@@ -35,6 +33,8 @@ APPLICATION_ROOT = "omhhsc.org"
 
 # Protection against Cross-site Request Forgery (CSRF)
 WTF_CSRF_ENABLED = True
+WTF_CSRF_TIME_LIMIT = None
+WTF_CSRF_SECRET_KEY = "145qqkjelrkn2345h9HNSEMqffhsw5y5"
 
 CSRF_SESSION_KEY = "BASDboasdfkjewrBASD"
 
