@@ -256,7 +256,7 @@ class Camper_Registration(db.Model):
 
     @property
     def sub_time(self):
-        return self.submission_timestamp.strftime("%I:%M:%S%p %m/%d/%y")
+        return self.submission_timestamp.strftime("%I:%M:%S%p %m/%d/%y %Z")
 
 class Medical_Form(db.Model):
 

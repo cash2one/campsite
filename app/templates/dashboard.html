@@ -123,6 +123,8 @@
                         <td class="fc-green">Accepted</td>
                         {% elif regs[camper].accepted == -1 %}
                         <td class="fc-yellow">Waitlist</td>
+                        {% elif regs[camper].accepted == -2 %}
+                        <td class="fc-red">Widthdrawn</td>
                         {% else %}
                         <td class="fc-yellow">Decision Pending</td>
                         {% endif %}
