@@ -573,6 +573,7 @@ class MyModelView(ModelView):
 class UserModelView(MyModelView):
     can_export = True
     column_list = ['parents.g1ln', 'parents.g1fn','email', 'password_hash']
+    column_searchable_list = ['email']
     column_labels = dict(user_parents_g1ln='Last Name')
     page_size = 50
 
@@ -581,6 +582,7 @@ class CamperRegistrationModelView(MyModelView):
     edit_template = 'admin/registration_edit.html'
     # list_template = 'admin/registration_list.html'
     # Calculate age of camper at camp
+    column_searchable_list = ['camper.fn', 'camper.ln', 'camper.parents.user.email']
     column_list = ["submission_timestamp", 'camper.fn', 'camper.ln', 'camper.dob', 'camper.gender', 'camp_session.formatdate', 'camper.parents.user.email', 'payment_received', 'payment_amount', 'payment_status', 'accepted', 'gradeinfall', 'prevcamper', 'cabin_pal_name', 'shirtsize', 'emgname', 'emgrelation', 'emgemail', 'emgphone', 'travel', 'accept']
     column_labels = dict(payment_email='Send Payment Email?')
     page_size = 50
@@ -602,25 +604,35 @@ class CamperRegistrationModelView(MyModelView):
 
 class MedicalFormModelView(MyModelView):
     can_export = True
+    column_searchable_list = ['camper_registration.camper.fn', 'camper_registration.camper.ln', 'camper_registration.camp_session.session']
     column_list = ['submission_timestamp', 'camper_registration.camper.fn', 'camper_registration.camper.ln', 'camper_registration.camper.dob', 'camper_registration.camper.gender', 'camper_registration.camp_session.formatdate', 'allergies','allexplain','dtap','mump','polio','ckpox','hadckpox','meningitis','hib','pcv','tb','tbtest','hosp','surg','chro','bedw','recinj','asth','envallg','diab','seiz','dizz','chestpain','add','genexplain','emodisorder','seenprof','other','explain','swim','restrictions','presmeds','pmed1name','pmed1reason','pmed1dosage','pmed1time','pmed1admin','pmed2name','pmed2reason','pmed2dosage','pmed2time','pmed2admin','pmed3name','pmed3reason','pmed3dosage','pmed3time','pmed3admin','pmed4name','pmed4reason','pmed4dosage','pmed4time','pmed4admin','nonpresmeds','npmed1name','npmed1reason','npmed1dosage','npmed1time','npmed1admin','npmed2name','npmed2reason','npmed2dosage','npmed2time','npmed2admin','npmed3name','npmed3reason','npmed3dosage','npmed3time','npmed3admin','npmed4name','npmed4reason','npmed4dosage','npmed4time','npmed4admin','insu','insucomp','insupoli','insusubs','insuphon','sign','parentrelation','datesigned']
+    page_size = 50
 
 class CamperModelView(MyModelView):
     can_export = True
-    column_searchable_list = ('fn', 'ln', 'dob')
+    column_searchable_list = ['fn', 'ln']
     column_list = ['fn', 'ln', 'dob', 'gender', 'street', 'city', 'state', 'zipcode', 'campercell', 'camperemail', 'parents.g1fn', 'parents.g1ln']
+    page_size = 50
 
 class ParentsModelView(MyModelView):
-    inline_models = (Camper,)
-    column_list = ['g1fn', 'g1ln', 'g1street', 'g1city', 'g1state', 'g1zipcode', 'g1country', 'g1phone', 'user.email', 'g2fn', 'g2ln', 'g2street', 'g2city', 'g2state', 'g2zipcode', 'g2country', 'g2phone', 'g2email']
+    can_export = True
+    column_searchable_list = ['g1fn', 'g1ln', 'user.email']
+    column_list = ['g1fn', 'g1ln', 'g1street', 'g1city', 'g1state', 'g1zipcode', 'g1country', 'g1phone', 'user.email', 'g2fn', 'g2ln', 'g2street', 'g2city', 'g2state', 'g2zipcode', 'g2country', 'g2phone', 'g2email', 'user.email']
+    page_size = 50
 
 class MessageBoardModelView(MyModelView):
+    page_size = 50
+    can_export = True
+
+class CampSessionModelView(MyModelView):
+    page_size = 50
     can_export = True
 
 admin = Admin(app, 'HHSC Admin', template_mode='bootstrap3')
 
 admin.add_view(UserModelView(User, db.session))
 admin.add_view(CamperRegistrationModelView(Camper_Registration, db.session))
-admin.add_view(MyModelView(Camp_Session, db.session))
+admin.add_view(CampSessionModelView(Camp_Session, db.session))
 admin.add_view(CamperModelView(Camper, db.session))
 admin.add_view(ParentsModelView(Parents, db.session))
 admin.add_view(MedicalFormModelView(Medical_Form, db.session))
